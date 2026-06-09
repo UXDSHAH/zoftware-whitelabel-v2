@@ -126,8 +126,9 @@ body {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Page background ── */
-[data-theme="2"] .min-h-screen,
-[data-theme="2"] .min-h-full    { background-color: var(--th-page-bg) !important; }
+/* :not(.bg-white) prevents overriding pages that explicitly request a white bg */
+[data-theme="2"] .min-h-screen:not(.bg-white),
+[data-theme="2"] .min-h-full:not(.bg-white)    { background-color: var(--th-page-bg) !important; }
 
 /* ── Body text warm shift ── */
 [data-theme="2"] .text-black          { color: #1A130C !important; }

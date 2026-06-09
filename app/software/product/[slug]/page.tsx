@@ -166,12 +166,12 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                   <p className="text-[14px] text-[#333] leading-[1.75]">{product.overview}</p>
                 </div>
 
-                <div className="border border-black/8 rounded-sm p-5">
+                <div className="bg-white border border-black/8 rounded-sm p-5">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">What makes it different</p>
                   <p className="text-[14px] text-[#333] leading-[1.75]">{product.usp}</p>
                 </div>
 
-                <div className="border border-black/8 rounded-sm p-5">
+                <div className="bg-white border border-black/8 rounded-sm p-5">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-4">Product Details</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {[
@@ -198,7 +198,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 </div>
 
                 {/* Key features (first 6) */}
-                <div className="border border-black/8 rounded-sm p-5">
+                <div className="bg-white border border-black/8 rounded-sm p-5">
                   <div className="flex items-center justify-between mb-4">
                     <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em]">Key Features</p>
                     <button onClick={() => setActiveTab('Features')} className="text-[11px] font-semibold text-accent hover:text-accent-hover">
@@ -218,7 +218,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 </div>
 
                 {/* Ratings */}
-                <div className="border border-black/8 rounded-sm p-5">
+                <div className="bg-white border border-black/8 rounded-sm p-5">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-4">Ratings Breakdown</p>
                   <div className="space-y-3">
                     <RatingBar label="Ease of Use" value={product.ratings.easeOfUse} />
@@ -248,7 +248,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
 
             {/* ── FEATURES ── */}
             {activeTab === 'Features' && (
-              <div className="border border-black/8 rounded-sm overflow-hidden">
+              <div className="bg-white border border-black/8 rounded-sm overflow-hidden">
                 <div className="px-5 py-3.5 border-b border-black/8 bg-white">
                   <p className="text-[13px] font-semibold text-black">All Features ({product.features.length})</p>
                 </div>
@@ -289,7 +289,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 </div>
 
                 {/* GCC special offer card */}
-                <div className="border-2 border-accent rounded-sm p-5">
+                <div className="bg-white border-2 border-accent rounded-sm p-5">
                   <div className="flex items-start justify-between mb-3 flex-wrap gap-2">
                     <div>
                       <span className="text-[10px] font-bold text-white bg-accent px-2 py-0.5 rounded-sm">GCC Exclusive Offer</span>
@@ -320,7 +320,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">Standard Vendor Plans</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {product.plans.map(plan => (
-                      <div key={plan.name} className="border border-black/8 rounded-sm p-4">
+                      <div key={plan.name} className="bg-white border border-black/8 rounded-sm p-4">
                         <div className="flex items-center justify-between mb-2">
                           <p className="text-[14px] font-semibold text-black">{plan.name}</p>
                           <div className="text-right">
@@ -357,7 +357,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                   </div>
                 ) : (
                   relatedBundles.map(bundle => (
-                    <div key={bundle.id} className="border border-black/8 rounded-sm overflow-hidden hover:border-black/20 transition-all">
+                    <div key={bundle.id} className="bg-white border border-black/8 rounded-sm overflow-hidden hover:border-black/20 transition-all">
                       <div className="px-5 py-4 flex items-center justify-between gap-4 flex-wrap">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-sm flex items-center justify-center shrink-0"
@@ -405,7 +405,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
 
           {/* Sidebar */}
           <div className="hidden lg:block w-64 xl:w-72 shrink-0 sticky top-28">
-            <div className="border border-black/8 rounded-sm overflow-hidden">
+            <div className="bg-white border border-black/8 rounded-sm overflow-hidden">
               <div className="p-5 border-b border-black/8">
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em]">GCC Price</p>
