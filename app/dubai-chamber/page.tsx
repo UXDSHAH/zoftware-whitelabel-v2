@@ -297,7 +297,7 @@ export default function DubaiChamberPage() {
               className="text-[13px] font-medium text-[#555] hover:text-black transition-colors px-3 py-2">Services</a>
             <a href="https://www.dubaichambers.com/contact-us" target="_blank" rel="noopener noreferrer"
               className="text-[13px] font-medium text-[#555] hover:text-black transition-colors px-3 py-2">Contact Us</a>
-            <ThemeToggle />
+            <ThemeToggle showLabel />
             <a href="https://wa.me/9718002426237" target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1.5 bg-black text-white text-[12px] font-semibold px-4 py-2 rounded-sm hover:bg-[#333] transition-colors min-h-[36px]">
               <MessageSquare size={13} /> Let&apos;s Chat

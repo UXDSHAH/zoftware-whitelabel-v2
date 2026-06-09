@@ -1,14 +1,12 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Theme 2 font — Plus Jakarta Sans
+   Fonts
    ───────────────────────────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Semantic color tokens
-   @theme WITHOUT inline → utilities reference CSS variables at runtime,
-   enabling live theme switching via data-theme attribute.
+   Semantic tokens  (@theme WITHOUT inline → utilities use CSS vars)
    ───────────────────────────────────────────────────────────────────────── */
 @theme {
   --color-accent:         #007AFF;
@@ -19,9 +17,9 @@
   --color-border:         rgba(0,0,0,0.08);
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   THEME 1 — Classic (Apple-esque clean white)
-   ───────────────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME 1  —  Classic Apple-esque (bright white, SF Pro, iOS blue)
+   ═══════════════════════════════════════════════════════════════════════════ */
 :root {
   --color-accent:         #007AFF;
   --color-accent-hover:   #0051D5;
@@ -32,35 +30,53 @@
 
   --th-page-bg:           #ffffff;
   --th-body-color:        #000000;
+  --th-card-bg:           #ffffff;
+  --th-card-border:       rgba(0,0,0,0.08);
+  --th-input-bg:          #f5f5f7;
+  --th-input-text:        #000000;
+  --th-input-border:      rgba(0,0,0,0.08);
   --th-nav-bg:            rgba(255,255,255,0.95);
   --th-nav-border:        rgba(0,0,0,0.06);
   --th-nav-text:          #000000;
   --th-nav-text-muted:    #86868b;
   --th-nav-hover-bg:      #f5f5f7;
   --th-nav-hover-text:    #000000;
+  --th-btn-gradient:      none;
+  --th-btn-shadow:        none;
+  --th-card-shadow:       none;
   --th-font:              -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  --th-radius:            4px;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   THEME 2 — Enterprise Slate (deep navy · cobalt blue · Plus Jakarta Sans)
-   ───────────────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME 2  —  Dark Indigo  (near-black · violet accent · Plus Jakarta Sans)
+   ═══════════════════════════════════════════════════════════════════════════ */
 [data-theme="2"] {
-  --color-accent:         #2563EB;
-  --color-accent-hover:   #1D4ED8;
-  --color-surface:        #F1F5F9;
-  --color-surface-hover:  #E2E8F0;
-  --color-muted:          #64748B;
-  --color-border:         #E2E8F0;
+  --color-accent:         #7C3AED;
+  --color-accent-hover:   #6D28D9;
+  --color-surface:        #161B2E;
+  --color-surface-hover:  #1E2640;
+  --color-muted:          #8B949E;
+  --color-border:         rgba(255,255,255,0.07);
 
-  --th-page-bg:           #F8FAFC;
-  --th-body-color:        #0F172A;
-  --th-nav-bg:            #0F172A;
-  --th-nav-border:        rgba(255,255,255,0.08);
-  --th-nav-text:          #F8FAFC;
-  --th-nav-text-muted:    #94A3B8;
-  --th-nav-hover-bg:      rgba(255,255,255,0.07);
-  --th-nav-hover-text:    #F8FAFC;
+  --th-page-bg:           #0D1117;
+  --th-body-color:        #E6EDF3;
+  --th-card-bg:           #161B2E;
+  --th-card-border:       rgba(255,255,255,0.07);
+  --th-input-bg:          #0D1117;
+  --th-input-text:        #E6EDF3;
+  --th-input-border:      rgba(255,255,255,0.1);
+  --th-nav-bg:            rgba(13,17,23,0.98);
+  --th-nav-border:        rgba(255,255,255,0.05);
+  --th-nav-text:          #E6EDF3;
+  --th-nav-text-muted:    #8B949E;
+  --th-nav-hover-bg:      rgba(124,58,237,0.12);
+  --th-nav-hover-text:    #E6EDF3;
+  --th-btn-gradient:      linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+  --th-btn-shadow:        0 4px 15px rgba(124,58,237,0.35);
+  --th-card-shadow:       0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
   --th-font:              'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --th-radius:            10px;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -71,20 +87,22 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
 body {
   font-family: var(--th-font);
-  background: var(--th-page-bg);
+  background-color: var(--th-page-bg);
   color: var(--th-body-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Gateway header — theme-aware nav bar (.gw-header class)
+   Gateway header — theme-aware nav (.gw-header class)
    ───────────────────────────────────────────────────────────────────────── */
 .gw-header {
   background: var(--th-nav-bg) !important;
   border-bottom-color: var(--th-nav-border) !important;
 }
-.gw-nav-text     { color: var(--th-nav-text); }
-.gw-nav-muted    { color: var(--th-nav-text-muted); }
-.gw-nav-divider  { background-color: var(--th-nav-border); }
+.gw-nav-text    { color: var(--th-nav-text); }
+.gw-nav-muted   { color: var(--th-nav-text-muted); }
+.gw-nav-divider { background-color: var(--th-nav-border); }
+
 .gw-nav-link {
   color: var(--th-nav-text-muted);
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -95,48 +113,150 @@ body {
 }
 .gw-nav-accent {
   color: var(--color-accent);
-  border-color: color-mix(in oklch, var(--color-accent) 25%, transparent);
+  border-color: color-mix(in oklch, var(--color-accent) 30%, transparent);
+  transition: color 0.15s, background-color 0.15s;
 }
 .gw-nav-accent:hover {
   color: var(--color-accent-hover);
-  background-color: color-mix(in oklch, var(--color-accent) 6%, transparent);
+  background-color: color-mix(in oklch, var(--color-accent) 8%, transparent);
 }
-[data-theme="2"] .gw-nav-accent       { color: #60A5FA; border-color: rgba(96,165,250,0.25); }
-[data-theme="2"] .gw-nav-accent:hover { color: #93C5FD; background-color: rgba(96,165,250,0.1); }
+[data-theme="2"] .gw-nav-accent { color: #A78BFA; border-color: rgba(167,139,250,0.25); }
+[data-theme="2"] .gw-nav-accent:hover { color: #C4B5FD; background-color: rgba(124,58,237,0.12); }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Theme 2 — Border-radius scaling (rounder corners)
-   ───────────────────────────────────────────────────────────────────────── */
-[data-theme="2"] .rounded-sm  { border-radius: 8px !important; }
-[data-theme="2"] .rounded     { border-radius: 10px !important; }
-[data-theme="2"] .rounded-md  { border-radius: 10px !important; }
-[data-theme="2"] .rounded-lg  { border-radius: 13px !important; }
-[data-theme="2"] .rounded-xl  { border-radius: 16px !important; }
-[data-theme="2"] .rounded-2xl { border-radius: 20px !important; }
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME 2  —  GLOBAL DARK-MODE OVERRIDES
+   Systematically override Tailwind utility classes that are hardcoded
+   in component files so the full UI switches to dark.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Theme 2 — Border & divider tokens (black-opacity → slate)
-   ───────────────────────────────────────────────────────────────────────── */
+/* — Page / container backgrounds — */
+[data-theme="2"] .bg-white                { background-color: var(--th-card-bg) !important; }
+[data-theme="2"] .bg-white\/90,
+[data-theme="2"] .bg-white\/95            { background-color: var(--th-nav-bg) !important; }
+[data-theme="2"] .min-h-screen            { background-color: var(--th-page-bg) !important; }
+[data-theme="2"] .min-h-full              { background-color: var(--th-page-bg) !important; }
+
+/* — Text colours — */
+[data-theme="2"] .text-black              { color: #E6EDF3 !important; }
+[data-theme="2"] .text-\[#333\]           { color: #C9D1D9 !important; }
+[data-theme="2"] .text-\[#444\]           { color: #B1BAC4 !important; }
+[data-theme="2"] .text-\[#555\]           { color: #8B949E !important; }
+[data-theme="2"] .text-\[#666\]           { color: #8B949E !important; }
+[data-theme="2"] .hover\:text-black:hover { color: #E6EDF3 !important; }
+
+/* — Borders — */
 [data-theme="2"] .border-black\/5,
 [data-theme="2"] .border-black\/8,
 [data-theme="2"] .border-black\/10,
-[data-theme="2"] .border-black\/12 { border-color: #E2E8F0 !important; }
+[data-theme="2"] .border-black\/12,
+[data-theme="2"] .border-black\/20        { border-color: rgba(255,255,255,0.07) !important; }
+[data-theme="2"] .divide-black\/5  > * + *,
+[data-theme="2"] .divide-black\/8  > * + *,
+[data-theme="2"] .divide-black\/10 > * + * { border-color: rgba(255,255,255,0.07) !important; }
 
-[data-theme="2"] .divide-black\/5 > * + *,
-[data-theme="2"] .divide-black\/8 > * + * { border-color: #E2E8F0 !important; }
+/* — Cards & panels — */
+[data-theme="2"] .border {
+  border-color: rgba(255,255,255,0.07) !important;
+  box-shadow: var(--th-card-shadow) !important;
+}
+[data-theme="2"] .shadow-sm,
+[data-theme="2"] .shadow-md,
+[data-theme="2"] .shadow-lg    { box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important; }
+
+/* — Primary CTA buttons — gradient + glow — */
+[data-theme="2"] .bg-accent {
+  background: var(--th-btn-gradient) !important;
+  box-shadow: var(--th-btn-shadow) !important;
+}
+[data-theme="2"] .hover\:bg-accent-hover:hover {
+  background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%) !important;
+  box-shadow: 0 6px 20px rgba(124,58,237,0.45) !important;
+}
+[data-theme="2"] .bg-accent\/8,
+[data-theme="2"] .bg-accent\/10,
+[data-theme="2"] .bg-accent\/12 { background-color: rgba(124,58,237,0.12) !important; }
+
+/* — Border-accent in dark — */
+[data-theme="2"] .border-accent,
+[data-theme="2"] .border-accent\/20,
+[data-theme="2"] .border-accent\/25,
+[data-theme="2"] .border-accent\/30,
+[data-theme="2"] .border-accent\/40  { border-color: rgba(124,58,237,0.35) !important; }
+
+/* — Secondary / outline buttons — */
+[data-theme="2"] .border-black\/10.bg-white {
+  background-color: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #E6EDF3 !important;
+}
+
+/* — Form inputs — */
+[data-theme="2"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+[data-theme="2"] textarea,
+[data-theme="2"] select {
+  background-color: var(--th-input-bg) !important;
+  color: var(--th-input-text) !important;
+  border-color: var(--th-input-border) !important;
+}
+[data-theme="2"] input::placeholder,
+[data-theme="2"] textarea::placeholder { color: #4B5563 !important; }
+[data-theme="2"] input:focus,
+[data-theme="2"] textarea:focus,
+[data-theme="2"] select:focus {
+  background-color: #161B2E !important;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.25) !important;
+  border-color: rgba(124,58,237,0.5) !important;
+  outline: none;
+}
+[data-theme="2"] .focus\:ring-accent\/20:focus { box-shadow: 0 0 0 3px rgba(124,58,237,0.2) !important; }
+[data-theme="2"] .focus\:bg-white:focus { background-color: #161B2E !important; }
+
+/* — bg-surface (semantic) in dark — */
+[data-theme="2"] .bg-surface          { background-color: var(--th-card-bg) !important; }
+[data-theme="2"] .hover\:bg-surface:hover { background-color: var(--color-surface-hover) !important; }
+
+/* — Rounded corners scale up in Theme 2 — */
+[data-theme="2"] .rounded-sm  { border-radius: 8px !important; }
+[data-theme="2"] .rounded     { border-radius: 10px !important; }
+[data-theme="2"] .rounded-md  { border-radius: 10px !important; }
+[data-theme="2"] .rounded-lg  { border-radius: 14px !important; }
+[data-theme="2"] .rounded-xl  { border-radius: 18px !important; }
+[data-theme="2"] .rounded-2xl { border-radius: 22px !important; }
+
+/* — Overlay modals and drawers — */
+[data-theme="2"] .bg-black\/20  { background-color: rgba(0,0,0,0.6) !important; }
+[data-theme="2"] .bg-black\/40  { background-color: rgba(0,0,0,0.7) !important; }
+
+/* — Accent text glow in dark — */
+[data-theme="2"] .text-accent { color: #A78BFA !important; }
+[data-theme="2"] .hover\:text-accent-hover:hover { color: #C4B5FD !important; }
+
+/* — Ring utilities — */
+[data-theme="2"] .ring-accent,
+[data-theme="2"] .ring-accent\/20,
+[data-theme="2"] .focus\:ring-accent:focus { ring-color: rgba(124,58,237,0.35) !important; }
+
+/* — Sticky nav on scroll in dark — */
+[data-theme="2"] .backdrop-blur-xl { backdrop-filter: blur(20px) saturate(180%); }
+
+/* — Special: bg-black used for CTA buttons (like Sign In) — */
+[data-theme="2"] a.bg-black,
+[data-theme="2"] button.bg-black {
+  background: var(--th-btn-gradient) !important;
+  box-shadow: var(--th-btn-shadow) !important;
+}
+[data-theme="2"] a.hover\:bg-\[\#333\]:hover,
+[data-theme="2"] button.hover\:bg-\[\#333\]:hover {
+  background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%) !important;
+}
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Theme 2 — Subtle card elevation on bordered elements
-   ───────────────────────────────────────────────────────────────────────── */
-[data-theme="2"] .border { box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); }
-
-/* ─────────────────────────────────────────────────────────────────────────
-   Theme 2 — Page-level background
-   ───────────────────────────────────────────────────────────────────────── */
-[data-theme="2"] .min-h-screen { background-color: var(--th-page-bg); }
-
-/* ─────────────────────────────────────────────────────────────────────────
-   Scrollbar hide
+   Scrollbar  (dark-mode aware)
    ───────────────────────────────────────────────────────────────────────── */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+[data-theme="2"] ::-webkit-scrollbar         { width: 6px; height: 6px; }
+[data-theme="2"] ::-webkit-scrollbar-track   { background: #0D1117; }
+[data-theme="2"] ::-webkit-scrollbar-thumb   { background: rgba(124,58,237,0.4); border-radius: 3px; }
+[data-theme="2"] ::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,0.7); }
