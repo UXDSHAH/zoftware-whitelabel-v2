@@ -74,7 +74,7 @@ function SoftwareContent() {
             </div>
             <div>
               <p className="text-[13px] font-semibold text-white">Software Gateway · Powered by Zoftware</p>
-              <p className="text-[11px] text-white/40">6,000+ verified products · GCC region pricing</p>
+              <p className="text-[11px] text-white/40">50+ verified products · GCC region pricing</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ function SoftwareContent() {
           <div className="relative flex-1 max-w-lg">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
             <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search 6,000+ software products…"
+              placeholder="Search 50+ software products…"
               className="w-full bg-white border border-zinc-200 pl-10 pr-4 py-2.5 text-[14px] rounded-xl outline-none focus:border-[#2563EB]/40 focus:ring-2 focus:ring-[#2563EB]/10 transition-all min-h-[42px]" />
           </div>
           <button onClick={() => setOnlyDeals(d => !d)}

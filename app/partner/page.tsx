@@ -20,7 +20,7 @@ const tiers = [
       'Deploy a fully branded software marketplace under your own domain, logo, and color palette. Your customers never know Zoftware is behind it — they see your brand, start to finish.',
     points: [
       'Custom domain, logo & brand colors',
-      'Pre-loaded with 6,000+ verified software products',
+      'Pre-loaded with 50+ verified software products',
       'Deploy on your cloud or on-premises',
       'Your pricing, your margins, your contracts',
       'White-glove onboarding & dedicated support',
@@ -106,7 +106,7 @@ const bundleExamples = [
 const partners = ['PhonePe', 'GTR POS', 'Axis Bank', 'HDFC SmartHub', 'Paytm for Business', 'IndusInd'];
 
 const stats = [
-  { value: '6,000+', label: 'Software Products' },
+  { value: '50+', label: 'Software Products' },
   { value: '600+', label: 'Categories' },
   { value: '5,000+', label: 'Businesses Served' },
   { value: '30+', label: 'Countries' },
@@ -540,7 +540,7 @@ function TierTwoVisual({ accent }: { accent: string }) {
         </div>
         <div className="px-3 pb-3">
           <div className="rounded-sm p-2 text-[9px] font-semibold text-white text-center" style={{ backgroundColor: accent }}>
-            Tap to browse 6,000+ tools →
+            Tap to browse 50+ tools →
           </div>
         </div>
       </div>

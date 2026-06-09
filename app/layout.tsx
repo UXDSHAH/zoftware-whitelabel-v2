@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Software Gateway — Powered by Zoftware',
-  description: 'Discover, compare, and purchase 6,000+ business software tools. AI-powered recommendations, pre-built bundles, GCC pricing.',
+  description: 'Discover, compare, and purchase 50+ business software tools. AI-powered recommendations, pre-built bundles, GCC pricing.',
 };
 
 // Root layout is intentionally minimal — each section manages its own navigation.

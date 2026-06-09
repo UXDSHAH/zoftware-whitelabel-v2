@@ -45,7 +45,7 @@ export default function Navbar() {
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Search 6,000+ software products..."
+                placeholder="Search 50+ software products..."
                 className="w-full bg-[#f5f5f7] border-0 pl-8 pr-4 py-1.5 text-[13px] text-black placeholder-[#86868b] rounded-sm outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:bg-white transition-colors"
               />
             </div>
