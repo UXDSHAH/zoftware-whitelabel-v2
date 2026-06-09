@@ -5,12 +5,69 @@ import { notFound } from 'next/navigation';
 import { use } from 'react';
 import Link from 'next/link';
 import {
-  ArrowLeft, ArrowRight, CheckCircle, Package, Zap, Star,
-  ChevronRight, Shield, Clock, Users
+  ArrowLeft, ArrowRight, CheckCircle, Package, Zap,
+  ChevronRight, Shield, Clock, Users, Info, X, ExternalLink
 } from 'lucide-react';
-import { getBundleBySlug, bundles, formatBundleAED } from '@/data/bundles';
+import { getBundleBySlug, bundles } from '@/data/bundles';
 import { AED_RATE } from '@/data/billing-options';
 import ZainChat from '@/components/ZainChat';
+
+// ── Product info lookup ────────────────────────────────────────────────────
+const productInfo: Record<string, {
+  slug: string;
+  description: string;
+  features: string[];
+  usedFor: string;
+}> = {
+  'Freshchat': {
+    slug: 'freshchat',
+    usedFor: 'Customer messaging & live chat',
+    description: 'AI-powered live chat and messaging platform that lets your team support customers across web, mobile, WhatsApp, and social channels from a single inbox.',
+    features: ['Real-time chat widget for web & mobile', 'Freddy AI bot for 24/7 automated support', 'WhatsApp & social channel integration', 'Team inbox with assignment rules', 'Conversation analytics & CSAT scores'],
+  },
+  'Freshcaller': {
+    slug: 'freshcaller',
+    usedFor: 'Cloud business phone & calling',
+    description: 'Cloud-based business phone system with virtual numbers, IVR call routing, and real-time analytics — no hardware required, deploy in hours.',
+    features: ['Virtual numbers in 90+ countries', 'IVR & smart call routing', 'Call recording & voicemail', 'Live call monitoring dashboard', 'CRM & helpdesk integration'],
+  },
+  'Zoho Mail': {
+    slug: 'zoho-mail',
+    usedFor: 'Business email with custom domain',
+    description: 'Professional business email hosting with custom domain, shared team inboxes, and robust admin controls — built for organisations that need reliability and compliance.',
+    features: ['Custom domain email (yourname@company.com)', 'Shared team inboxes & distribution lists', 'eDiscovery & audit trails', 'Calendar, contacts & tasks built in', 'Admin console with security controls'],
+  },
+  'Spotler Mail+': {
+    slug: 'spotler-mail',
+    usedFor: 'Email marketing & automation',
+    description: 'Drag-and-drop email marketing platform with automation workflows, A/B testing, and detailed campaign analytics to grow and retain your customer base.',
+    features: ['Drag-and-drop email builder', 'Automation workflows & drip campaigns', 'A/B testing & send-time optimisation', 'Campaign analytics & heatmaps', 'GDPR & GCC-compliant delivery'],
+  },
+  'Freshsales': {
+    slug: 'freshsales',
+    usedFor: 'CRM & sales pipeline',
+    description: 'AI-powered CRM with built-in phone, email, activity capture, and visual deal pipeline — helps sales teams close more deals with less manual work.',
+    features: ['AI lead scoring (Freddy AI)', 'Visual sales pipeline & deal stages', 'Built-in email & phone calling', 'Sales forecasting & reports', 'Mobile CRM app for on-the-go teams'],
+  },
+  'Freshservice': {
+    slug: 'freshservice',
+    usedFor: 'IT service management (ITSM)',
+    description: 'ITIL-aligned IT service management platform covering ticketing, asset management, change management, and a self-service portal for your IT team.',
+    features: ['Incident & service request ticketing', 'IT asset discovery & management', 'Change & problem management', 'Service catalog & self-service portal', 'SLA policies & escalation rules'],
+  },
+  'Freshworks': {
+    slug: 'freshworks-enterprise',
+    usedFor: 'Unified enterprise suite',
+    description: 'The complete Freshworks enterprise platform combining CRM, ITSM, customer support, chat, and calling under one roof — with a single admin console and unified reporting.',
+    features: ['Unified dashboard across all products', 'Cross-product AI with Freddy AI', 'Enterprise SSO & security controls', 'Advanced analytics & custom reports', 'Dedicated customer success manager'],
+  },
+  'Freshdesk': {
+    slug: 'freshdesk',
+    usedFor: 'Omnichannel helpdesk & ticketing',
+    description: 'Omnichannel customer support platform with intelligent ticket management, automation rules, SLA tracking, and a knowledge base to help your team resolve issues faster.',
+    features: ['Omnichannel inbox (email, chat, phone, social)', 'Smart ticket assignment & automation', 'SLA management & escalations', 'Customer-facing knowledge base', 'Canned responses & collision detection'],
+  },
+};
 
 export default function BundleDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -19,6 +76,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
 
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
   const [currency, setCurrency] = useState<'USD' | 'AED'>('USD');
+  const [expandedProduct, setExpandedProduct] = useState<string | null>(null);
 
   const displayPrice = billingCycle === 'annual' ? bundle.annualMonthlyPrice : bundle.monthlyPrice;
   const displayOriginal = billingCycle === 'annual'
@@ -108,26 +166,83 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
                   const bPrice = currency === 'AED' ? `AED ${Math.round(adjustedBundle * AED_RATE)}` : `$${adjustedBundle.toFixed(2)}`;
                   const oPrice = currency === 'AED' ? `AED ${Math.round(adjustedOriginal * AED_RATE)}` : `$${adjustedOriginal.toFixed(2)}`;
                   const saving = Math.round(((adjustedOriginal - adjustedBundle) / adjustedOriginal) * 100);
+                  const isExpanded = expandedProduct === item.product;
+                  const info = productInfo[item.product];
                   return (
-                    <div key={item.product} className="px-5 py-4 flex items-center justify-between gap-4 bg-white hover:bg-[#f9fafb] transition-colors">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-9 h-9 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
-                          <span className="text-[10px] font-bold text-black">{item.product.slice(0, 2).toUpperCase()}</span>
+                    <div key={item.product}>
+                      {/* Product row */}
+                      <div className="px-5 py-4 flex items-center justify-between gap-4 bg-white transition-colors"
+                        style={{ backgroundColor: isExpanded ? '#f5f9ff' : undefined }}>
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-9 h-9 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+                            <span className="text-[10px] font-bold text-black">{item.product.slice(0, 2).toUpperCase()}</span>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-[13px] font-semibold text-black">{item.product}</p>
+                            <p className="text-[11px] text-[#86868b]">{item.vendor} · {item.category}</p>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-[13px] font-semibold text-black">{item.product}</p>
-                          <p className="text-[11px] text-[#86868b]">{item.vendor} · {item.category}</p>
+                        <div className="flex items-center gap-2.5 shrink-0">
+                          <div className="text-right">
+                            <p className="text-[13px] font-semibold text-black">{bPrice}<span className="text-[10px] text-[#86868b] font-normal">/user/mo</span></p>
+                            <p className="text-[10px] text-[#86868b] line-through">{oPrice}</p>
+                          </div>
+                          {saving > 0 && (
+                            <span className="text-[9px] font-bold bg-[#dcfce7] text-[#16a34a] px-1.5 py-0.5 rounded-sm hidden sm:inline">{saving}% off</span>
+                          )}
+                          {/* Info toggle */}
+                          {info && (
+                            <button
+                              onClick={() => setExpandedProduct(isExpanded ? null : item.product)}
+                              title={isExpanded ? 'Hide product info' : 'What does this do?'}
+                              className="w-7 h-7 rounded-full flex items-center justify-center transition-all shrink-0 border"
+                              style={{
+                                background: isExpanded ? '#007AFF' : 'transparent',
+                                borderColor: isExpanded ? '#007AFF' : 'rgba(0,0,0,0.12)',
+                                color: isExpanded ? '#fff' : '#86868b',
+                              }}>
+                              {isExpanded ? <X size={12} strokeWidth={2.5} /> : <Info size={13} strokeWidth={1.8} />}
+                            </button>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 shrink-0 text-right">
-                        <div>
-                          <p className="text-[13px] font-semibold text-black">{bPrice}<span className="text-[10px] text-[#86868b] font-normal">/user/mo</span></p>
-                          <p className="text-[10px] text-[#86868b] line-through">{oPrice}</p>
+
+                      {/* Expandable product info panel */}
+                      {isExpanded && info && (
+                        <div className="px-5 py-4 border-t" style={{ background: '#eef5ff', borderColor: 'rgba(0,122,255,0.12)' }}>
+                          {/* Use-case badge */}
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm"
+                              style={{ background: 'rgba(0,122,255,0.12)', color: '#007AFF' }}>
+                              {info.usedFor}
+                            </span>
+                          </div>
+
+                          {/* Description */}
+                          <p className="text-[13px] text-[#333] leading-[1.6] mb-3">{info.description}</p>
+
+                          {/* Key features */}
+                          <div className="mb-4">
+                            <p className="text-[10px] font-bold text-[#86868b] uppercase tracking-[0.08em] mb-2">Key features</p>
+                            <ul className="space-y-1.5">
+                              {info.features.map(f => (
+                                <li key={f} className="flex items-start gap-2 text-[12px] text-[#444]">
+                                  <CheckCircle size={12} strokeWidth={2} className="shrink-0 mt-0.5" style={{ color: '#007AFF' }} />
+                                  {f}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* View full details link */}
+                          <Link
+                            href={`/software/product/${info.slug}`}
+                            className="inline-flex items-center gap-1 text-[12px] font-semibold"
+                            style={{ color: '#007AFF' }}>
+                            View full product details <ExternalLink size={11} />
+                          </Link>
                         </div>
-                        {saving > 0 && (
-                          <span className="text-[9px] font-bold bg-[#dcfce7] text-[#16a34a] px-1.5 py-0.5 rounded-sm">{saving}% off</span>
-                        )}
-                      </div>
+                      )}
                     </div>
                   );
                 })}
