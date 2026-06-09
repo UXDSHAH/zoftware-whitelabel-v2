@@ -1,12 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Search, ChevronDown, ChevronRight, Menu, X, Globe, Phone,
   ArrowRight, Sparkles, FileText, BarChart2, MessageSquare, Zap,
-  Shield, Users, Building2, ExternalLink, TrendingUp, Star, Package, Check
+  Shield, Users, Building2, ExternalLink, TrendingUp, Star, Package, Check,
+  Eye, EyeOff, Lock, TrendingDown
 } from 'lucide-react';
+
+// ─── Login credentials (update when real creds are provided) ─────────────────
+const AUTH_USER = 'admin';
+const AUTH_PASS = 'v2access';
+const AUTH_KEY  = 'dc_v2_auth';
 
 // ─── Nav structure ────────────────────────────────────────────────────────────
 const navItems = [
@@ -92,9 +98,10 @@ const gatewayTools = [
   {
     icon: <Search size={20} strokeWidth={1.5} />,
     label: 'Smart Search',
-    desc: 'Find the right software from 6,000+ verified products in seconds.',
+    desc: 'Find the right software from 50+ verified products in seconds.',
     href: '/software?mode=search',
     color: '#007AFF',
+    external: false,
   },
   {
     icon: <FileText size={20} strokeWidth={1.5} />,
@@ -102,6 +109,7 @@ const gatewayTools = [
     desc: 'Generate a detailed technical requirements document for your procurement.',
     href: '/software?mode=requirements',
     color: '#0051D5',
+    external: false,
   },
   {
     icon: <BarChart2 size={20} strokeWidth={1.5} />,
@@ -109,12 +117,123 @@ const gatewayTools = [
     desc: 'Get a full tech strategy and implementation roadmap in under 1 minute.',
     href: '/software?mode=strategy',
     color: '#007AFF',
+    external: false,
+  },
+  {
+    icon: <TrendingDown size={20} strokeWidth={1.5} />,
+    label: 'Cost Optimizer',
+    desc: 'Analyse your current software spend and uncover savings opportunities instantly.',
+    href: 'COST_OPTIMIZER_URL',
+    color: '#16a34a',
+    external: true,
   },
 ];
 
 export default function DubaiChamberPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openNav, setOpenNav] = useState<string | null>(null);
+
+  // ── Login wall ────────────────────────────────────────────────────────────
+  const [authReady,  setAuthReady]  = useState(false);
+  const [authed,     setAuthed]     = useState(false);
+  const [loginUser,  setLoginUser]  = useState('');
+  const [loginPass,  setLoginPass]  = useState('');
+  const [showPass,   setShowPass]   = useState(false);
+  const [loginErr,   setLoginErr]   = useState('');
+  const [logging,    setLogging]    = useState(false);
+
+  useEffect(() => {
+    const stored = typeof window !== 'undefined' && localStorage.getItem(AUTH_KEY);
+    if (stored === 'true') setAuthed(true);
+    setAuthReady(true);
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLogging(true);
+    setTimeout(() => {
+      if (loginUser.trim() === AUTH_USER && loginPass === AUTH_PASS) {
+        localStorage.setItem(AUTH_KEY, 'true');
+        setAuthed(true);
+        setLoginErr('');
+      } else {
+        setLoginErr('Incorrect username or password.');
+      }
+      setLogging(false);
+    }, 600);
+  };
+
+  // Render login wall until auth is confirmed
+  if (!authReady) return null;
+
+  if (!authed) return (
+    <div className="min-h-screen bg-[#f5f5f7] flex items-center justify-center px-4">
+      <div className="w-full max-w-[380px]">
+        {/* Generic logo mark */}
+        <div className="flex items-center gap-2.5 mb-8 justify-center">
+          <div className="w-9 h-9 bg-black rounded-sm flex items-center justify-center">
+            <div className="grid grid-cols-2 gap-[3px]">
+              {[0,1,2,3].map(i => <div key={i} className="w-[7px] h-[7px] bg-white rounded-[1px]" />)}
+            </div>
+          </div>
+          <span className="text-[18px] font-bold text-black tracking-tight">LOGO</span>
+        </div>
+
+        <div className="bg-white border border-black/8 rounded-sm p-8 shadow-sm">
+          <div className="flex items-center gap-2 mb-1">
+            <Lock size={15} className="text-[#007AFF]" />
+            <p className="text-[15px] font-semibold text-black">Sign in to continue</p>
+          </div>
+          <p className="text-[12px] text-[#86868b] mb-6">This workspace is access-controlled.</p>
+
+          <form onSubmit={handleLogin} className="space-y-3.5">
+            <label className="block">
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b] mb-1.5 block">Username</span>
+              <input
+                type="text"
+                value={loginUser}
+                onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }}
+                placeholder="Enter username"
+                autoComplete="username"
+                className="w-full h-10 border border-black/10 rounded-sm px-3 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10 bg-white"
+              />
+            </label>
+            <label className="block">
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b] mb-1.5 block">Password</span>
+              <div className="relative">
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  value={loginPass}
+                  onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }}
+                  placeholder="Enter password"
+                  autoComplete="current-password"
+                  className="w-full h-10 border border-black/10 rounded-sm px-3 pr-10 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10 bg-white"
+                />
+                <button type="button" onClick={() => setShowPass(s => !s)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#86868b] hover:text-black transition-colors">
+                  {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
+            </label>
+
+            {loginErr && (
+              <p className="text-[12px] text-red-600 font-medium">{loginErr}</p>
+            )}
+
+            <button type="submit" disabled={logging || !loginUser || !loginPass}
+              className="w-full h-10 bg-[#007AFF] hover:bg-[#0051D5] disabled:opacity-50 text-white text-[13px] font-semibold rounded-sm transition-colors flex items-center justify-center gap-2">
+              {logging ? (
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : 'Sign in'}
+            </button>
+          </form>
+        </div>
+        <p className="text-center text-[11px] text-[#86868b] mt-4">
+          Powered by <span className="font-semibold text-black">Zoftware</span> · Software Gateway V2
+        </p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="bg-white min-h-screen font-sans">
@@ -139,9 +258,14 @@ export default function DubaiChamberPage() {
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-black/8">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
 
-          {/* Logo — Data Direct */}
-          <Link href="/dubai-chamber" className="flex items-center shrink-0">
-            <img src="/data-direct-logo.svg" alt="Data Direct" className="h-8 w-auto" />
+          {/* Generic logo */}
+          <Link href="/dubai-chamber" className="flex items-center gap-2 shrink-0">
+            <div className="w-8 h-8 bg-black rounded-sm flex items-center justify-center">
+              <div className="grid grid-cols-2 gap-[2.5px]">
+                {[0,1,2,3].map(i => <div key={i} className="w-[6px] h-[6px] bg-white rounded-[1px]" />)}
+              </div>
+            </div>
+            <span className="text-[15px] font-bold text-black tracking-tight">LOGO</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -309,7 +433,7 @@ export default function DubaiChamberPage() {
                     <Zap size={14} className="text-[#007AFF]" />
                     Software Gateway
                   </p>
-                  <p className="text-[12px] text-[#86868b] mt-0.5">Browse 6,000+ business software tools</p>
+                  <p className="text-[12px] text-[#86868b] mt-0.5">Browse 50+ business software tools</p>
                 </div>
                 <span className="text-[11px] font-semibold text-[#007AFF] border border-[#007AFF]/30 px-2.5 py-1 rounded-sm group-hover:bg-[#007AFF] group-hover:text-white transition-all shrink-0">
                   Explore →
@@ -342,7 +466,7 @@ export default function DubaiChamberPage() {
                 AI-powered digital collaboration hub for business growth
               </p>
               <p className="text-[14px] text-[#555] max-w-[460px] leading-[1.7]">
-                Access 6,000+ verified products across 35 categories — with GCC-exclusive pricing, bundle deals, and AI-powered recommendations built in.
+                Access 50+ verified products across 35 categories — with GCC-exclusive pricing, bundle deals, and AI-powered recommendations built in.
               </p>
             </div>
             <Link href="/software"
@@ -385,9 +509,37 @@ export default function DubaiChamberPage() {
           </div>
           <style>{`@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
 
-          {/* 3 gateway tool cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-6">
+          {/* 4 gateway tool cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-6">
             {gatewayTools.map((tool, i) => (
+              tool.external ? (
+              <a key={tool.label} href={tool.href === 'COST_OPTIMIZER_URL' ? '#' : tool.href} target="_blank" rel="noopener noreferrer"
+                className="relative border border-black/8 rounded-sm p-6 hover:border-black/20 hover:shadow-md transition-all group bg-white overflow-hidden cursor-pointer">
+                {/* Subtle corner glow */}
+                <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ background: `radial-gradient(circle, ${tool.color}20 0%, transparent 70%)` }} />
+                <div className="w-12 h-12 rounded-sm flex items-center justify-center mb-5 relative"
+                  style={{ backgroundColor: tool.color + '12' }}>
+                  <span style={{ color: tool.color }}>{tool.icon}</span>
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white border-2 flex items-center justify-center text-[8px] font-bold"
+                    style={{ color: tool.color, borderColor: tool.color + '40' }}>
+                    {i + 1}
+                  </span>
+                </div>
+                <h3 className="text-[16px] font-semibold text-black mb-2 leading-tight">{tool.label}</h3>
+                <p className="text-[13px] text-[#555] leading-[1.65] mb-5">{tool.desc}</p>
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold transition-colors group-hover:gap-2"
+                    style={{ color: tool.color }}>
+                    Get started <ArrowRight size={12} />
+                  </span>
+                  <div className="w-7 h-7 rounded-full border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+                    style={{ borderColor: tool.color + '40', backgroundColor: tool.color + '10' }}>
+                    <ArrowRight size={11} style={{ color: tool.color }} />
+                  </div>
+                </div>
+              </a>
+              ) : (
               <Link key={tool.label} href={tool.href}
                 className="relative border border-black/8 rounded-sm p-6 hover:border-black/20 hover:shadow-md transition-all group bg-white overflow-hidden">
                 {/* Subtle corner glow */}
@@ -417,13 +569,14 @@ export default function DubaiChamberPage() {
                   </div>
                 </div>
               </Link>
+              )
             ))}
           </div>
 
           {/* Stats strip below gateway */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { v: '6,000+', l: 'Verified products', c: '#007AFF' },
+              { v: '50+', l: 'Verified products', c: '#007AFF' },
               { v: '35', l: 'Software categories', c: '#0051D5' },
               { v: 'Up to 40%', l: 'Bundle savings', c: '#007AFF' },
               { v: '7 days', l: 'Average activation', c: '#FF9500' },
@@ -822,7 +975,14 @@ export default function DubaiChamberPage() {
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-10 sm:py-12">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
             <div className="col-span-2 sm:col-span-1">
-              <img src="/data-direct-logo.svg" alt="Data Direct" className="h-7 w-auto mb-3" />
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-7 h-7 bg-black rounded-sm flex items-center justify-center">
+                  <div className="grid grid-cols-2 gap-[2px]">
+                    {[0,1,2,3].map(i => <div key={i} className="w-[5px] h-[5px] bg-white rounded-[1px]" />)}
+                  </div>
+                </div>
+                <span className="text-[14px] font-bold text-black tracking-tight">LOGO</span>
+              </div>
               <p className="text-[12px] text-[#86868b] leading-[1.6] mb-3">
                 Shaping Dubai&apos;s business landscape since 1965.
               </p>
