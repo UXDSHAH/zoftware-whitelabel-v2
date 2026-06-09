@@ -1,23 +1,142 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Theme 2 font — Plus Jakarta Sans
+   ───────────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 @import "tailwindcss";
 
-@theme inline {
-  --color-accent: #007AFF;
-  --color-accent-hover: #0051D5;
-  --color-surface: #f5f5f7;
-  --color-surface-hover: #e5e5e7;
-  --color-muted: #86868b;
-  --color-border: rgba(0,0,0,0.08);
+/* ─────────────────────────────────────────────────────────────────────────
+   Semantic color tokens
+   @theme WITHOUT inline → utilities reference CSS variables at runtime,
+   enabling live theme switching via data-theme attribute.
+   ───────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-accent:         #007AFF;
+  --color-accent-hover:   #0051D5;
+  --color-surface:        #f5f5f7;
+  --color-surface-hover:  #e5e5e7;
+  --color-muted:          #86868b;
+  --color-border:         rgba(0,0,0,0.08);
 }
 
-* { box-sizing: border-box; }
+/* ─────────────────────────────────────────────────────────────────────────
+   THEME 1 — Classic (Apple-esque clean white)
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  --color-accent:         #007AFF;
+  --color-accent-hover:   #0051D5;
+  --color-surface:        #f5f5f7;
+  --color-surface-hover:  #e5e5e7;
+  --color-muted:          #86868b;
+  --color-border:         rgba(0,0,0,0.08);
 
+  --th-page-bg:           #ffffff;
+  --th-body-color:        #000000;
+  --th-nav-bg:            rgba(255,255,255,0.95);
+  --th-nav-border:        rgba(0,0,0,0.06);
+  --th-nav-text:          #000000;
+  --th-nav-text-muted:    #86868b;
+  --th-nav-hover-bg:      #f5f5f7;
+  --th-nav-hover-text:    #000000;
+  --th-font:              -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   THEME 2 — Enterprise Slate (deep navy · cobalt blue · Plus Jakarta Sans)
+   ───────────────────────────────────────────────────────────────────────── */
+[data-theme="2"] {
+  --color-accent:         #2563EB;
+  --color-accent-hover:   #1D4ED8;
+  --color-surface:        #F1F5F9;
+  --color-surface-hover:  #E2E8F0;
+  --color-muted:          #64748B;
+  --color-border:         #E2E8F0;
+
+  --th-page-bg:           #F8FAFC;
+  --th-body-color:        #0F172A;
+  --th-nav-bg:            #0F172A;
+  --th-nav-border:        rgba(255,255,255,0.08);
+  --th-nav-text:          #F8FAFC;
+  --th-nav-text-muted:    #94A3B8;
+  --th-nav-hover-bg:      rgba(255,255,255,0.07);
+  --th-nav-hover-text:    #F8FAFC;
+  --th-font:              'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Base
+   ───────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
 html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
-  background: #ffffff;
-  color: #000000;
+  font-family: var(--th-font);
+  background: var(--th-page-bg);
+  color: var(--th-body-color);
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   Gateway header — theme-aware nav bar (.gw-header class)
+   ───────────────────────────────────────────────────────────────────────── */
+.gw-header {
+  background: var(--th-nav-bg) !important;
+  border-bottom-color: var(--th-nav-border) !important;
+}
+.gw-nav-text     { color: var(--th-nav-text); }
+.gw-nav-muted    { color: var(--th-nav-text-muted); }
+.gw-nav-divider  { background-color: var(--th-nav-border); }
+.gw-nav-link {
+  color: var(--th-nav-text-muted);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.gw-nav-link:hover {
+  color: var(--th-nav-hover-text);
+  background-color: var(--th-nav-hover-bg);
+}
+.gw-nav-accent {
+  color: var(--color-accent);
+  border-color: color-mix(in oklch, var(--color-accent) 25%, transparent);
+}
+.gw-nav-accent:hover {
+  color: var(--color-accent-hover);
+  background-color: color-mix(in oklch, var(--color-accent) 6%, transparent);
+}
+[data-theme="2"] .gw-nav-accent       { color: #60A5FA; border-color: rgba(96,165,250,0.25); }
+[data-theme="2"] .gw-nav-accent:hover { color: #93C5FD; background-color: rgba(96,165,250,0.1); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Theme 2 — Border-radius scaling (rounder corners)
+   ───────────────────────────────────────────────────────────────────────── */
+[data-theme="2"] .rounded-sm  { border-radius: 8px !important; }
+[data-theme="2"] .rounded     { border-radius: 10px !important; }
+[data-theme="2"] .rounded-md  { border-radius: 10px !important; }
+[data-theme="2"] .rounded-lg  { border-radius: 13px !important; }
+[data-theme="2"] .rounded-xl  { border-radius: 16px !important; }
+[data-theme="2"] .rounded-2xl { border-radius: 20px !important; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Theme 2 — Border & divider tokens (black-opacity → slate)
+   ───────────────────────────────────────────────────────────────────────── */
+[data-theme="2"] .border-black\/5,
+[data-theme="2"] .border-black\/8,
+[data-theme="2"] .border-black\/10,
+[data-theme="2"] .border-black\/12 { border-color: #E2E8F0 !important; }
+
+[data-theme="2"] .divide-black\/5 > * + *,
+[data-theme="2"] .divide-black\/8 > * + * { border-color: #E2E8F0 !important; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Theme 2 — Subtle card elevation on bordered elements
+   ───────────────────────────────────────────────────────────────────────── */
+[data-theme="2"] .border { box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Theme 2 — Page-level background
+   ───────────────────────────────────────────────────────────────────────── */
+[data-theme="2"] .min-h-screen { background-color: var(--th-page-bg); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Scrollbar hide
+   ───────────────────────────────────────────────────────────────────────── */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

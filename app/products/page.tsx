@@ -12,7 +12,7 @@ function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex items-center gap-0.5">
       {[1,2,3,4,5].map(i => (
-        <Star key={i} size={10} fill={i <= Math.round(rating) ? '#007AFF' : 'none'} className={i <= Math.round(rating) ? 'text-[#007AFF]' : 'text-[#e5e5e7]'} />
+        <Star key={i} size={10} fill={i <= Math.round(rating) ? '#007AFF' : 'none'} className={i <= Math.round(rating) ? 'text-accent' : 'text-[#e5e5e7]'} />
       ))}
       <span className="text-[11px] font-medium text-black ml-1">{rating}</span>
     </div>
@@ -81,20 +81,20 @@ function ProductsContent() {
 
       {/* Page header */}
       <div className="mb-6">
-        <p className="text-[11px] font-semibold text-[#86868b] tracking-[0.1em] uppercase mb-1.5">Software Catalog</p>
+        <p className="text-[11px] font-semibold text-muted tracking-[0.1em] uppercase mb-1.5">Software Catalog</p>
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-[28px] sm:text-[36px] font-medium text-black tracking-tight leading-[1.1] mb-1">
               {selectedCategory ? categories.find(c => c.slug === selectedCategory)?.name : 'All Software'}
             </h1>
-            <p className="text-[13px] text-[#86868b]">{filtered.length} products {selectedCategory ? `in this category` : 'available'}</p>
+            <p className="text-[13px] text-muted">{filtered.length} products {selectedCategory ? `in this category` : 'available'}</p>
           </div>
           {/* Mobile filter button */}
           <button onClick={() => setFilterOpen(true)}
-            className="lg:hidden flex items-center gap-2 border border-black/10 bg-white px-4 py-2.5 text-[13px] font-medium rounded-sm hover:bg-[#f5f5f7] transition-colors min-h-[44px]">
+            className="lg:hidden flex items-center gap-2 border border-black/10 bg-white px-4 py-2.5 text-[13px] font-medium rounded-sm hover:bg-surface transition-colors min-h-[44px]">
             <SlidersHorizontal size={14} /> Filters
             {(selectedDeployment.length + selectedSizes.length + (selectedPrice ? 1 : 0) + (selectedCategory ? 1 : 0)) > 0 && (
-              <span className="bg-[#007AFF] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <span className="bg-accent text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                 {selectedDeployment.length + selectedSizes.length + (selectedPrice ? 1 : 0) + (selectedCategory ? 1 : 0)}
               </span>
             )}
@@ -109,27 +109,27 @@ function ProductsContent() {
           <div className="relative bg-white w-72 max-w-[85vw] h-full overflow-y-auto p-5 ml-auto shadow-xl">
             <div className="flex items-center justify-between mb-5">
               <p className="text-[15px] font-semibold text-black">Filters</p>
-              <button onClick={() => setFilterOpen(false)} className="text-[#86868b] hover:text-black">
+              <button onClick={() => setFilterOpen(false)} className="text-muted hover:text-black">
                 <X size={18} />
               </button>
             </div>
             {/* Category */}
             <div className="mb-5">
-              <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-2.5">Category</p>
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2.5">Category</p>
               {categories.map(cat => (
                 <button key={cat.slug} onClick={() => setSelectedCategory(selectedCategory === cat.slug ? '' : cat.slug)}
-                  className={`w-full flex items-center justify-between px-2.5 py-2 text-[13px] rounded-sm mb-0.5 transition-colors ${selectedCategory === cat.slug ? 'bg-[#007AFF] text-white font-medium' : 'text-[#333333] hover:bg-[#f5f5f7]'}`}>
+                  className={`w-full flex items-center justify-between px-2.5 py-2 text-[13px] rounded-sm mb-0.5 transition-colors ${selectedCategory === cat.slug ? 'bg-accent text-white font-medium' : 'text-[#333333] hover:bg-surface'}`}>
                   <span>{cat.name}</span><span className="opacity-60">{cat.count}</span>
                 </button>
               ))}
             </div>
             {/* Deployment */}
             <div className="mb-5">
-              <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-2.5">Deployment</p>
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2.5">Deployment</p>
               {deploymentOptions.map(opt => (
                 <label key={opt} className="flex items-center gap-2.5 py-2 cursor-pointer">
                   <div onClick={() => setSelectedDeployment(prev => prev.includes(opt) ? prev.filter(x => x !== opt) : [...prev, opt])}
-                    className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors cursor-pointer ${selectedDeployment.includes(opt) ? 'bg-[#007AFF] border-[#007AFF]' : 'border-black/20 bg-white'}`}>
+                    className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors cursor-pointer ${selectedDeployment.includes(opt) ? 'bg-accent border-accent' : 'border-black/20 bg-white'}`}>
                     {selectedDeployment.includes(opt) && <Check size={10} className="text-white" strokeWidth={2.5} />}
                   </div>
                   <span className="text-[13px] text-[#333333]">{opt}</span>
@@ -138,20 +138,20 @@ function ProductsContent() {
             </div>
             {/* Price */}
             <div className="mb-5">
-              <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-2.5">Price Range</p>
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2.5">Price Range</p>
               {priceRanges.map(range => (
                 <button key={range.label} onClick={() => setSelectedPrice(selectedPrice === range.label ? '' : range.label)}
-                  className={`w-full flex px-2.5 py-2 text-[13px] rounded-sm mb-0.5 transition-colors ${selectedPrice === range.label ? 'bg-[#007AFF] text-white font-medium' : 'text-[#333333] hover:bg-[#f5f5f7]'}`}>
+                  className={`w-full flex px-2.5 py-2 text-[13px] rounded-sm mb-0.5 transition-colors ${selectedPrice === range.label ? 'bg-accent text-white font-medium' : 'text-[#333333] hover:bg-surface'}`}>
                   {range.label}
                 </button>
               ))}
             </div>
             <button onClick={() => { setSelectedCategory(''); setSelectedDeployment([]); setSelectedSizes([]); setSelectedPrice(''); setFilterOpen(false); }}
-              className="w-full py-2.5 text-[13px] font-medium border border-black/10 rounded-sm hover:bg-[#f5f5f7] transition-colors mt-2">
+              className="w-full py-2.5 text-[13px] font-medium border border-black/10 rounded-sm hover:bg-surface transition-colors mt-2">
               Clear All Filters
             </button>
             <button onClick={() => setFilterOpen(false)}
-              className="w-full py-2.5 text-[13px] font-medium bg-[#007AFF] text-white rounded-sm hover:bg-[#0051D5] transition-colors mt-2">
+              className="w-full py-2.5 text-[13px] font-medium bg-accent text-white rounded-sm hover:bg-accent-hover transition-colors mt-2">
               Show {filtered.length} Results
             </button>
           </div>
@@ -166,38 +166,38 @@ function ProductsContent() {
 
             {/* Search */}
             <div className="relative mb-6">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#86868b]" />
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search products..."
-                className="w-full bg-[#f5f5f7] pl-8 pr-3 py-2 text-[12px] placeholder-[#86868b] rounded-sm outline-none focus:ring-2 focus:ring-[#007AFF]/20 transition-colors"
+                className="w-full bg-surface pl-8 pr-3 py-2 text-[12px] placeholder-muted rounded-sm outline-none focus:ring-2 focus:ring-accent/20 transition-colors"
               />
             </div>
 
             {/* Category */}
             <div className="mb-6">
-              <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-2.5">Category</p>
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2.5">Category</p>
               {categories.map(cat => (
                 <button
                   key={cat.slug}
                   onClick={() => setSelectedCategory(selectedCategory === cat.slug ? '' : cat.slug)}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-[12px] rounded-sm mb-0.5 transition-colors ${selectedCategory === cat.slug ? 'bg-[#007AFF] text-white font-medium' : 'text-[#333333] hover:bg-[#f5f5f7]'}`}
+                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-[12px] rounded-sm mb-0.5 transition-colors ${selectedCategory === cat.slug ? 'bg-accent text-white font-medium' : 'text-[#333333] hover:bg-surface'}`}
                 >
                   <span>{cat.name}</span>
-                  <span className={selectedCategory === cat.slug ? 'text-white/60' : 'text-[#86868b]'}>{cat.count}</span>
+                  <span className={selectedCategory === cat.slug ? 'text-white/60' : 'text-muted'}>{cat.count}</span>
                 </button>
               ))}
             </div>
 
             {/* Deployment */}
             <div className="mb-6">
-              <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-2.5">Deployment</p>
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2.5">Deployment</p>
               {deploymentOptions.map(opt => (
                 <label key={opt} className="flex items-center gap-2.5 py-1.5 cursor-pointer group">
                   <div
                     onClick={() => setSelectedDeployment(prev => prev.includes(opt) ? prev.filter(x => x !== opt) : [...prev, opt])}
-                    className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors cursor-pointer ${selectedDeployment.includes(opt) ? 'bg-[#007AFF] border-[#007AFF]' : 'border-black/20 bg-white group-hover:border-black/40'}`}
+                    className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors cursor-pointer ${selectedDeployment.includes(opt) ? 'bg-accent border-accent' : 'border-black/20 bg-white group-hover:border-black/40'}`}
                   >
                     {selectedDeployment.includes(opt) && <Check size={10} className="text-white" strokeWidth={2.5} />}
                   </div>
@@ -208,12 +208,12 @@ function ProductsContent() {
 
             {/* Price */}
             <div className="mb-6">
-              <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-2.5">Price Range</p>
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2.5">Price Range</p>
               {priceRanges.map(range => (
                 <button
                   key={range.label}
                   onClick={() => setSelectedPrice(selectedPrice === range.label ? '' : range.label)}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-[12px] rounded-sm mb-0.5 transition-colors ${selectedPrice === range.label ? 'bg-[#007AFF] text-white font-medium' : 'text-[#333333] hover:bg-[#f5f5f7]'}`}
+                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-[12px] rounded-sm mb-0.5 transition-colors ${selectedPrice === range.label ? 'bg-accent text-white font-medium' : 'text-[#333333] hover:bg-surface'}`}
                 >
                   {range.label}
                 </button>
@@ -222,12 +222,12 @@ function ProductsContent() {
 
             {/* Company Size */}
             <div className="mb-6">
-              <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-2.5">Company Size</p>
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2.5">Company Size</p>
               {sizeOptions.map(opt => (
                 <label key={opt} className="flex items-center gap-2.5 py-1.5 cursor-pointer group">
                   <div
                     onClick={() => setSelectedSizes(prev => prev.includes(opt) ? prev.filter(x => x !== opt) : [...prev, opt])}
-                    className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors cursor-pointer ${selectedSizes.includes(opt) ? 'bg-[#007AFF] border-[#007AFF]' : 'border-black/20 bg-white group-hover:border-black/40'}`}
+                    className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors cursor-pointer ${selectedSizes.includes(opt) ? 'bg-accent border-accent' : 'border-black/20 bg-white group-hover:border-black/40'}`}
                   >
                     {selectedSizes.includes(opt) && <Check size={10} className="text-white" strokeWidth={2.5} />}
                   </div>
@@ -244,21 +244,21 @@ function ProductsContent() {
 
           {/* Sort + Currency bar */}
           <div className="flex items-center justify-between gap-2 mb-5 pb-4 border-b border-black/8 overflow-x-auto">
-            <div className="flex items-center gap-1 bg-[#f5f5f7] p-0.5 rounded-sm shrink-0">
+            <div className="flex items-center gap-1 bg-surface p-0.5 rounded-sm shrink-0">
               {(['best-match', 'rating', 'reviews', 'price-asc'] as const).map(s => (
                 <button
                   key={s}
                   onClick={() => setSortBy(s)}
-                  className={`px-2.5 sm:px-3 py-1.5 text-[11px] font-medium rounded-sm transition-all whitespace-nowrap ${sortBy === s ? 'bg-white text-black shadow-sm' : 'text-[#86868b] hover:text-black'}`}
+                  className={`px-2.5 sm:px-3 py-1.5 text-[11px] font-medium rounded-sm transition-all whitespace-nowrap ${sortBy === s ? 'bg-white text-black shadow-sm' : 'text-muted hover:text-black'}`}
                 >
                   {{ 'best-match': 'Best Match', rating: 'Top Rated', reviews: 'Most Reviewed', 'price-asc': 'Price ↑' }[s]}
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-1 bg-[#f5f5f7] p-0.5 rounded-sm shrink-0">
+            <div className="flex items-center gap-1 bg-surface p-0.5 rounded-sm shrink-0">
               {(['USD', 'AED'] as const).map(c => (
                 <button key={c} onClick={() => setCurrency(c)}
-                  className={`px-2.5 sm:px-3 py-1.5 text-[11px] font-semibold rounded-sm transition-all ${currency === c ? 'bg-white text-black shadow-sm' : 'text-[#86868b] hover:text-black'}`}
+                  className={`px-2.5 sm:px-3 py-1.5 text-[11px] font-semibold rounded-sm transition-all ${currency === c ? 'bg-white text-black shadow-sm' : 'text-muted hover:text-black'}`}
                 >{c}</button>
               ))}
             </div>
@@ -273,12 +273,12 @@ function ProductsContent() {
                   <Link href={`/products/${product.slug}`} className="p-5 flex-1 block">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-sm bg-surface border border-black/8 flex items-center justify-center shrink-0">
                           <span className="text-[10px] font-bold text-black">{product.logo}</span>
                         </div>
                         <div>
                           <p className="text-[13px] font-semibold text-black leading-tight">{product.name}</p>
-                          <p className="text-[11px] text-[#86868b]">{product.deployment} · {product.category}</p>
+                          <p className="text-[11px] text-muted">{product.deployment} · {product.category}</p>
                         </div>
                       </div>
                       {product.fitScore && (
@@ -288,18 +288,18 @@ function ProductsContent() {
                     <p className="text-[12px] text-[#555555] leading-[1.5] mb-3 line-clamp-2">{product.tagline}</p>
                     <div className="flex flex-wrap gap-1 mb-3">
                       {product.tags.slice(0,3).map(tag => (
-                        <span key={tag} className="bg-[#f5f5f7] text-[#86868b] text-[10px] px-2 py-0.5 rounded-sm">{tag}</span>
+                        <span key={tag} className="bg-surface text-muted text-[10px] px-2 py-0.5 rounded-sm">{tag}</span>
                       ))}
                     </div>
                     <div className="flex items-center justify-between">
                       <StarRating rating={product.rating} />
-                      <p className="text-[11px] text-[#86868b]">({product.reviews.toLocaleString()})</p>
+                      <p className="text-[11px] text-muted">({product.reviews.toLocaleString()})</p>
                     </div>
                   </Link>
                   <div className="px-5 pb-4 pt-3 border-t border-black/5 flex items-center justify-between">
                     <div>
                       <p className="text-[13px] font-semibold text-black">{formatPrice(product.startingPrice)}</p>
-                      {product.startingPrice > 0 && <p className="text-[10px] text-[#86868b]">per user/month</p>}
+                      {product.startingPrice > 0 && <p className="text-[10px] text-muted">per user/month</p>}
                     </div>
                     <div className="flex items-center gap-2">
                       <button
@@ -309,7 +309,7 @@ function ProductsContent() {
                         {inCompare ? <><Check size={10} strokeWidth={2.5} /> Added</> : <><Plus size={10} strokeWidth={2} /> Compare</>}
                       </button>
                       <Link href={`/products/${product.slug}`}
-                        className="flex items-center gap-1 bg-[#007AFF] text-white px-3 py-1.5 text-[11px] font-medium rounded-sm hover:bg-[#0051D5] transition-colors">
+                        className="flex items-center gap-1 bg-accent text-white px-3 py-1.5 text-[11px] font-medium rounded-sm hover:bg-accent-hover transition-colors">
                         View <ArrowRight size={11} strokeWidth={2} />
                       </Link>
                     </div>
@@ -322,7 +322,7 @@ function ProductsContent() {
           {filtered.length === 0 && (
             <div className="text-center py-20">
               <p className="text-[17px] font-semibold text-black mb-2">No products found</p>
-              <p className="text-[13px] text-[#86868b]">Try adjusting your filters or search term.</p>
+              <p className="text-[13px] text-muted">Try adjusting your filters or search term.</p>
             </div>
           )}
         </div>
@@ -340,7 +340,7 @@ function ProductsContent() {
               <button onClick={() => setCompareList([])} className="flex items-center gap-1.5 text-[13px] text-white/60 hover:text-white transition-colors">
                 <X size={14} /> Clear
               </button>
-              <Link href="/compare" className="flex items-center gap-2 bg-[#007AFF] text-white px-5 py-2 text-[13px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors">
+              <Link href="/compare" className="flex items-center gap-2 bg-accent text-white px-5 py-2 text-[13px] font-semibold rounded-sm hover:bg-accent-hover transition-colors">
                 Compare Now <ArrowRight size={13} strokeWidth={2} />
               </Link>
             </div>
@@ -354,7 +354,7 @@ function ProductsContent() {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div className="p-20 text-center text-[13px] text-[#86868b]">Loading...</div>}>
+    <Suspense fallback={<div className="p-20 text-center text-[13px] text-muted">Loading...</div>}>
       <ProductsContent />
     </Suspense>
   );

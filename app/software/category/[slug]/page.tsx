@@ -20,7 +20,7 @@ function StarRow({ rating }: { rating: number }) {
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map(i => (
         <Star key={i} size={10} fill={i <= Math.round(rating) ? '#007AFF' : 'none'}
-          className={i <= Math.round(rating) ? 'text-[#007AFF]' : 'text-[#e5e5e7]'} />
+          className={i <= Math.round(rating) ? 'text-accent' : 'text-[#e5e5e7]'} />
       ))}
     </div>
   );
@@ -106,7 +106,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
       {/* Breadcrumb */}
       <div className="border-b border-black/8 bg-[#f9fafb]">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-10 flex items-center gap-1.5 overflow-x-auto">
-          <Link href="/software" className="flex items-center gap-1 text-[12px] text-[#86868b] hover:text-black transition-colors shrink-0 min-h-[36px] items-center">
+          <Link href="/software" className="flex items-center gap-1 text-[12px] text-muted hover:text-black transition-colors shrink-0 min-h-[36px] items-center">
             <ArrowLeft size={11} /> Software
           </Link>
           <ChevronRight size={10} className="text-[#c7c7cc] shrink-0" />
@@ -117,13 +117,13 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
       {/* ── Currency toggle — top bar ── */}
       <div className="border-b border-black/6 bg-[#f9fafb]">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-11 flex items-center justify-between gap-4">
-          <p className="text-[11px] text-[#86868b]">
+          <p className="text-[11px] text-muted">
             Showing prices in <span className="font-semibold text-black">{currency}</span>
           </p>
           <div className="flex items-center gap-1 bg-white border border-black/10 p-0.5 rounded-sm shadow-sm">
             {(['USD', 'AED'] as const).map(c => (
               <button key={c} onClick={() => setCurrency(c)}
-                className={`px-4 py-1 text-[11px] font-bold rounded-sm transition-all ${currency === c ? 'bg-black text-white shadow-sm' : 'text-[#86868b] hover:text-black'}`}>
+                className={`px-4 py-1 text-[11px] font-bold rounded-sm transition-all ${currency === c ? 'bg-black text-white shadow-sm' : 'text-muted hover:text-black'}`}>
                 {c === 'USD' ? '$ USD' : 'AED'}
               </button>
             ))}
@@ -137,7 +137,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
 
           {/* Left — category info + filters */}
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-semibold text-[#86868b] tracking-[0.1em] uppercase mb-1">{category.count} tools · GCC region</p>
+            <p className="text-[10px] font-semibold text-muted tracking-[0.1em] uppercase mb-1">{category.count} tools · GCC region</p>
             <h1 className="text-[24px] sm:text-[32px] font-semibold text-black tracking-tight mb-2">{category.name}</h1>
             <p className="text-[13px] sm:text-[14px] text-[#555] leading-[1.65] mb-4">{category.description}</p>
 
@@ -147,23 +147,23 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                 <span key={sub} className="text-[11px] font-medium px-2.5 py-1 rounded-sm border border-black/10 text-[#555] bg-white">{sub}</span>
               ))}
               {category.subcategories.length > 6 && (
-                <span className="text-[11px] text-[#86868b] px-2.5 py-1">+{category.subcategories.length - 6} more</span>
+                <span className="text-[11px] text-muted px-2.5 py-1">+{category.subcategories.length - 6} more</span>
               )}
             </div>
 
             {/* Controls row — search + hot deals only (annual toggle removed) */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="relative">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#86868b]" />
+                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
                 <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products..."
-                  className="bg-[#f5f5f7] border-0 pl-8 pr-3 py-2 text-[12px] rounded-sm outline-none focus:ring-2 focus:ring-[#007AFF]/20 w-40 sm:w-56 min-h-[36px]" />
+                  className="bg-surface border-0 pl-8 pr-3 py-2 text-[12px] rounded-sm outline-none focus:ring-2 focus:ring-accent/20 w-40 sm:w-56 min-h-[36px]" />
               </div>
               <button onClick={() => setShowOnlyDiscounted(d => !d)}
                 className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1.5 rounded-sm border transition-colors min-h-[34px] ${showOnlyDiscounted ? 'bg-[#fff7ed] border-[#f97316]/30 text-[#ea580c]' : 'border-black/10 text-[#555] hover:border-black/20'}`}>
-                <Flame size={11} className={showOnlyDiscounted ? 'text-[#ea580c]' : 'text-[#86868b]'} />
+                <Flame size={11} className={showOnlyDiscounted ? 'text-[#ea580c]' : 'text-muted'} />
                 {showOnlyDiscounted ? 'Hot Deals ×' : 'Hot Deals'}
               </button>
-              <span className="text-[12px] text-[#86868b] ml-auto">{filtered.length} products</span>
+              <span className="text-[12px] text-muted ml-auto">{filtered.length} products</span>
             </div>
           </div>
 
@@ -172,16 +172,16 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             <div className="lg:w-64 shrink-0">
               <div className="flex items-center gap-1.5 mb-3">
                 <TrendingUp size={12} className="text-[#ea580c]" />
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em]">Hot in {category.name}</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em]">Hot in {category.name}</p>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {trendingProducts.slice(0, 6).map(tp => (
                   <Link key={tp.id} href={`/software/product/${tp.slug}`}
-                    className="flex items-center gap-2 border border-black/8 rounded-sm px-2.5 py-2 bg-white hover:border-[#007AFF]/25 hover:bg-[#f8fbff] transition-all group">
-                    <div className="w-7 h-7 rounded-sm bg-[#f5f5f7] flex items-center justify-center shrink-0 text-[9px] font-bold text-black">{tp.logo}</div>
+                    className="flex items-center gap-2 border border-black/8 rounded-sm px-2.5 py-2 bg-white hover:border-accent/25 hover:bg-[#f8fbff] transition-all group">
+                    <div className="w-7 h-7 rounded-sm bg-surface flex items-center justify-center shrink-0 text-[9px] font-bold text-black">{tp.logo}</div>
                     <div className="min-w-0">
-                      <p className="text-[11px] font-semibold text-black truncate leading-tight group-hover:text-[#007AFF] transition-colors">{tp.name}</p>
-                      <p className="text-[10px] text-[#86868b]">
+                      <p className="text-[11px] font-semibold text-black truncate leading-tight group-hover:text-accent transition-colors">{tp.name}</p>
+                      <p className="text-[10px] text-muted">
                         {tp.gcPrice === 0 ? 'Free' : `$${tp.gcPrice}/mo`}
                       </p>
                     </div>
@@ -202,7 +202,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
               <div className="text-center py-16 border border-black/8 rounded-sm">
                 <p className="text-[16px] font-semibold text-black mb-2">No products match your filter</p>
                 <button onClick={() => { setSearch(''); setShowOnlyDiscounted(false); }}
-                  className="text-[13px] text-[#007AFF]">Clear filters</button>
+                  className="text-[13px] text-accent">Clear filters</button>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -218,12 +218,12 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                       <div className="p-5 flex-1">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
-                            <div className="w-11 h-11 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+                            <div className="w-11 h-11 rounded-sm bg-surface border border-black/8 flex items-center justify-center shrink-0">
                               <span className="text-[11px] font-bold text-black">{product.logo}</span>
                             </div>
                             <div>
                               <p className="text-[13px] font-semibold text-black leading-tight">{product.name}</p>
-                              <p className="text-[10px] text-[#86868b]">{product.vendor}</p>
+                              <p className="text-[10px] text-muted">{product.vendor}</p>
                             </div>
                           </div>
                           {product.discountPct > 0 && (
@@ -243,18 +243,18 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                             <>
                               <div className="flex items-baseline gap-1.5">
                                 <span className="text-[18px] font-semibold text-black">{fmtMonthly(product.gcPrice)}</span>
-                                <span className="text-[11px] text-[#86868b]">/mo</span>
+                                <span className="text-[11px] text-muted">/mo</span>
                               </div>
                               <div className="flex items-center gap-1.5 mt-0.5">
-                                <span className="text-[11px] text-[#007AFF] font-medium">
+                                <span className="text-[11px] text-accent font-medium">
                                   Annual: {currency === 'AED'
                                     ? `AED ${Math.round(product.gcPrice * 0.8 * AED_RATE)}`
                                     : `$${(product.gcPrice * 0.8).toFixed(2)}`}/mo
                                 </span>
-                                <span className="text-[9px] font-bold text-[#007AFF] bg-[#007AFF]/10 px-1 py-0.5 rounded-sm">−20%</span>
+                                <span className="text-[9px] font-bold text-accent bg-accent/10 px-1 py-0.5 rounded-sm">−20%</span>
                               </div>
                               {product.discountPct > 0 && (
-                                <span className="text-[11px] text-[#86868b] line-through">{fmtOriginal(product.originalPrice)}</span>
+                                <span className="text-[11px] text-muted line-through">{fmtOriginal(product.originalPrice)}</span>
                               )}
                             </>
                           )}
@@ -263,13 +263,13 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                         {/* Rating */}
                         <div className="flex items-center gap-2 mb-3">
                           <StarRow rating={product.rating} />
-                          <span className="text-[11px] text-[#86868b]">{product.rating} · {product.reviews.toLocaleString()}</span>
+                          <span className="text-[11px] text-muted">{product.rating} · {product.reviews.toLocaleString()}</span>
                         </div>
 
                         {/* Tags */}
                         <div className="flex flex-wrap gap-1">
                           {product.tags.slice(0, 3).map(tag => (
-                            <span key={tag} className="text-[10px] bg-[#f5f5f7] text-[#86868b] px-1.5 py-0.5 rounded-sm">{tag}</span>
+                            <span key={tag} className="text-[10px] bg-surface text-muted px-1.5 py-0.5 rounded-sm">{tag}</span>
                           ))}
                         </div>
                       </div>
@@ -277,11 +277,11 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                       {/* CTAs — always Buy Now + View Details */}
                       <div className="px-4 pb-4 pt-3 border-t border-black/5 flex items-center gap-2">
                         <Link href={checkoutUrl}
-                          className="flex-1 flex items-center justify-center gap-1 bg-[#007AFF] text-white py-2.5 text-[12px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors min-h-[44px]">
+                          className="flex-1 flex items-center justify-center gap-1 bg-accent text-white py-2.5 text-[12px] font-semibold rounded-sm hover:bg-accent-hover transition-colors min-h-[44px]">
                           Buy Now <ArrowRight size={11} strokeWidth={2} />
                         </Link>
                         <Link href={`/software/product/${product.slug}`}
-                          className="flex items-center justify-center border border-black/10 text-black px-3 py-2.5 text-[12px] font-medium rounded-sm hover:bg-[#f5f5f7] transition-colors min-h-[44px]">
+                          className="flex items-center justify-center border border-black/10 text-black px-3 py-2.5 text-[12px] font-medium rounded-sm hover:bg-surface transition-colors min-h-[44px]">
                           Details
                         </Link>
                       </div>
@@ -292,8 +292,8 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             )}
 
             {/* GCC note */}
-            <div className="mt-5 flex items-center gap-2.5 px-4 py-3 bg-[#f5f5f7] rounded-sm">
-              <Zap size={13} className="text-[#86868b] shrink-0" />
+            <div className="mt-5 flex items-center gap-2.5 px-4 py-3 bg-surface rounded-sm">
+              <Zap size={13} className="text-muted shrink-0" />
               <p className="text-[12px] text-[#555]">
                 <span className="font-semibold">GCC region pricing.</span> All prices shown with exclusive GCC discounts. Activation within 7 days. Single invoice per order.
               </p>
@@ -308,19 +308,19 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
               <div>
                 <div className="flex items-center gap-1.5 mb-3">
                   <TrendingUp size={12} className="text-[#ea580c]" />
-                  <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em]">Trending Now</p>
+                  <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em]">Trending Now</p>
                 </div>
                 <div className="relative overflow-hidden border border-black/8 rounded-sm bg-white">
                   {trendingProducts.map((tp, i) => (
                     <Link key={tp.id} href={`/software/product/${tp.slug}`}
                       className={`block p-4 transition-all duration-500 ${i === trendingIdx ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}>
                       <div className="flex items-center gap-2.5 mb-2">
-                        <div className="w-9 h-9 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 rounded-sm bg-surface border border-black/8 flex items-center justify-center shrink-0">
                           <span className="text-[10px] font-bold text-black">{tp.logo}</span>
                         </div>
                         <div className="min-w-0">
                           <p className="text-[12px] font-semibold text-black truncate">{tp.name}</p>
-                          <p className="text-[10px] text-[#86868b] truncate">{tp.vendor}</p>
+                          <p className="text-[10px] text-muted truncate">{tp.vendor}</p>
                         </div>
                       </div>
                       <p className="text-[11px] text-[#555] line-clamp-2 leading-snug mb-2">{tp.tagline}</p>
@@ -328,7 +328,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                         <span className="text-[13px] font-semibold text-black">
                           {tp.gcPrice === 0 ? 'Free' : `$${tp.gcPrice}/mo`}
                         </span>
-                        <span className="text-[10px] font-semibold text-[#007AFF] flex items-center gap-0.5">
+                        <span className="text-[10px] font-semibold text-accent flex items-center gap-0.5">
                           View <ArrowRight size={9} />
                         </span>
                       </div>
@@ -338,7 +338,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                   <div className="flex items-center justify-center gap-1 pb-2 pt-1">
                     {trendingProducts.map((_, i) => (
                       <button key={i} onClick={() => setTrendingIdx(i)}
-                        className={`w-1.5 h-1.5 rounded-full transition-all ${i === trendingIdx ? 'bg-[#007AFF] w-3' : 'bg-black/15'}`} />
+                        className={`w-1.5 h-1.5 rounded-full transition-all ${i === trendingIdx ? 'bg-accent w-3' : 'bg-black/15'}`} />
                     ))}
                   </div>
                 </div>
@@ -347,7 +347,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
 
             {relatedBundles.length > 0 && (
             <div>
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-3">Buy as a Bundle</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">Buy as a Bundle</p>
               <div className="space-y-3">
                 {relatedBundles.slice(0, 3).map(bundle => (
                   <div key={bundle.id} className="border border-black/8 rounded-sm p-4 bg-white hover:border-black/20 transition-all">
@@ -358,10 +358,10 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                         Save {bundle.savePct}%
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#86868b] mb-2 leading-snug">{bundle.tagline}</p>
+                    <p className="text-[11px] text-muted mb-2 leading-snug">{bundle.tagline}</p>
                     <div className="flex items-baseline gap-1 mb-2">
                       <span className="text-[16px] font-semibold text-black">${bundle.monthlyPrice}</span>
-                      <span className="text-[10px] text-[#86868b]">/mo</span>
+                      <span className="text-[10px] text-muted">/mo</span>
                     </div>
                     <div className="space-y-1 mb-3">
                       {bundle.items.slice(0, 3).map(item => (
@@ -370,7 +370,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                           {item.product}
                         </div>
                       ))}
-                      {bundle.items.length > 3 && <p className="text-[10px] text-[#86868b] pl-4">+{bundle.items.length - 3} more</p>}
+                      {bundle.items.length > 3 && <p className="text-[10px] text-muted pl-4">+{bundle.items.length - 3} more</p>}
                     </div>
                     <Link href={`/bundles/${bundle.slug}`}
                       className="flex items-center justify-center gap-1 w-full py-2 text-[11px] font-semibold rounded-sm text-white transition-colors min-h-[36px]"
@@ -383,12 +383,12 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
 
               {/* Other categories */}
               <div className="mt-6">
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2.5">Other Categories</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-2.5">Other Categories</p>
                 {softwareCategories.filter(c => c.slug !== slug && c.featured).slice(0, 5).map(c => (
                   <Link key={c.slug} href={`/software/category/${c.slug}`}
                     className="flex items-center justify-between py-2 text-[12px] text-[#555] hover:text-black border-b border-black/5 group">
-                    <span className="group-hover:text-[#007AFF] transition-colors">{c.name}</span>
-                    <span className="text-[10px] text-[#86868b]">{c.count}</span>
+                    <span className="group-hover:text-accent transition-colors">{c.name}</span>
+                    <span className="text-[10px] text-muted">{c.count}</span>
                   </Link>
                 ))}
               </div>

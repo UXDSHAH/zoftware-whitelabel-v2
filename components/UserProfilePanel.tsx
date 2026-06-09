@@ -158,12 +158,12 @@ function StatusBadge({ status }: { status: string }) {
   const cfg: Record<string, string> = {
     Active: 'bg-[#dcfce7] text-[#16a34a]',
     Activating: 'bg-[#fef3c7] text-[#d97706]',
-    Resolved: 'bg-[#f5f5f7] text-[#86868b]',
+    Resolved: 'bg-surface text-muted',
     Open: 'bg-[#fff7ed] text-[#ea580c]',
-    Completed: 'bg-[#eff6ff] text-[#007AFF]',
+    Completed: 'bg-[#eff6ff] text-accent',
   };
   return (
-    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-sm ${cfg[status] || 'bg-[#f5f5f7] text-[#86868b]'}`}>
+    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-sm ${cfg[status] || 'bg-surface text-muted'}`}>
       {status}
     </span>
   );
@@ -222,21 +222,21 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
             <div className="flex items-center gap-2">
               <p className="text-[13px] font-semibold text-black">{mockUser.firstName} {mockUser.lastName}</p>
               <span className="text-[#c7c7cc]">·</span>
-              <p className="text-[12px] text-[#86868b] hidden sm:block">{mockUser.role} · {mockUser.company}</p>
+              <p className="text-[12px] text-muted hidden sm:block">{mockUser.role} · {mockUser.company}</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f5f5f7] text-[#86868b] hover:text-black transition-colors relative">
+            <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface text-muted hover:text-black transition-colors relative">
               <Bell size={14} />
               {openTickets > 0 && <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#ea580c]" />}
             </button>
             <button onClick={handleLogout}
               title="Sign out"
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 text-[#86868b] hover:text-red-500 transition-colors">
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 text-muted hover:text-red-500 transition-colors">
               <LogOut size={14} />
             </button>
             <button onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f5f5f7] text-[#86868b] hover:text-black transition-colors">
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface text-muted hover:text-black transition-colors">
               <X size={16} />
             </button>
           </div>
@@ -257,7 +257,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
               ].map(({ v, l, sub, alert }) => (
                 <div key={l} className="py-3 text-center">
                   <p className={`text-[18px] font-semibold leading-none mb-0.5 ${alert ? 'text-[#ea580c]' : 'text-black'}`}>{v}</p>
-                  <p className="text-[9px] text-[#86868b]">{l}</p>
+                  <p className="text-[9px] text-muted">{l}</p>
                   <p className="text-[9px] text-[#c7c7cc]">{sub}</p>
                 </div>
               ))}
@@ -272,11 +272,11 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                       ? 'bg-black text-white'
                       : 'text-[#555] hover:bg-white hover:text-black'
                   }`}>
-                  <span className={tab === t.id ? 'text-white' : 'text-[#86868b]'}>{t.icon}</span>
+                  <span className={tab === t.id ? 'text-white' : 'text-muted'}>{t.icon}</span>
                   <span className="flex-1">{t.label}</span>
                   {t.badge !== undefined && (
                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center ${
-                      tab === t.id ? 'bg-white/20 text-white' : 'bg-[#f0f0f0] text-[#86868b]'
+                      tab === t.id ? 'bg-white/20 text-white' : 'bg-[#f0f0f0] text-muted'
                     }`}>{t.badge}</span>
                   )}
                 </button>
@@ -284,7 +284,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
 
               {/* Sign out */}
               <button onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-sm text-left text-[13px] font-medium text-[#86868b] hover:bg-red-50 hover:text-red-500 transition-colors mt-1">
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-sm text-left text-[13px] font-medium text-muted hover:bg-red-50 hover:text-red-500 transition-colors mt-1">
                 <LogOut size={14} className="shrink-0" />
                 Sign out
               </button>
@@ -346,12 +346,12 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
               {tabs.map(t => (
                 <button key={t.id} onClick={() => setTab(t.id)}
                   className={`flex items-center gap-1.5 px-4 py-3 text-[11px] font-semibold border-b-2 whitespace-nowrap shrink-0 transition-colors ${
-                    tab === t.id ? 'border-[#007AFF] text-[#007AFF]' : 'border-transparent text-[#86868b] hover:text-black'
+                    tab === t.id ? 'border-accent text-accent' : 'border-transparent text-muted hover:text-black'
                   }`}>
                   {t.label}
                   {t.badge !== undefined && (
                     <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                      tab === t.id ? 'bg-[#007AFF] text-white' : 'bg-[#f5f5f7] text-[#86868b]'
+                      tab === t.id ? 'bg-accent text-white' : 'bg-surface text-muted'
                     }`}>{t.badge}</span>
                   )}
                 </button>
@@ -366,7 +366,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                 {tab === 'reports' && 'Saved Reports'}
                 {tab === 'support' && 'Support & Help'}
               </h1>
-              <p className="text-[13px] text-[#86868b] mt-1">
+              <p className="text-[13px] text-muted mt-1">
                 {tab === 'purchases' && `${mockPurchases.length} active subscriptions · $1,520/mo`}
                 {tab === 'cart' && `${cartItems.length} item${cartItems.length !== 1 ? 's' : ''} · $${cartTotal}/mo estimated`}
                 {tab === 'reports' && `${mockRfpReports.length + mockStrategyReports.length} reports generated`}
@@ -383,9 +383,9 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
               {tab === 'purchases' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-[12px] text-[#86868b]">{mockPurchases.length} active subscriptions</p>
+                    <p className="text-[12px] text-muted">{mockPurchases.length} active subscriptions</p>
                     <Link href="/software" onClick={onClose}
-                      className="text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] flex items-center gap-1">
+                      className="text-[12px] font-semibold text-accent hover:text-accent-hover flex items-center gap-1">
                       Browse more <ArrowRight size={11} />
                     </Link>
                   </div>
@@ -396,26 +396,26 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                         className="flex items-center gap-4 px-5 py-4 cursor-pointer"
                         onClick={() => { onClose(); router.push(p.type === 'bundle' ? `/bundles/${p.slug}` : `/software/product/${p.slug}`); }}
                       >
-                        <div className="w-11 h-11 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+                        <div className="w-11 h-11 rounded-sm bg-surface border border-black/8 flex items-center justify-center shrink-0">
                           <span className="text-[12px] font-bold text-black">{p.logo}</span>
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
-                            <p className="text-[14px] font-semibold text-black group-hover:text-[#007AFF] transition-colors truncate">{p.name}</p>
+                            <p className="text-[14px] font-semibold text-black group-hover:text-accent transition-colors truncate">{p.name}</p>
                             <StatusBadge status={p.status} />
                           </div>
-                          <p className="text-[12px] text-[#86868b]">
+                          <p className="text-[12px] text-muted">
                             {p.vendor} · {p.plan} · {p.licenses} {p.type === 'bundle' ? 'bundle' : 'users'} · {p.department}
                           </p>
                         </div>
                         <div className="text-right shrink-0">
                           <p className="text-[15px] font-semibold text-black">{p.price}</p>
-                          <p className="text-[11px] text-[#86868b]">{p.billing}</p>
+                          <p className="text-[11px] text-muted">{p.billing}</p>
                         </div>
                       </div>
 
                       <div className="border-t border-black/6 px-5 py-2.5 flex items-center justify-between bg-[#f9fafb]">
-                        <div className="text-[11px] text-[#86868b] flex items-center gap-3">
+                        <div className="text-[11px] text-muted flex items-center gap-3">
                           {p.status === 'Activating' ? (
                             <span className="flex items-center gap-1 text-[#d97706]">
                               <Clock size={10} /> Activation in progress
@@ -430,7 +430,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                         </div>
                         <button
                           onClick={() => toggleHolders(p.id)}
-                          className="flex items-center gap-1 text-[11px] font-semibold text-[#007AFF] hover:text-[#0051D5] bg-[#007AFF]/5 hover:bg-[#007AFF]/10 px-2 py-0.5 rounded-sm transition-colors">
+                          className="flex items-center gap-1 text-[11px] font-semibold text-accent hover:text-accent-hover bg-accent/5 hover:bg-accent/10 px-2 py-0.5 rounded-sm transition-colors">
                           Holders
                           <ChevronDown size={10} className={`transition-transform ${expandedHolders.includes(p.id) ? 'rotate-180' : ''}`} />
                         </button>
@@ -438,7 +438,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
 
                       {expandedHolders.includes(p.id) && (
                         <div className="border-t border-black/6 bg-white px-5 py-3 space-y-2">
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-wider mb-2">
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">
                             License Holders ({p.licenses} total)
                           </p>
                           <div className="divide-y divide-black/4">
@@ -446,14 +446,14 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                               <div key={i} className="py-2 flex items-center justify-between gap-3">
                                 <div>
                                   <p className="text-[12px] font-semibold text-black">{h.name}</p>
-                                  <p className="text-[10px] text-[#86868b] font-mono">{h.email}</p>
+                                  <p className="text-[10px] text-muted font-mono">{h.email}</p>
                                 </div>
-                                <span className="text-[10px] bg-[#f5f5f7] text-[#555] px-2 py-0.5 rounded-sm font-medium shrink-0">{h.role}</span>
+                                <span className="text-[10px] bg-surface text-[#555] px-2 py-0.5 rounded-sm font-medium shrink-0">{h.role}</span>
                               </div>
                             ))}
                           </div>
                           {p.licenses > p.holders.length && (
-                            <p className="text-[10px] text-[#86868b] italic pt-1 border-t border-black/6">
+                            <p className="text-[10px] text-muted italic pt-1 border-t border-black/6">
                               + {p.licenses - p.holders.length} unassigned licenses remaining
                             </p>
                           )}
@@ -463,15 +463,15 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                   ))}
 
                   {/* Spend summary */}
-                  <div className="border border-[#007AFF]/15 bg-[#eff6ff] rounded-sm p-5 flex items-center justify-between">
+                  <div className="border border-accent/15 bg-[#eff6ff] rounded-sm p-5 flex items-center justify-between">
                     <div>
-                      <p className="text-[11px] font-semibold text-[#007AFF] mb-1">Monthly spend</p>
+                      <p className="text-[11px] font-semibold text-accent mb-1">Monthly spend</p>
                       <p className="text-[28px] font-semibold text-black">$1,520</p>
-                      <p className="text-[12px] text-[#86868b]">across all active subscriptions</p>
+                      <p className="text-[12px] text-muted">across all active subscriptions</p>
                     </div>
                     <div className="text-right">
                       <p className="text-[14px] font-semibold text-[#16a34a]">Saving $680/mo</p>
-                      <p className="text-[11px] text-[#86868b]">vs list prices</p>
+                      <p className="text-[11px] text-muted">vs list prices</p>
                     </div>
                   </div>
                 </div>
@@ -484,18 +484,18 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                     <div className="text-center py-16 border border-dashed border-black/10 rounded-sm">
                       <ShoppingCart size={32} className="text-[#c7c7cc] mx-auto mb-3" strokeWidth={1.2} />
                       <p className="text-[14px] font-semibold text-black mb-1">Your cart is empty</p>
-                      <p className="text-[12px] text-[#86868b] mb-4">Browse software or bundles to add items</p>
+                      <p className="text-[12px] text-muted mb-4">Browse software or bundles to add items</p>
                       <Link href="/software" onClick={onClose}
-                        className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+                        className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors">
                         Browse Software <ArrowRight size={11} />
                       </Link>
                     </div>
                   ) : (
                     <>
                       <div className="flex items-center justify-between">
-                        <p className="text-[12px] text-[#86868b]">{cartItems.length} item{cartItems.length !== 1 ? 's' : ''} in your cart</p>
+                        <p className="text-[12px] text-muted">{cartItems.length} item{cartItems.length !== 1 ? 's' : ''} in your cart</p>
                         <Link href="/software" onClick={onClose}
-                          className="text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] flex items-center gap-1">
+                          className="text-[12px] font-semibold text-accent hover:text-accent-hover flex items-center gap-1">
                           Add more <ArrowRight size={11} />
                         </Link>
                       </div>
@@ -503,26 +503,26 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                       {cartItems.map(item => (
                         <div key={item.id} className="border border-black/8 rounded-sm overflow-hidden hover:border-black/16 transition-all group">
                           <div className="flex items-center gap-4 px-5 py-4">
-                            <div className="w-11 h-11 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+                            <div className="w-11 h-11 rounded-sm bg-surface border border-black/8 flex items-center justify-center shrink-0">
                               <span className="text-[12px] font-bold text-black">{item.logo}</span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-0.5">
                                 <p className="text-[14px] font-semibold text-black truncate">{item.name}</p>
                                 {item.type === 'bundle' && (
-                                  <span className="text-[9px] font-bold bg-[#007AFF] text-white px-1.5 py-0.5 rounded-sm shrink-0">BUNDLE</span>
+                                  <span className="text-[9px] font-bold bg-accent text-white px-1.5 py-0.5 rounded-sm shrink-0">BUNDLE</span>
                                 )}
                               </div>
-                              <p className="text-[12px] text-[#86868b]">
+                              <p className="text-[12px] text-muted">
                                 {item.vendor} · {item.plan} · {item.licenses} {item.type === 'bundle' ? 'bundle' : `user${item.licenses !== 1 ? 's' : ''}`} · {item.category}
                               </p>
                               <p className="text-[10px] text-[#c7c7cc] mt-0.5">Added {item.addedOn}</p>
                             </div>
                             <div className="text-right shrink-0 mr-2">
-                              <p className="text-[15px] font-semibold text-black">${item.price}<span className="text-[11px] text-[#86868b] font-normal">/mo</span></p>
+                              <p className="text-[15px] font-semibold text-black">${item.price}<span className="text-[11px] text-muted font-normal">/mo</span></p>
                               {item.originalPrice > item.price && (
                                 <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                                  <p className="text-[10px] text-[#86868b] line-through">${item.originalPrice}</p>
+                                  <p className="text-[10px] text-muted line-through">${item.originalPrice}</p>
                                   <span className="text-[9px] font-bold bg-[#dcfce7] text-[#16a34a] px-1 py-0.5 rounded-sm">{item.discountPct}% off</span>
                                 </div>
                               )}
@@ -535,11 +535,11 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                           </div>
 
                           <div className="border-t border-black/6 px-5 py-2.5 flex items-center justify-between bg-[#f9fafb]">
-                            <span className="text-[11px] text-[#86868b]">{item.billing} billing</span>
+                            <span className="text-[11px] text-muted">{item.billing} billing</span>
                             <Link
                               href={item.type === 'bundle' ? `/checkout?bundle=${item.slug}` : `/checkout?product=${item.slug}&price=${item.price}&billing=${item.billing.toLowerCase()}`}
                               onClick={onClose}
-                              className="flex items-center gap-1 text-[11px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+                              className="flex items-center gap-1 text-[11px] font-semibold text-accent hover:text-accent-hover transition-colors">
                               Checkout <ChevronRight size={10} />
                             </Link>
                           </div>
@@ -566,7 +566,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                         <Link
                           href={`/checkout?product=${cartItems[0]?.slug}&price=${cartItems[0]?.price}&billing=${cartItems[0]?.billing?.toLowerCase()}`}
                           onClick={onClose}
-                          className="w-full flex items-center justify-center gap-2 py-3 bg-[#007AFF] hover:bg-[#0051D5] text-white text-[13px] font-semibold rounded-sm transition-colors">
+                          className="w-full flex items-center justify-center gap-2 py-3 bg-accent hover:bg-accent-hover text-white text-[13px] font-semibold rounded-sm transition-colors">
                           Proceed to Checkout <ArrowRight size={13} />
                         </Link>
                       </div>
@@ -580,11 +580,11 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                 <div className="space-y-6">
                   <div>
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-[#007AFF]">
+                      <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-accent">
                         <FileText size={13} className="text-white" />
                       </div>
                       <p className="text-[13px] font-semibold text-black">Tech Requirement Reports</p>
-                      <span className="ml-auto text-[10px] font-semibold bg-[#f5f5f7] text-[#86868b] px-2 py-0.5 rounded-full">{mockRfpReports.length} reports</span>
+                      <span className="ml-auto text-[10px] font-semibold bg-surface text-muted px-2 py-0.5 rounded-full">{mockRfpReports.length} reports</span>
                     </div>
                     <div className="space-y-3">
                       {mockRfpReports.map(r => (
@@ -595,14 +595,14 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                           </div>
                           <p className="text-[12px] text-[#555] leading-snug mb-3">{r.summary}</p>
                           <div className="flex flex-wrap gap-1.5 mb-3">
-                            {r.matched.map(m => <span key={m} className="text-[10px] bg-[#f5f5f7] text-[#555] px-2 py-0.5 rounded-sm">{m}</span>)}
+                            {r.matched.map(m => <span key={m} className="text-[10px] bg-surface text-[#555] px-2 py-0.5 rounded-sm">{m}</span>)}
                           </div>
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3 text-[11px] text-[#86868b]">
+                            <div className="flex items-center gap-3 text-[11px] text-muted">
                               <span>{r.date}</span>
-                              <span className="font-semibold text-[#007AFF]">Match: {r.score}</span>
+                              <span className="font-semibold text-accent">Match: {r.score}</span>
                             </div>
-                            <button className="flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5]">
+                            <button className="flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover">
                               <Download size={11} /> Download RFP
                             </button>
                           </div>
@@ -615,11 +615,11 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
 
                   <div>
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-[#0051D5]">
+                      <div className="w-7 h-7 rounded-sm flex items-center justify-center bg-accent-hover">
                         <BarChart2 size={13} className="text-white" />
                       </div>
                       <p className="text-[13px] font-semibold text-black">Tech Strategy Reports</p>
-                      <span className="ml-auto text-[10px] font-semibold bg-[#f5f5f7] text-[#86868b] px-2 py-0.5 rounded-full">{mockStrategyReports.length} report</span>
+                      <span className="ml-auto text-[10px] font-semibold bg-surface text-muted px-2 py-0.5 rounded-full">{mockStrategyReports.length} report</span>
                     </div>
                     <div className="space-y-3">
                       {mockStrategyReports.map(r => (
@@ -641,8 +641,8 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                             ))}
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-[11px] text-[#86868b]">{r.date}</span>
-                            <button className="flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5]">
+                            <span className="text-[11px] text-muted">{r.date}</span>
+                            <button className="flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover">
                               <Download size={11} /> Download Roadmap
                             </button>
                           </div>
@@ -653,10 +653,10 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
 
                   <div className="border border-black/8 rounded-sm p-5 bg-[#f9fafb] text-center">
                     <p className="text-[13px] font-semibold text-black mb-1">Generate a new report</p>
-                    <p className="text-[12px] text-[#86868b] mb-4">Use our AI builders to create RFPs or tech roadmaps instantly</p>
+                    <p className="text-[12px] text-muted mb-4">Use our AI builders to create RFPs or tech roadmaps instantly</p>
                     <div className="flex gap-3 max-w-sm mx-auto">
                       <Link href="/software?mode=requirements" onClick={onClose}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold bg-[#007AFF] text-white rounded-sm hover:bg-[#0051D5] transition-colors">
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold bg-accent text-white rounded-sm hover:bg-accent-hover transition-colors">
                         <FileText size={12} /> RFP Builder
                       </Link>
                       <Link href="/software?mode=strategy" onClick={onClose}
@@ -674,7 +674,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <p className="text-[13px] font-semibold text-black">Support Tickets</p>
-                      <button className="flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5]">
+                      <button className="flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover">
                         <Ticket size={11} /> New ticket
                       </button>
                     </div>
@@ -685,7 +685,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                             <p className="text-[13px] font-semibold text-black">{t.subject}</p>
                             <StatusBadge status={t.status} />
                           </div>
-                          <div className="flex items-center gap-3 text-[11px] text-[#86868b] mt-2">
+                          <div className="flex items-center gap-3 text-[11px] text-muted mt-2">
                             <span className="font-mono">{t.id}</span>
                             <span>·</span>
                             <span>{t.priority} priority</span>
@@ -693,10 +693,10 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                             <span>Updated {t.lastUpdate}</span>
                           </div>
                           <div className="flex items-center gap-2 mt-2 text-[12px] text-[#555]">
-                            <User size={11} className="text-[#86868b]" /> Assigned to {t.agent}
+                            <User size={11} className="text-muted" /> Assigned to {t.agent}
                           </div>
                           {t.status === 'Open' && (
-                            <button className="mt-2 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] flex items-center gap-1">
+                            <button className="mt-2 text-[12px] font-semibold text-accent hover:text-accent-hover flex items-center gap-1">
                               View thread <ChevronRight size={11} />
                             </button>
                           )}
@@ -717,7 +717,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                           </div>
                           <div>
                             <p className="text-[13px] text-black">{c.summary}</p>
-                            <p className="text-[10px] text-[#86868b] mt-1">{c.date} · {c.bot}</p>
+                            <p className="text-[10px] text-muted mt-1">{c.date} · {c.bot}</p>
                           </div>
                         </div>
                       ))}
@@ -727,7 +727,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                   <div className="border-t border-black/8" />
 
                   <div className="border border-black/8 rounded-sm p-5">
-                    <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-4">Reach Support</p>
+                    <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-4">Reach Support</p>
                     <div className="space-y-3 mb-4">
                       {[
                         { icon: <Mail size={13} />, label: 'Email', value: 'support@zoftware.com', href: 'mailto:support@zoftware.com' },
@@ -735,14 +735,14 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                         { icon: <MessageSquare size={13} />, label: 'WhatsApp', value: '+971 55 000 0000', href: 'https://wa.me/971550000000' },
                       ].map(({ icon, label, value, href }) => (
                         <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
-                          className="flex items-center gap-3 hover:text-[#007AFF] transition-colors group">
-                          <span className="text-[#86868b] group-hover:text-[#007AFF]">{icon}</span>
-                          <span className="text-[12px] text-[#86868b] w-20 shrink-0">{label}</span>
-                          <span className="text-[13px] font-medium text-black group-hover:text-[#007AFF]">{value}</span>
+                          className="flex items-center gap-3 hover:text-accent transition-colors group">
+                          <span className="text-muted group-hover:text-accent">{icon}</span>
+                          <span className="text-[12px] text-muted w-20 shrink-0">{label}</span>
+                          <span className="text-[13px] font-medium text-black group-hover:text-accent">{value}</span>
                         </a>
                       ))}
                     </div>
-                    <div className="flex items-center gap-2 text-[11px] text-[#86868b] bg-[#f5f5f7] rounded-sm px-3 py-2">
+                    <div className="flex items-center gap-2 text-[11px] text-muted bg-surface rounded-sm px-3 py-2">
                       <Clock size={11} />
                       Support hours: Sun–Thu 9am–6pm GST · Priority SLA: 4 hours
                     </div>
@@ -756,7 +756,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                 <div className="hidden xl:block w-[240px] shrink-0 sticky top-0 self-start">
                   <div className="border border-black/8 rounded-sm overflow-hidden">
                     <div className="px-4 py-3 bg-[#f9fafb] border-b border-black/8">
-                      <p className="text-[10px] font-bold text-[#86868b] uppercase tracking-[0.08em]">Account Summary</p>
+                      <p className="text-[10px] font-bold text-muted uppercase tracking-[0.08em]">Account Summary</p>
                     </div>
                     <div className="divide-y divide-black/6">
                       {[
@@ -766,7 +766,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                         { v: cartItems.length.toString(), l: 'Items in cart', c: '#000' },
                       ].map(({ v, l, c }) => (
                         <div key={l} className="flex items-center justify-between px-4 py-3">
-                          <span className="text-[12px] text-[#86868b]">{l}</span>
+                          <span className="text-[12px] text-muted">{l}</span>
                           <span className="text-[13px] font-bold" style={{ color: c }}>{v}</span>
                         </div>
                       ))}

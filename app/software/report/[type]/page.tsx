@@ -145,7 +145,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
         <div className="max-w-[900px] mx-auto px-4 sm:px-6 h-13 flex items-center justify-between gap-4 py-3">
           <div className="flex items-center gap-3">
             <Link href="/software"
-              className="flex items-center gap-1.5 text-[12px] text-[#86868b] hover:text-black transition-colors">
+              className="flex items-center gap-1.5 text-[12px] text-muted hover:text-black transition-colors">
               <ArrowLeft size={13} /> Back to Software
             </Link>
             <span className="text-[#e5e5e7]">|</span>
@@ -157,7 +157,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
               <span className="text-[13px] font-semibold text-black">{report.title}</span>
             </div>
           </div>
-          <button className="flex items-center gap-1.5 text-[12px] font-semibold text-white bg-[#007AFF] px-3 py-1.5 rounded-sm hover:bg-[#0051D5] transition-colors">
+          <button className="flex items-center gap-1.5 text-[12px] font-semibold text-white bg-accent px-3 py-1.5 rounded-sm hover:bg-accent-hover transition-colors">
             <Download size={12} /> Download PDF
           </button>
         </div>
@@ -176,17 +176,17 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
                     style={{ background: isRequirements ? 'linear-gradient(135deg,#007AFF,#0051D5)' : 'linear-gradient(135deg,#0051D5,#003CA6)' }}>
                     {isRequirements ? <FileText size={14} className="text-white" /> : <BarChart2 size={14} className="text-white" />}
                   </div>
-                  <span className="text-[11px] font-bold text-[#007AFF] uppercase tracking-[0.1em]">
+                  <span className="text-[11px] font-bold text-accent uppercase tracking-[0.1em]">
                     {isRequirements ? 'Tech Requirements Report' : 'Tech Strategy Roadmap'}
                   </span>
                 </div>
                 <h1 className="text-[22px] sm:text-[26px] font-semibold text-black tracking-tight mb-1">
                   {report.subtitle}
                 </h1>
-                <p className="text-[13px] text-[#86868b]">{report.preparedBy}</p>
+                <p className="text-[13px] text-muted">{report.preparedBy}</p>
               </div>
               <div className="text-right shrink-0">
-                <p className="text-[11px] text-[#86868b]">Generated</p>
+                <p className="text-[11px] text-muted">Generated</p>
                 <p className="text-[13px] font-semibold text-black">{report.generatedOn}</p>
               </div>
             </div>
@@ -201,7 +201,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
               { icon: <Shield size={12} />, label: 'Confidential', value: 'Internal use only' },
             ].map(({ icon, label, value }) => (
               <div key={label} className="px-4 py-3">
-                <div className="flex items-center gap-1.5 text-[#86868b] mb-0.5">{icon}<span className="text-[10px]">{label}</span></div>
+                <div className="flex items-center gap-1.5 text-muted mb-0.5">{icon}<span className="text-[10px]">{label}</span></div>
                 <p className="text-[12px] font-semibold text-black truncate">{value}</p>
               </div>
             ))}
@@ -214,14 +214,14 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
             {/* Inputs summary */}
             <div className="bg-white border border-black/8 rounded-sm overflow-hidden">
               <div className="px-5 py-3.5 border-b border-black/8 bg-[#f9fafb]">
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em]">Requirements Summary</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em]">Requirements Summary</p>
               </div>
               <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {requirementsReport.inputs.map(({ label, value }) => (
                   <div key={label} className="flex items-start gap-3">
-                    <Check size={13} className="text-[#007AFF] mt-0.5 shrink-0" strokeWidth={2.5} />
+                    <Check size={13} className="text-accent mt-0.5 shrink-0" strokeWidth={2.5} />
                     <div>
-                      <p className="text-[11px] text-[#86868b]">{label}</p>
+                      <p className="text-[11px] text-muted">{label}</p>
                       <p className="text-[13px] font-medium text-black">{value}</p>
                     </div>
                   </div>
@@ -231,30 +231,30 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
 
             {/* Recommendations */}
             <div>
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-3">Software Recommendations</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">Software Recommendations</p>
               <div className="space-y-4">
                 {requirementsReport.recommendations.map(r => (
                   <div key={r.rank} className="bg-white border border-black/8 rounded-sm overflow-hidden">
                     <div className="flex items-center justify-between px-5 py-4 border-b border-black/8 bg-[#f9fafb]">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center">
+                        <div className="w-9 h-9 rounded-sm bg-surface border border-black/8 flex items-center justify-center">
                           <span className="text-[10px] font-bold text-black">{r.logo}</span>
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
                             <p className="text-[14px] font-semibold text-black">{r.name}</p>
-                            <span className="text-[9px] font-bold text-[#86868b] bg-[#f5f5f7] px-1.5 py-0.5 rounded-sm">#{r.rank}</span>
+                            <span className="text-[9px] font-bold text-muted bg-surface px-1.5 py-0.5 rounded-sm">#{r.rank}</span>
                           </div>
-                          <p className="text-[11px] text-[#86868b]">{r.vendor} · {r.category}</p>
+                          <p className="text-[11px] text-muted">{r.vendor} · {r.category}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="text-right">
                           <p className="text-[13px] font-semibold text-black">{r.price}</p>
-                          <p className="text-[10px] text-[#86868b]">{r.annualTotal}</p>
+                          <p className="text-[10px] text-muted">{r.annualTotal}</p>
                         </div>
                         <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
-                          r.score >= 90 ? 'bg-[#dcfce7] text-[#16a34a]' : 'bg-[#dbeafe] text-[#007AFF]'
+                          r.score >= 90 ? 'bg-[#dcfce7] text-[#16a34a]' : 'bg-[#dbeafe] text-accent'
                         }`}>{r.score}% {r.label}</span>
                       </div>
                     </div>
@@ -262,17 +262,17 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
                       <p className="text-[13px] text-[#555] leading-[1.65] mb-4">{r.reason}</p>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2">Key Features</p>
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.08em] mb-2">Key Features</p>
                           <div className="space-y-1.5">
                             {r.features.map(f => (
                               <div key={f} className="flex items-center gap-1.5 text-[12px] text-[#555]">
-                                <Check size={10} className="text-[#007AFF] shrink-0" strokeWidth={3} />{f}
+                                <Check size={10} className="text-accent shrink-0" strokeWidth={3} />{f}
                               </div>
                             ))}
                           </div>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2">Strengths</p>
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.08em] mb-2">Strengths</p>
                           <div className="space-y-1.5">
                             {r.pros.map(p => (
                               <div key={p} className="flex items-center gap-1.5 text-[12px] text-[#555]">
@@ -282,7 +282,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
                           </div>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2">Watch-outs</p>
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.08em] mb-2">Watch-outs</p>
                           <div className="space-y-1.5">
                             {r.cons.map(c => (
                               <div key={c} className="flex items-center gap-1.5 text-[12px] text-[#555]">
@@ -294,11 +294,11 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
                       </div>
                       <div className="flex gap-2 mt-4 pt-4 border-t border-black/6">
                         <Link href={`/checkout?product=${encodeURIComponent(r.name)}&price=72&billing=monthly`}
-                          className="flex items-center gap-1.5 bg-[#007AFF] text-white text-[12px] font-semibold px-4 py-2 rounded-sm hover:bg-[#0051D5] transition-colors">
+                          className="flex items-center gap-1.5 bg-accent text-white text-[12px] font-semibold px-4 py-2 rounded-sm hover:bg-accent-hover transition-colors">
                           Buy Now <ArrowRight size={11} />
                         </Link>
                         <Link href={`/software/product/${r.name.toLowerCase().replace(/\s+/g,'-')}`}
-                          className="flex items-center gap-1.5 border border-black/10 text-black text-[12px] font-medium px-4 py-2 rounded-sm hover:bg-[#f5f5f7] transition-colors">
+                          className="flex items-center gap-1.5 border border-black/10 text-black text-[12px] font-medium px-4 py-2 rounded-sm hover:bg-surface transition-colors">
                           View details
                         </Link>
                       </div>
@@ -311,12 +311,12 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
             {/* Next steps */}
             <div className="bg-white border border-black/8 rounded-sm overflow-hidden">
               <div className="px-5 py-3.5 border-b border-black/8 bg-[#f9fafb]">
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em]">Recommended Next Steps</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em]">Recommended Next Steps</p>
               </div>
               <div className="p-5 space-y-3">
                 {requirementsReport.nextSteps.map((step, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <span className="w-5 h-5 rounded-full bg-[#007AFF] text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
+                    <span className="w-5 h-5 rounded-full bg-accent text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
                     <p className="text-[13px] text-[#555]">{step}</p>
                   </div>
                 ))}
@@ -331,14 +331,14 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
             {/* Profile */}
             <div className="bg-white border border-black/8 rounded-sm overflow-hidden">
               <div className="px-5 py-3.5 border-b border-black/8 bg-[#f9fafb]">
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em]">Business Profile</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em]">Business Profile</p>
               </div>
               <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {strategyReport.profile.map(({ label, value }) => (
                   <div key={label} className="flex items-start gap-3">
-                    <Check size={13} className="text-[#007AFF] mt-0.5 shrink-0" strokeWidth={2.5} />
+                    <Check size={13} className="text-accent mt-0.5 shrink-0" strokeWidth={2.5} />
                     <div>
-                      <p className="text-[11px] text-[#86868b]">{label}</p>
+                      <p className="text-[11px] text-muted">{label}</p>
                       <p className="text-[13px] font-medium text-black">{value}</p>
                     </div>
                   </div>
@@ -348,7 +348,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
 
             {/* Phases */}
             <div>
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-3">Implementation Roadmap</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">Implementation Roadmap</p>
               <div className="space-y-4">
                 {strategyReport.phases.map((phase, pi) => (
                   <div key={phase.phase} className="bg-white border border-black/8 rounded-sm overflow-hidden">
@@ -365,7 +365,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
                       <p className="text-[13px] text-[#555] leading-[1.65] mb-4">{phase.goal}</p>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="sm:col-span-1">
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2">Key Actions</p>
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.08em] mb-2">Key Actions</p>
                           <div className="space-y-1.5">
                             {phase.actions.map(a => (
                               <div key={a} className="flex items-start gap-1.5 text-[11px] text-[#555]">
@@ -375,7 +375,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
                           </div>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2">Recommended Products</p>
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.08em] mb-2">Recommended Products</p>
                           <div className="space-y-1.5">
                             {phase.products.map(p => (
                               <span key={p} className="block text-[11px] font-medium px-2 py-1 rounded-sm border"
@@ -386,7 +386,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
                           </div>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2">Success KPIs</p>
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.08em] mb-2">Success KPIs</p>
                           <div className="space-y-1.5">
                             {phase.kpis.map(k => (
                               <div key={k} className="flex items-start gap-1.5 text-[11px] text-[#555]">
@@ -405,7 +405,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
             {/* Investment */}
             <div className="bg-white border border-black/8 rounded-sm overflow-hidden">
               <div className="px-5 py-3.5 border-b border-black/8 bg-[#f9fafb]">
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em]">Indicative Investment</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em]">Indicative Investment</p>
               </div>
               <div className="p-5 space-y-2.5">
                 {strategyReport.investment.map(({ item, cost }) => (
@@ -427,7 +427,7 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
           </div>
           <div className="flex gap-2 shrink-0">
             <Link href="/software"
-              className="flex items-center gap-1.5 bg-[#007AFF] text-white text-[12px] font-semibold px-4 py-2.5 rounded-sm hover:bg-[#0051D5] transition-colors">
+              className="flex items-center gap-1.5 bg-accent text-white text-[12px] font-semibold px-4 py-2.5 rounded-sm hover:bg-accent-hover transition-colors">
               <Package size={12} /> Browse Software
             </Link>
             <a href="mailto:success@zoftware.com"

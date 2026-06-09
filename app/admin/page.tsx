@@ -173,7 +173,7 @@ function statusStyle(status: string) {
     return 'bg-[#ECFDF3] text-[#067647] border-[#12B76A]/20';
   }
   if (status === 'New' || status === 'Vendor replied' || status === 'Invoice uploaded') {
-    return 'bg-[#EFF6FF] text-[#007AFF] border-[#007AFF]/20';
+    return 'bg-[#EFF6FF] text-accent border-accent/20';
   }
   if (status === 'Churn Risk') {
     return 'bg-[#FEF3F2] text-[#B42318] border-[#F04438]/20';
@@ -197,12 +197,12 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b]">{label}</span>
+      <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-muted">{label}</span>
       <input
         name={name}
         type={type}
         defaultValue={value}
-        className="h-10 w-full rounded-sm border border-black/10 bg-white px-3 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10"
+        className="h-10 w-full rounded-sm border border-black/10 bg-white px-3 text-[13px] text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10"
       />
     </label>
   );
@@ -233,9 +233,9 @@ function Drawer({
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-[17px] font-semibold tracking-tight text-black">{title}</p>
-              <p className="mt-1 text-[12px] leading-[1.5] text-[#86868b]">{caption}</p>
+              <p className="mt-1 text-[12px] leading-[1.5] text-muted">{caption}</p>
             </div>
-            <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-sm text-[#86868b] hover:bg-[#f5f5f7] hover:text-black" aria-label="Close panel">
+            <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-sm text-muted hover:bg-surface hover:text-black" aria-label="Close panel">
               <X size={16} />
             </button>
           </div>
@@ -381,7 +381,7 @@ export default function AdminDashboardPage() {
   const ActionIcon = actionForSection.icon;
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] text-black">
+    <div className="min-h-screen bg-surface text-black">
       <header className="sticky top-0 z-40 border-b border-black/8 bg-white/95 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-3 px-4 sm:px-6">
           <Link href="/dubai-chamber" className="flex items-center gap-2 shrink-0">
@@ -399,21 +399,21 @@ export default function AdminDashboardPage() {
             </span>
             <div className="leading-none">
               <p className="text-[12px] font-semibold text-black">Vendor Command Center</p>
-              <p className="mt-1 hidden text-[10px] text-[#86868b] sm:block">Zoftware supply-side operations</p>
+              <p className="mt-1 hidden text-[10px] text-muted sm:block">Zoftware supply-side operations</p>
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <Link
               href="/software"
-              className="hidden items-center gap-1.5 rounded-sm border border-black/10 bg-white px-3 py-2 text-[12px] font-semibold text-black transition-colors hover:bg-[#f5f5f7] sm:flex"
+              className="hidden items-center gap-1.5 rounded-sm border border-black/10 bg-white px-3 py-2 text-[12px] font-semibold text-black transition-colors hover:bg-surface sm:flex"
             >
               <Package size={12} /> Gateway
             </Link>
-            <button onClick={() => setToast('3 admin notifications reviewed')} className="relative flex h-9 w-9 items-center justify-center rounded-sm border border-black/10 bg-white text-[#555] hover:bg-[#f5f5f7]" aria-label="Notifications">
+            <button onClick={() => setToast('3 admin notifications reviewed')} className="relative flex h-9 w-9 items-center justify-center rounded-sm border border-black/10 bg-white text-[#555] hover:bg-surface" aria-label="Notifications">
               <Bell size={15} />
               {approvalCount > 0 && <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#ea580c]" />}
             </button>
-            <button className="flex h-9 w-9 items-center justify-center rounded-full bg-[#007AFF] text-[12px] font-bold text-white" aria-label="Admin profile">
+            <button className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-[12px] font-bold text-white" aria-label="Admin profile">
               VA
             </button>
           </div>
@@ -423,7 +423,7 @@ export default function AdminDashboardPage() {
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-[248px_1fr]">
         <aside className="border-b border-black/8 bg-white px-4 py-4 lg:sticky lg:top-14 lg:h-[calc(100vh-56px)] lg:border-b-0 lg:border-r lg:px-3">
           <div className="mb-4 rounded-sm border border-black/8 bg-[#f9fafb] p-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">Current role</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">Current role</p>
             <div className="relative mt-2">
               <select
                 value={role}
@@ -431,15 +431,15 @@ export default function AdminDashboardPage() {
                   setRole(event.target.value as Role);
                   setToast('Role permissions updated');
                 }}
-                className="h-10 w-full appearance-none rounded-sm border border-black/10 bg-white px-3 pr-8 text-[12px] font-semibold text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10"
+                className="h-10 w-full appearance-none rounded-sm border border-black/10 bg-white px-3 pr-8 text-[12px] font-semibold text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10"
               >
                 {roles.map((item) => (
                   <option key={item.id} value={item.id}>{item.label}</option>
                 ))}
               </select>
-              <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#86868b]" />
+              <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" />
             </div>
-            <p className="mt-2 text-[11px] leading-snug text-[#86868b]">{selectedRole.caption}</p>
+            <p className="mt-2 text-[11px] leading-snug text-muted">{selectedRole.caption}</p>
           </div>
 
           <nav className="flex gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
@@ -451,7 +451,7 @@ export default function AdminDashboardPage() {
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
                   className={`flex shrink-0 items-center gap-2 rounded-sm px-3 py-2.5 text-left text-[12px] font-semibold transition-colors lg:w-full ${
-                    active ? 'bg-black text-white' : 'text-[#555] hover:bg-[#f5f5f7] hover:text-black'
+                    active ? 'bg-black text-white' : 'text-[#555] hover:bg-surface hover:text-black'
                   }`}
                 >
                   <Icon size={14} strokeWidth={1.6} />
@@ -461,13 +461,13 @@ export default function AdminDashboardPage() {
             })}
           </nav>
 
-          <div className="mt-5 hidden rounded-sm border border-[#007AFF]/20 bg-[#EFF6FF] p-3 lg:block">
+          <div className="mt-5 hidden rounded-sm border border-accent/20 bg-[#EFF6FF] p-3 lg:block">
             <div className="flex items-center gap-2">
-              <Zap size={14} className="text-[#007AFF]" />
+              <Zap size={14} className="text-accent" />
               <p className="text-[12px] font-semibold text-black">Live workflow state</p>
             </div>
             <p className="mt-1 text-[11px] leading-snug text-[#555]">{pendingActivations} activations, {approvalCount} approvals, {openTickets} support items.</p>
-            <button onClick={() => setActiveSection('overview')} className="mt-3 flex items-center gap-1.5 text-[12px] font-semibold text-[#007AFF]">
+            <button onClick={() => setActiveSection('overview')} className="mt-3 flex items-center gap-1.5 text-[12px] font-semibold text-accent">
               Open queue <ArrowRight size={12} />
             </button>
           </div>
@@ -477,7 +477,7 @@ export default function AdminDashboardPage() {
           <section className="mb-5 flex flex-col gap-4 border-b border-black/8 pb-5 xl:flex-row xl:items-end xl:justify-between">
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2">
-                <span className="rounded-sm border border-[#007AFF]/20 bg-[#007AFF]/8 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#007AFF]">Dubai Chamber pilot</span>
+                <span className="rounded-sm border border-accent/20 bg-accent/8 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-accent">Dubai Chamber pilot</span>
                 <span className="rounded-sm border border-black/8 bg-white px-2 py-1 text-[10px] font-semibold text-[#555]">End-to-end admin flow</span>
               </div>
               <h1 className="text-[26px] font-semibold tracking-tight text-black sm:text-[34px]">Vendor dashboard</h1>
@@ -492,13 +492,13 @@ export default function AdminDashboardPage() {
                   <button
                     key={item}
                     onClick={() => setCurrency(item)}
-                    className={`h-8 rounded-sm px-3 text-[11px] font-semibold transition-colors ${currency === item ? 'bg-black text-white' : 'text-[#86868b] hover:text-black'}`}
+                    className={`h-8 rounded-sm px-3 text-[11px] font-semibold transition-colors ${currency === item ? 'bg-black text-white' : 'text-muted hover:text-black'}`}
                   >
                     {item}
                   </button>
                 ))}
               </div>
-              <button onClick={actionForSection.action} className="flex h-9 items-center justify-center gap-1.5 rounded-sm bg-[#007AFF] px-4 text-[12px] font-semibold text-white shadow-lg shadow-[#007AFF]/15 hover:bg-[#0051D5]">
+              <button onClick={actionForSection.action} className="flex h-9 items-center justify-center gap-1.5 rounded-sm bg-accent px-4 text-[12px] font-semibold text-white shadow-lg shadow-accent/20 hover:bg-accent-hover">
                 <ActionIcon size={13} /> {actionForSection.label}
               </button>
             </div>
@@ -515,8 +515,8 @@ export default function AdminDashboardPage() {
               return (
                 <div key={metric.label} className="rounded-sm border border-black/8 bg-white p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
-                    <span className="text-[11px] font-semibold text-[#86868b]">{metric.label}</span>
-                    <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#f5f5f7] text-[#555]"><Icon size={15} strokeWidth={1.5} /></span>
+                    <span className="text-[11px] font-semibold text-muted">{metric.label}</span>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-surface text-[#555]"><Icon size={15} strokeWidth={1.5} /></span>
                   </div>
                   <p className="text-[22px] font-semibold tracking-tight text-black">{metric.value}</p>
                   <p className="mt-1 text-[11px] font-semibold text-[#16a34a]">{metric.delta}</p>
@@ -530,7 +530,7 @@ export default function AdminDashboardPage() {
               <div className="rounded-sm border border-black/8 bg-white">
                 <div className="border-b border-black/8 p-4">
                   <p className="text-[15px] font-semibold text-black">Today&apos;s command queue</p>
-                  <p className="mt-1 text-[11px] text-[#86868b]">Each row routes into the tab and drawer needed to complete the work.</p>
+                  <p className="mt-1 text-[11px] text-muted">Each row routes into the tab and drawer needed to complete the work.</p>
                 </div>
                 <div className="divide-y divide-black/8">
                   {[
@@ -549,11 +549,11 @@ export default function AdminDashboardPage() {
                     >
                       <div>
                         <p className="text-[13px] font-semibold text-black">{item.title}</p>
-                        <p className="mt-1 text-[11px] text-[#86868b]">{item.meta}</p>
+                        <p className="mt-1 text-[11px] text-muted">{item.meta}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <StatusBadge label={item.badge} />
-                        <ArrowRight size={13} className="text-[#86868b]" />
+                        <ArrowRight size={13} className="text-muted" />
                       </div>
                     </button>
                   ))}
@@ -562,7 +562,7 @@ export default function AdminDashboardPage() {
 
               <div className="rounded-sm border border-black/8 bg-white p-4">
                 <p className="text-[15px] font-semibold text-black">Role permissions</p>
-                <p className="mt-1 text-[11px] text-[#86868b]">{selectedRole.label} · {selectedRole.caption}</p>
+                <p className="mt-1 text-[11px] text-muted">{selectedRole.label} · {selectedRole.caption}</p>
                 <div className="mt-4 space-y-2">
                   {selectedRole.permissions.map((permission) => (
                     <div key={permission} className="flex items-center gap-2 rounded-sm border border-black/8 bg-[#f9fafb] px-3 py-2 text-[12px] font-semibold text-black">
@@ -571,7 +571,7 @@ export default function AdminDashboardPage() {
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 rounded-sm border border-[#007AFF]/20 bg-[#EFF6FF] p-3">
+                <div className="mt-4 rounded-sm border border-accent/20 bg-[#EFF6FF] p-3">
                   <p className="text-[12px] font-semibold text-black">GCC controls</p>
                   <p className="mt-1 text-[11px] leading-snug text-[#555]">AED/USD toggle, Arabic RTL readiness, VAT documentation, and 5-seat license minimum are represented in the flows.</p>
                 </div>
@@ -585,7 +585,7 @@ export default function AdminDashboardPage() {
                 <div className="flex flex-col gap-3 border-b border-black/8 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="text-[15px] font-semibold text-black">Product listing management</p>
-                    <p className="mt-1 text-[11px] text-[#86868b]">Edit listing copy, plans, GCC discounts, activation timelines, and SLA commitments.</p>
+                    <p className="mt-1 text-[11px] text-muted">Edit listing copy, plans, GCC discounts, activation timelines, and SLA commitments.</p>
                   </div>
                   <button onClick={() => openDrawer('product', selectedProduct.name)} className="flex h-9 items-center justify-center gap-1.5 rounded-sm bg-black px-3 text-[11px] font-semibold text-white">
                     <Package size={12} /> Edit selected
@@ -602,10 +602,10 @@ export default function AdminDashboardPage() {
                       className="grid w-full gap-3 p-4 text-left hover:bg-[#f9fafb] sm:grid-cols-[1fr_auto] sm:items-center"
                     >
                       <div className="flex items-start gap-3">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-[#f5f5f7] text-[12px] font-bold text-black">{product.name.slice(0, 2).toUpperCase()}</span>
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-surface text-[12px] font-bold text-black">{product.name.slice(0, 2).toUpperCase()}</span>
                         <div>
                           <p className="text-[13px] font-semibold text-black">{product.name}</p>
-                          <p className="mt-1 text-[11px] text-[#86868b]">{product.category} · {product.planCount} plans · GCC discount {product.discount}% · {product.activationDays} day activation</p>
+                          <p className="mt-1 text-[11px] text-muted">{product.category} · {product.planCount} plans · GCC discount {product.discount}% · {product.activationDays} day activation</p>
                           <p className="mt-1 line-clamp-1 text-[11px] text-[#555]">{product.tagline}</p>
                         </div>
                       </div>
@@ -617,7 +617,7 @@ export default function AdminDashboardPage() {
 
               <div className="rounded-sm border border-black/8 bg-white p-4">
                 <p className="text-[15px] font-semibold text-black">Approval workflow</p>
-                <p className="mt-1 text-[11px] text-[#86868b]">Submitted changes remain staged until Zoftware approves them.</p>
+                <p className="mt-1 text-[11px] text-muted">Submitted changes remain staged until Zoftware approves them.</p>
                 <div className="mt-4 space-y-2">
                   {[
                     ['Live listings', products.filter((item) => item.state === 'Live').length],
@@ -627,7 +627,7 @@ export default function AdminDashboardPage() {
                   ].map(([label, value]) => (
                     <div key={label} className="flex items-center justify-between rounded-sm border border-black/8 bg-[#f9fafb] px-3 py-2">
                       <span className="text-[12px] font-semibold text-black">{label}</span>
-                      <span className="text-[11px] text-[#86868b]">{value}</span>
+                      <span className="text-[11px] text-muted">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -641,26 +641,26 @@ export default function AdminDashboardPage() {
                 <div className="flex flex-col gap-3 border-b border-black/8 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="text-[15px] font-semibold text-black">Order entry points</p>
-                    <p className="mt-1 text-[11px] text-[#86868b]">Who bought what, through which partner, at what value, and where activation stands.</p>
+                    <p className="mt-1 text-[11px] text-muted">Who bought what, through which partner, at what value, and where activation stands.</p>
                   </div>
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <div className="relative">
-                      <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#86868b]" />
-                      <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search orders..." className="h-9 w-full rounded-sm border border-black/10 bg-white pl-9 pr-3 text-[12px] outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10 sm:w-[220px]" />
+                      <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                      <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search orders..." className="h-9 w-full rounded-sm border border-black/10 bg-white pl-9 pr-3 text-[12px] outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10 sm:w-[220px]" />
                     </div>
                     <div className="relative">
-                      <select value={partner} onChange={(event) => setPartner(event.target.value)} className="h-9 w-full appearance-none rounded-sm border border-black/10 bg-white px-3 pr-8 text-[12px] font-semibold text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10 sm:w-[170px]">
+                      <select value={partner} onChange={(event) => setPartner(event.target.value)} className="h-9 w-full appearance-none rounded-sm border border-black/10 bg-white px-3 pr-8 text-[12px] font-semibold text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10 sm:w-[170px]">
                         <option>All partners</option>
                         {partnerRows.map((item) => <option key={item.name}>{item.name}</option>)}
                       </select>
-                      <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#86868b]" />
+                      <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" />
                     </div>
                   </div>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[900px] border-collapse">
                     <thead>
-                      <tr className="border-b border-black/8 bg-[#f9fafb] text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b]">
+                      <tr className="border-b border-black/8 bg-[#f9fafb] text-left text-[10px] font-bold uppercase tracking-[0.1em] text-muted">
                         <th className="px-4 py-3">Buyer</th>
                         <th className="px-4 py-3">Product</th>
                         <th className="px-4 py-3">Partner</th>
@@ -675,21 +675,21 @@ export default function AdminDashboardPage() {
                         <tr key={order.id} className="border-b border-black/8 last:border-0 hover:bg-[#f9fafb]">
                           <td className="px-4 py-3">
                             <p className="text-[12px] font-semibold text-black">{order.customer}</p>
-                            <p className="mt-1 text-[10px] text-[#86868b]">{order.id} · {order.boughtOn}</p>
+                            <p className="mt-1 text-[10px] text-muted">{order.id} · {order.boughtOn}</p>
                           </td>
                           <td className="px-4 py-3">
                             <p className="text-[12px] font-semibold text-black">{order.product}</p>
-                            <p className="mt-1 text-[10px] text-[#86868b]">{order.plan} · {order.licenses} licenses</p>
+                            <p className="mt-1 text-[10px] text-muted">{order.plan} · {order.licenses} licenses</p>
                           </td>
                           <td className="px-4 py-3 text-[12px] text-[#555]">{order.partner}</td>
                           <td className="px-4 py-3">
                             <p className="text-[12px] font-semibold text-black">{money(order.value, currency)}</p>
-                            <p className="mt-1 text-[10px] text-[#86868b]">Payout {money(order.payout, currency)}</p>
+                            <p className="mt-1 text-[10px] text-muted">Payout {money(order.payout, currency)}</p>
                           </td>
                           <td className="px-4 py-3"><StatusBadge label={order.status} /></td>
                           <td className="px-4 py-3 text-[12px] text-[#555]">{order.activation}</td>
                           <td className="px-4 py-3">
-                            <button onClick={() => openDrawer('activation', order.id)} className="rounded-sm border border-black/10 px-3 py-2 text-[11px] font-semibold text-black hover:bg-[#f5f5f7]">
+                            <button onClick={() => openDrawer('activation', order.id)} className="rounded-sm border border-black/10 px-3 py-2 text-[11px] font-semibold text-black hover:bg-surface">
                               Manage
                             </button>
                           </td>
@@ -701,7 +701,7 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="grid gap-3 xl:grid-cols-[1fr_0.8fr]">
-                <div className="rounded-sm border border-[#007AFF]/20 bg-[#EFF6FF] p-4">
+                <div className="rounded-sm border border-accent/20 bg-[#EFF6FF] p-4">
                   <p className="text-[13px] font-semibold text-black">Filtered order value: {money(totalValue, currency)}</p>
                   <p className="mt-1 text-[12px] leading-[1.6] text-[#555]">Use the partner filter and search to isolate an entry point, then manage activation or license allocation from the row action.</p>
                 </div>
@@ -709,7 +709,7 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-[15px] font-semibold text-black">License provisioning</p>
-                      <p className="mt-1 text-[11px] text-[#86868b]">Bulk allocation and seat activation tracking.</p>
+                      <p className="mt-1 text-[11px] text-muted">Bulk allocation and seat activation tracking.</p>
                     </div>
                     <button onClick={() => openDrawer('bulk')} className="rounded-sm bg-black px-3 py-2 text-[11px] font-semibold text-white">Bulk upload</button>
                   </div>
@@ -718,10 +718,10 @@ export default function AdminDashboardPage() {
                       <div key={`${batch.account}-${batch.product}`} className="rounded-sm border border-black/8 bg-[#f9fafb] p-3">
                         <div className="mb-2 flex items-center justify-between gap-3 text-[11px]">
                           <span className="font-semibold text-black">{batch.account}</span>
-                          <span className="text-[#86868b]">{batch.assigned}/{batch.total} seats</span>
+                          <span className="text-muted">{batch.assigned}/{batch.total} seats</span>
                         </div>
-                        <p className="mb-2 text-[10px] text-[#86868b]">{batch.product} · {batch.state}</p>
-                        <div className="h-2 bg-white"><div className="h-2 bg-[#007AFF]" style={{ width: `${(batch.assigned / batch.total) * 100}%` }} /></div>
+                        <p className="mb-2 text-[10px] text-muted">{batch.product} · {batch.state}</p>
+                        <div className="h-2 bg-white"><div className="h-2 bg-accent" style={{ width: `${(batch.assigned / batch.total) * 100}%` }} /></div>
                       </div>
                     ))}
                   </div>
@@ -737,18 +737,18 @@ export default function AdminDashboardPage() {
                   <div className="mb-4 flex items-center justify-between">
                     <div>
                       <p className="text-[15px] font-semibold text-black">Revenue funnel</p>
-                      <p className="mt-1 text-[11px] text-[#86868b]">Product views to paid orders.</p>
+                      <p className="mt-1 text-[11px] text-muted">Product views to paid orders.</p>
                     </div>
-                    <BarChart3 size={17} className="text-[#007AFF]" />
+                    <BarChart3 size={17} className="text-accent" />
                   </div>
                   <div className="space-y-3">
                     {pipeline.map((step) => (
                       <div key={step.label}>
                         <div className="mb-1.5 flex items-center justify-between text-[11px]">
                           <span className="font-semibold text-black">{step.label}</span>
-                          <span className="text-[#86868b]">{step.value.toLocaleString()}</span>
+                          <span className="text-muted">{step.value.toLocaleString()}</span>
                         </div>
-                        <div className="h-2 rounded-sm bg-[#f5f5f7]"><div className="h-2 rounded-sm bg-[#007AFF]" style={{ width: `${Math.max(step.pct, 5)}%` }} /></div>
+                        <div className="h-2 rounded-sm bg-surface"><div className="h-2 rounded-sm bg-accent" style={{ width: `${Math.max(step.pct, 5)}%` }} /></div>
                       </div>
                     ))}
                   </div>
@@ -757,9 +757,9 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-[15px] font-semibold text-black">Partner performance</p>
-                      <p className="mt-1 text-[11px] text-[#86868b]">Volume, conversion, satisfaction, and regional growth.</p>
+                      <p className="mt-1 text-[11px] text-muted">Volume, conversion, satisfaction, and regional growth.</p>
                     </div>
-                    <button onClick={() => openDrawer('partner')} className="rounded-sm border border-black/10 px-3 py-2 text-[11px] font-semibold text-black hover:bg-[#f5f5f7]">Export</button>
+                    <button onClick={() => openDrawer('partner')} className="rounded-sm border border-black/10 px-3 py-2 text-[11px] font-semibold text-black hover:bg-surface">Export</button>
                   </div>
                   <div className="mt-4 grid gap-2 sm:grid-cols-2">
                     {partnerRows.map((item) => (
@@ -767,12 +767,12 @@ export default function AdminDashboardPage() {
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="text-[12px] font-semibold text-black">{item.name}</p>
-                            <p className="mt-1 flex items-center gap-1 text-[10px] text-[#86868b]"><Globe2 size={10} /> {item.country}</p>
+                            <p className="mt-1 flex items-center gap-1 text-[10px] text-muted"><Globe2 size={10} /> {item.country}</p>
                           </div>
                           <span className={`rounded-sm px-2 py-1 text-[10px] font-bold ${item.trend.startsWith('+') ? 'bg-[#ECFDF3] text-[#067647]' : 'bg-[#FEF3F2] text-[#B42318]'}`}>{item.trend}</span>
                         </div>
                         <p className="mt-3 text-[17px] font-semibold text-black">{money(item.mrr, currency)}</p>
-                        <p className="mt-1 text-[10px] text-[#86868b]">{item.orders} orders · {item.conversion}% conversion · {item.satisfaction}/5 rating</p>
+                        <p className="mt-1 text-[10px] text-muted">{item.orders} orders · {item.conversion}% conversion · {item.satisfaction}/5 rating</p>
                       </div>
                     ))}
                   </div>
@@ -783,22 +783,22 @@ export default function AdminDashboardPage() {
                 <div className="flex flex-col gap-3 border-b border-black/8 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="text-[15px] font-semibold text-black">RFP and recommendation intelligence</p>
-                    <p className="mt-1 text-[11px] text-[#86868b]">How AI builders surface products against competitors.</p>
+                    <p className="mt-1 text-[11px] text-muted">How AI builders surface products against competitors.</p>
                   </div>
-                  <button onClick={() => openDrawer('keywords')} className="flex items-center gap-1.5 rounded-sm border border-black/10 px-3 py-2 text-[11px] font-semibold text-black hover:bg-[#f5f5f7]">
+                  <button onClick={() => openDrawer('keywords')} className="flex items-center gap-1.5 rounded-sm border border-black/10 px-3 py-2 text-[11px] font-semibold text-black hover:bg-surface">
                     <SlidersHorizontal size={12} /> Keyword rules
                   </button>
                 </div>
                 <div className="grid gap-3 p-4 lg:grid-cols-4">
                   {rfpRows.map((item) => (
                     <div key={item.product} className="rounded-sm border border-black/8 bg-[#f9fafb] p-4">
-                      <Sparkles size={15} className="text-[#007AFF]" />
+                      <Sparkles size={15} className="text-accent" />
                       <p className="mt-3 text-[13px] font-semibold text-black">{item.product}</p>
-                      <p className="mt-1 text-[11px] text-[#86868b]">{item.appearances} appearances</p>
-                      <div className="mt-3 h-2 bg-white"><div className="h-2 bg-[#007AFF]" style={{ width: `${item.excellent}%` }} /></div>
-                      <p className="mt-2 text-[10px] font-semibold text-[#007AFF]">{item.excellent}% excellent matches</p>
+                      <p className="mt-1 text-[11px] text-muted">{item.appearances} appearances</p>
+                      <div className="mt-3 h-2 bg-white"><div className="h-2 bg-accent" style={{ width: `${item.excellent}%` }} /></div>
+                      <p className="mt-2 text-[10px] font-semibold text-accent">{item.excellent}% excellent matches</p>
                       <p className="mt-3 text-[10px] leading-snug text-[#555]">Alongside: {item.competitors}</p>
-                      <p className="mt-2 text-[10px] leading-snug text-[#86868b]">Triggers: {item.triggers}</p>
+                      <p className="mt-2 text-[10px] leading-snug text-muted">Triggers: {item.triggers}</p>
                     </div>
                   ))}
                 </div>
@@ -811,16 +811,16 @@ export default function AdminDashboardPage() {
               <div className="rounded-sm border border-black/8 bg-white">
                 <div className="border-b border-black/8 p-4">
                   <p className="text-[15px] font-semibold text-black">Escalated support tickets</p>
-                  <p className="mt-1 text-[11px] text-[#86868b]">Zain chat and activation issues routed to vendors.</p>
+                  <p className="mt-1 text-[11px] text-muted">Zain chat and activation issues routed to vendors.</p>
                 </div>
                 <div className="divide-y divide-black/8">
                   {tickets.map((ticket) => (
                     <div key={ticket.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
                       <div className="flex items-start gap-3">
-                        <span className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-sm bg-[#f5f5f7] text-[#555]"><Ticket size={15} /></span>
+                        <span className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-sm bg-surface text-[#555]"><Ticket size={15} /></span>
                         <div>
                           <p className="text-[12px] font-semibold text-black">{ticket.issue}</p>
-                          <p className="mt-1 text-[11px] text-[#86868b]">{ticket.id} · {ticket.customer} · {ticket.priority}</p>
+                          <p className="mt-1 text-[11px] text-muted">{ticket.id} · {ticket.customer} · {ticket.priority}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -833,7 +833,7 @@ export default function AdminDashboardPage() {
               </div>
               <div className="rounded-sm border border-black/8 bg-white p-4">
                 <p className="text-[15px] font-semibold text-black">Professional services</p>
-                <p className="mt-1 text-[11px] text-[#86868b]">Implementation, training, custom integration, and sign-off.</p>
+                <p className="mt-1 text-[11px] text-muted">Implementation, training, custom integration, and sign-off.</p>
                 <div className="mt-4 space-y-2">
                   {[
                     ['Implementation requests', '12 open'],
@@ -843,7 +843,7 @@ export default function AdminDashboardPage() {
                   ].map(([label, value]) => (
                     <button key={label} onClick={() => setToast(`${label} queue opened`)} className="flex w-full items-center justify-between rounded-sm border border-black/8 bg-[#f9fafb] px-3 py-2 text-left hover:bg-white">
                       <span className="text-[12px] font-semibold text-black">{label}</span>
-                      <span className="text-[11px] text-[#86868b]">{value}</span>
+                      <span className="text-[11px] text-muted">{value}</span>
                     </button>
                   ))}
                 </div>
@@ -855,7 +855,7 @@ export default function AdminDashboardPage() {
             <section className="rounded-sm border border-black/8 bg-white">
               <div className="border-b border-black/8 p-4">
                 <p className="text-[15px] font-semibold text-black">Billing and payout reconciliation</p>
-                <p className="mt-1 text-[11px] text-[#86868b]">Orders placed vs revenue received after platform fee deduction.</p>
+                <p className="mt-1 text-[11px] text-muted">Orders placed vs revenue received after platform fee deduction.</p>
               </div>
               <div className="grid gap-3 p-4 lg:grid-cols-3">
                 {payouts.map((payout) => (
@@ -863,18 +863,18 @@ export default function AdminDashboardPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="text-[13px] font-semibold text-black">{payout.vendor}</p>
-                        <p className="mt-1 text-[11px] text-[#86868b]">{payout.id} · {payout.period}</p>
+                        <p className="mt-1 text-[11px] text-muted">{payout.id} · {payout.period}</p>
                       </div>
-                      <FileText size={15} className="text-[#007AFF]" />
+                      <FileText size={15} className="text-accent" />
                     </div>
                     <div className="mt-4 space-y-2 text-[11px]">
-                      <div className="flex justify-between"><span className="text-[#86868b]">Gross</span><span className="font-semibold text-black">{money(payout.gross, currency)}</span></div>
-                      <div className="flex justify-between"><span className="text-[#86868b]">Platform fee</span><span className="font-semibold text-black">{money(payout.fee, currency)}</span></div>
-                      <div className="flex justify-between border-t border-black/8 pt-2"><span className="text-[#86868b]">Net payout</span><span className="font-semibold text-black">{money(payout.net, currency)}</span></div>
+                      <div className="flex justify-between"><span className="text-muted">Gross</span><span className="font-semibold text-black">{money(payout.gross, currency)}</span></div>
+                      <div className="flex justify-between"><span className="text-muted">Platform fee</span><span className="font-semibold text-black">{money(payout.fee, currency)}</span></div>
+                      <div className="flex justify-between border-t border-black/8 pt-2"><span className="text-muted">Net payout</span><span className="font-semibold text-black">{money(payout.net, currency)}</span></div>
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-2">
                       <StatusBadge label={payout.status} />
-                      <button onClick={() => openDrawer('payout', payout.id)} className="rounded-sm border border-black/10 bg-white px-3 py-2 text-[11px] font-semibold text-black hover:bg-[#f5f5f7]">
+                      <button onClick={() => openDrawer('payout', payout.id)} className="rounded-sm border border-black/10 bg-white px-3 py-2 text-[11px] font-semibold text-black hover:bg-surface">
                         Reconcile
                       </button>
                     </div>
@@ -895,15 +895,15 @@ export default function AdminDashboardPage() {
           <form onSubmit={completeActivation} className="space-y-4">
             <div className="rounded-sm border border-black/8 bg-[#f9fafb] p-3">
               <p className="text-[12px] font-semibold text-black">{selectedOrder.id}</p>
-              <p className="mt-1 text-[11px] text-[#86868b]">{selectedOrder.partner} · {selectedOrder.licenses} licenses · {money(selectedOrder.value, currency)}</p>
+              <p className="mt-1 text-[11px] text-muted">{selectedOrder.partner} · {selectedOrder.licenses} licenses · {money(selectedOrder.value, currency)}</p>
               <div className="mt-3"><StatusBadge label={selectedOrder.status} /></div>
             </div>
             <Field label="Activation owner" name="owner" value={selectedOrder.owner === 'Unassigned' ? 'Noura Al Fahim' : selectedOrder.owner} />
             <label className="block">
-              <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b]">Go-live note</span>
-              <textarea name="note" defaultValue="Customer admin invited, seats provisioned, welcome email scheduled." className="min-h-[96px] w-full rounded-sm border border-black/10 bg-white p-3 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10" />
+              <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-muted">Go-live note</span>
+              <textarea name="note" defaultValue="Customer admin invited, seats provisioned, welcome email scheduled." className="min-h-[96px] w-full rounded-sm border border-black/10 bg-white p-3 text-[13px] text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10" />
             </label>
-            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-[#007AFF] text-[12px] font-semibold text-white hover:bg-[#0051D5]">
+            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-accent text-[12px] font-semibold text-white hover:bg-accent-hover">
               <CheckCircle2 size={14} /> Confirm activation
             </button>
           </form>
@@ -915,14 +915,14 @@ export default function AdminDashboardPage() {
           <form onSubmit={submitProductUpdate} className="space-y-4">
             <Field label="Product name" name="name" value={selectedProduct.name} />
             <label className="block">
-              <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b]">Tagline</span>
-              <textarea name="tagline" defaultValue={selectedProduct.tagline} className="min-h-[96px] w-full rounded-sm border border-black/10 bg-white p-3 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10" />
+              <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-muted">Tagline</span>
+              <textarea name="tagline" defaultValue={selectedProduct.tagline} className="min-h-[96px] w-full rounded-sm border border-black/10 bg-white p-3 text-[13px] text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10" />
             </label>
             <div className="grid grid-cols-2 gap-3">
               <Field label="GCC discount %" name="discount" value={selectedProduct.discount} type="number" />
               <Field label="Activation days" name="activationDays" value={selectedProduct.activationDays} type="number" />
             </div>
-            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-[#007AFF] text-[12px] font-semibold text-white hover:bg-[#0051D5]">
+            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-accent text-[12px] font-semibold text-white hover:bg-accent-hover">
               <Package size={14} /> Submit for approval
             </button>
           </form>
@@ -936,13 +936,13 @@ export default function AdminDashboardPage() {
               <div key={batch.account} className="rounded-sm border border-black/8 bg-[#f9fafb] p-3">
                 <div className="mb-2 flex justify-between text-[11px]">
                   <span className="font-semibold text-black">{batch.account}</span>
-                  <span className="text-[#86868b]">{batch.assigned}/{batch.total}</span>
+                  <span className="text-muted">{batch.assigned}/{batch.total}</span>
                 </div>
-                <p className="mb-2 text-[10px] text-[#86868b]">{batch.product} · {batch.state}</p>
-                <div className="h-2 bg-white"><div className="h-2 bg-[#007AFF]" style={{ width: `${(batch.assigned / batch.total) * 100}%` }} /></div>
+                <p className="mb-2 text-[10px] text-muted">{batch.product} · {batch.state}</p>
+                <div className="h-2 bg-white"><div className="h-2 bg-accent" style={{ width: `${(batch.assigned / batch.total) * 100}%` }} /></div>
               </div>
             ))}
-            <button onClick={provisionLicenses} className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-[#007AFF] text-[12px] font-semibold text-white hover:bg-[#0051D5]">
+            <button onClick={provisionLicenses} className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-accent text-[12px] font-semibold text-white hover:bg-accent-hover">
               <Users size={14} /> Provision all pending seats
             </button>
           </div>
@@ -954,14 +954,14 @@ export default function AdminDashboardPage() {
           <form onSubmit={respondToTicket} className="space-y-4">
             <div className="rounded-sm border border-black/8 bg-[#f9fafb] p-3">
               <p className="text-[12px] font-semibold text-black">{selectedTicket.issue}</p>
-              <p className="mt-1 text-[11px] text-[#86868b]">Priority {selectedTicket.priority} · SLA {selectedTicket.sla}</p>
+              <p className="mt-1 text-[11px] text-muted">Priority {selectedTicket.priority} · SLA {selectedTicket.sla}</p>
               <div className="mt-3"><StatusBadge label={selectedTicket.status} /></div>
             </div>
             <label className="block">
-              <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b]">Vendor response</span>
-              <textarea name="response" defaultValue="We have checked the provisioning state and updated the customer admin. Next sync is scheduled within the SLA window." className="min-h-[120px] w-full rounded-sm border border-black/10 bg-white p-3 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10" />
+              <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-muted">Vendor response</span>
+              <textarea name="response" defaultValue="We have checked the provisioning state and updated the customer admin. Next sync is scheduled within the SLA window." className="min-h-[120px] w-full rounded-sm border border-black/10 bg-white p-3 text-[13px] text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10" />
             </label>
-            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-[#007AFF] text-[12px] font-semibold text-white hover:bg-[#0051D5]">
+            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-accent text-[12px] font-semibold text-white hover:bg-accent-hover">
               <Ticket size={14} /> Send response
             </button>
           </form>
@@ -972,13 +972,13 @@ export default function AdminDashboardPage() {
         <Drawer title="Reconcile payout" caption={`${selectedPayout.vendor} · ${selectedPayout.period}`} onClose={closeDrawer}>
           <form onSubmit={uploadInvoice} className="space-y-4">
             <div className="rounded-sm border border-black/8 bg-[#f9fafb] p-3 text-[12px]">
-              <div className="flex justify-between"><span className="text-[#86868b]">Gross</span><span className="font-semibold text-black">{money(selectedPayout.gross, currency)}</span></div>
-              <div className="mt-2 flex justify-between"><span className="text-[#86868b]">Platform fee</span><span className="font-semibold text-black">{money(selectedPayout.fee, currency)}</span></div>
-              <div className="mt-2 flex justify-between border-t border-black/8 pt-2"><span className="text-[#86868b]">Net payout</span><span className="font-semibold text-black">{money(selectedPayout.net, currency)}</span></div>
+              <div className="flex justify-between"><span className="text-muted">Gross</span><span className="font-semibold text-black">{money(selectedPayout.gross, currency)}</span></div>
+              <div className="mt-2 flex justify-between"><span className="text-muted">Platform fee</span><span className="font-semibold text-black">{money(selectedPayout.fee, currency)}</span></div>
+              <div className="mt-2 flex justify-between border-t border-black/8 pt-2"><span className="text-muted">Net payout</span><span className="font-semibold text-black">{money(selectedPayout.net, currency)}</span></div>
             </div>
             <Field label="Invoice reference" name="invoice" value={`${selectedPayout.id}-INV`} />
             <Field label="VAT registration" name="vat" value="100245889300003" />
-            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-[#007AFF] text-[12px] font-semibold text-white hover:bg-[#0051D5]">
+            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-accent text-[12px] font-semibold text-white hover:bg-accent-hover">
               <FileText size={14} /> Upload invoice
             </button>
           </form>
@@ -990,11 +990,11 @@ export default function AdminDashboardPage() {
           <form onSubmit={saveKeywordRules} className="space-y-4">
             {rfpRows.map((row) => (
               <label key={row.product} className="block">
-                <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b]">{row.product}</span>
-                <input name={row.product} defaultValue={row.triggers} className="h-10 w-full rounded-sm border border-black/10 bg-white px-3 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10" />
+                <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-muted">{row.product}</span>
+                <input name={row.product} defaultValue={row.triggers} className="h-10 w-full rounded-sm border border-black/10 bg-white px-3 text-[13px] text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10" />
               </label>
             ))}
-            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-[#007AFF] text-[12px] font-semibold text-white hover:bg-[#0051D5]">
+            <button className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-accent text-[12px] font-semibold text-white hover:bg-accent-hover">
               <Sparkles size={14} /> Save keyword rules
             </button>
           </form>
@@ -1007,10 +1007,10 @@ export default function AdminDashboardPage() {
             {partnerRows.map((row) => (
               <div key={row.name} className="rounded-sm border border-black/8 bg-[#f9fafb] p-3">
                 <p className="text-[12px] font-semibold text-black">{row.name}</p>
-                <p className="mt-1 text-[11px] text-[#86868b]">{row.country} · {money(row.mrr, currency)} MRR · {row.orders} orders</p>
+                <p className="mt-1 text-[11px] text-muted">{row.country} · {money(row.mrr, currency)} MRR · {row.orders} orders</p>
               </div>
             ))}
-            <button onClick={() => { setToast('Partner performance report exported'); closeDrawer(); }} className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-[#007AFF] text-[12px] font-semibold text-white hover:bg-[#0051D5]">
+            <button onClick={() => { setToast('Partner performance report exported'); closeDrawer(); }} className="flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-accent text-[12px] font-semibold text-white hover:bg-accent-hover">
               <FileText size={14} /> Export report
             </button>
           </div>

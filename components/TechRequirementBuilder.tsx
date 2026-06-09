@@ -216,12 +216,12 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
         onMouseMove={resetActivity} onKeyDown={resetActivity} onTouchStart={resetActivity}>
         {messages.map((msg, i) => (
           <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-            <div className="w-7 h-7 rounded-full bg-[#007AFF] flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center shrink-0 mt-0.5">
               {msg.role === 'bot' ? <FileText size={13} className="text-white" strokeWidth={1.5} /> : <User size={13} className="text-white" strokeWidth={1.5} />}
             </div>
             <div className={`flex flex-col gap-2 max-w-[84%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
               <div className={`px-3.5 py-2.5 text-[13px] leading-[1.65] whitespace-pre-line rounded-2xl ${
-                msg.role === 'bot' ? 'bg-[#f5f5f7] text-black rounded-tl-sm' : 'bg-[#007AFF] text-white rounded-tr-sm'
+                msg.role === 'bot' ? 'bg-surface text-black rounded-tl-sm' : 'bg-accent text-white rounded-tr-sm'
               }`}>
                 <RichText text={msg.text} />
               </div>
@@ -233,7 +233,7 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
                     <div className="flex flex-wrap gap-2 mt-1">
                       {currentStep.options.map(opt => (
                         <button key={opt} onClick={() => advance(opt)}
-                          className="text-[12px] font-medium border border-[#007AFF]/25 text-[#007AFF] bg-white px-3 py-1.5 rounded-full hover:bg-[#007AFF]/8 hover:border-[#007AFF]/50 transition-all">
+                          className="text-[12px] font-medium border border-accent/25 text-accent bg-white px-3 py-1.5 rounded-full hover:bg-accent/8 hover:border-accent/50 transition-all">
                           {opt}
                         </button>
                       ))}
@@ -245,7 +245,7 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
                         {currentStep.options.map(opt => (
                           <button key={opt} onClick={() => toggleMulti(opt)}
                             className={`flex items-center gap-1.5 text-[12px] font-medium px-3 py-1.5 rounded-full border transition-all ${
-                              selected.includes(opt) ? 'bg-[#007AFF] text-white border-[#007AFF]' : 'border-[#007AFF]/25 text-[#007AFF] bg-white hover:bg-[#007AFF]/8'
+                              selected.includes(opt) ? 'bg-accent text-white border-accent' : 'border-accent/25 text-accent bg-white hover:bg-accent/8'
                             }`}>
                             {selected.includes(opt) && <Check size={10} strokeWidth={3} />}{opt}
                           </button>
@@ -253,7 +253,7 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
                       </div>
                       {selected.length > 0 && (
                         <button onClick={confirmMulti}
-                          className="flex items-center gap-2 bg-[#007AFF] text-white text-[12px] font-semibold px-4 py-2 rounded-sm hover:opacity-90 transition-opacity">
+                          className="flex items-center gap-2 bg-accent text-white text-[12px] font-semibold px-4 py-2 rounded-sm hover:opacity-90 transition-opacity">
                           <Check size={13} strokeWidth={2.5} /> Confirm {selected.length} selection{selected.length > 1 ? 's' : ''}
                         </button>
                       )}
@@ -266,10 +266,10 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
               {msg.role === 'bot' && msg.stepId === 'review' && reviewing && isLastMsg(i) && (
                 <div className="w-full mt-1 space-y-2">
                   <button onClick={() => generateResults()}
-                    className="flex items-center gap-2 bg-[#007AFF] text-white text-[12px] font-semibold px-4 py-2.5 rounded-sm hover:bg-[#0051D5] transition-colors">
+                    className="flex items-center gap-2 bg-accent text-white text-[12px] font-semibold px-4 py-2.5 rounded-sm hover:bg-accent-hover transition-colors">
                     <Sparkles size={13} /> Looks good — generate my recommendations
                   </button>
-                  <p className="text-[11px] text-[#86868b]">Or type any extra context below and hit send</p>
+                  <p className="text-[11px] text-muted">Or type any extra context below and hit send</p>
                 </div>
               )}
 
@@ -280,32 +280,32 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
                     <div key={r.slug} className="border border-black/8 rounded-sm overflow-hidden bg-white">
                       <div className="flex items-center justify-between px-4 py-3 border-b border-black/8 bg-[#f9fafb]">
                         <div className="flex items-center gap-2.5">
-                          <span className="text-[10px] font-bold text-[#86868b] w-5">#{ri + 1}</span>
-                          <div className="w-8 h-8 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center">
+                          <span className="text-[10px] font-bold text-muted w-5">#{ri + 1}</span>
+                          <div className="w-8 h-8 rounded-sm bg-surface border border-black/8 flex items-center justify-center">
                             <span className="text-[10px] font-bold text-black">{r.logo}</span>
                           </div>
                           <div>
                             <p className="text-[13px] font-semibold text-black">{r.name}</p>
-                            <p className="text-[10px] text-[#86868b]">{r.category}</p>
+                            <p className="text-[10px] text-muted">{r.category}</p>
                           </div>
                         </div>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          r.score >= 90 ? 'bg-[#dcfce7] text-[#16a34a]' : r.score >= 80 ? 'bg-[#dbeafe] text-[#007AFF]' : 'bg-[#f5f5f7] text-[#86868b]'
+                          r.score >= 90 ? 'bg-[#dcfce7] text-[#16a34a]' : r.score >= 80 ? 'bg-[#dbeafe] text-accent' : 'bg-surface text-muted'
                         }`}>{r.score}% {r.label}</span>
                       </div>
                       <div className="px-4 py-3">
                         <p className="text-[12px] text-[#555] leading-[1.55] mb-2.5">{r.reason}</p>
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {r.features.map(f => (
-                            <span key={f} className="flex items-center gap-1 text-[10px] text-[#555] bg-[#f5f5f7] px-2 py-1 rounded-sm">
-                              <Check size={8} className="text-[#007AFF]" strokeWidth={3} />{f}
+                            <span key={f} className="flex items-center gap-1 text-[10px] text-[#555] bg-surface px-2 py-1 rounded-sm">
+                              <Check size={8} className="text-accent" strokeWidth={3} />{f}
                             </span>
                           ))}
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-[12px] font-semibold text-black">{r.price}</span>
                           <Link href={`/software/product/${r.slug}`} onClick={onClose}
-                            className="flex items-center gap-1 text-[11px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+                            className="flex items-center gap-1 text-[11px] font-semibold text-accent hover:text-accent-hover transition-colors">
                             View details <ArrowRight size={11} />
                           </Link>
                         </div>
@@ -314,11 +314,11 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
                   ))}
                   <div className="flex gap-2 pt-1">
                     <Link href="/software/report/requirements" onClick={onClose}
-                      className="flex items-center gap-1.5 bg-[#007AFF] text-white text-[11px] font-semibold px-3 py-2.5 rounded-sm hover:bg-[#0051D5] transition-colors">
+                      className="flex items-center gap-1.5 bg-accent text-white text-[11px] font-semibold px-3 py-2.5 rounded-sm hover:bg-accent-hover transition-colors">
                       <Download size={11} /> View Full Report
                     </Link>
                     <Link href="/software" onClick={onClose}
-                      className="flex items-center gap-1.5 border border-black/10 text-black text-[11px] font-medium px-3 py-2.5 rounded-sm hover:bg-[#f5f5f7] transition-colors">
+                      className="flex items-center gap-1.5 border border-black/10 text-black text-[11px] font-medium px-3 py-2.5 rounded-sm hover:bg-surface transition-colors">
                       Browse all software <ArrowRight size={11} />
                     </Link>
                   </div>
@@ -333,8 +333,8 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
       {/* ── Idle nudge banner ── */}
       {showIdleNudge && !done && (
         <div className="mx-4 mb-2 flex items-center gap-3 bg-black text-white px-4 py-2.5 rounded-sm text-[12px] shadow-lg">
-          <Clock size={14} className="text-[#007AFF] shrink-0 animate-pulse" />
-          <span className="flex-1">Still there? Need a hand completing this? <span className="text-[#007AFF] font-semibold">We can help.</span></span>
+          <Clock size={14} className="text-accent shrink-0 animate-pulse" />
+          <span className="flex-1">Still there? Need a hand completing this? <span className="text-accent font-semibold">We can help.</span></span>
           <button onClick={resetActivity} className="text-white/50 hover:text-white transition-colors shrink-0"><X size={13} /></button>
         </div>
       )}
@@ -355,19 +355,19 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
                   }
                 }}
                 placeholder={reviewing ? 'Add any extra context… (optional)' : (currentStep.type === 'text' ? (currentStep.placeholder || 'Type your answer…') : 'Or type your own answer…')}
-                className="flex-1 bg-[#f5f5f7] border-0 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:ring-2 focus:ring-[#007AFF]/20 placeholder-[#86868b]"
+                className="flex-1 bg-surface border-0 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:ring-2 focus:ring-accent/20 placeholder-muted"
               />
               <button
                 onClick={() => {
                   if (reviewing) { if (extraContext.trim()) generateResults(extraContext); else generateResults(); }
                   else if (input.trim()) advance(input.trim());
                 }}
-                className="w-9 h-9 rounded-full bg-[#007AFF] flex items-center justify-center text-white hover:opacity-90 transition-opacity shrink-0">
+                className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white hover:opacity-90 transition-opacity shrink-0">
                 <Send size={14} strokeWidth={2} />
               </button>
             </div>
             {!reviewing && (
-              <p className="text-[10px] text-[#86868b] mt-1.5 text-center">
+              <p className="text-[10px] text-muted mt-1.5 text-center">
                 Question {STEPS.findIndex(s => s.id === currentStep.id) + 1} of {STEPS.length} · Choose above or type freely
               </p>
             )}
@@ -375,11 +375,11 @@ export default function TechRequirementBuilder({ onClose }: { onClose: () => voi
         ) : (
           <div className="flex gap-2">
             <button onClick={handleReset}
-              className="flex-1 flex items-center justify-center gap-1.5 text-[12px] text-[#86868b] hover:text-black py-2 transition-colors">
+              className="flex-1 flex items-center justify-center gap-1.5 text-[12px] text-muted hover:text-black py-2 transition-colors">
               <RefreshCw size={11} /> Start over
             </button>
             <button onClick={onClose}
-              className="flex-1 bg-[#007AFF] text-white text-[12px] font-semibold py-2.5 rounded-sm hover:opacity-90 transition-opacity">
+              className="flex-1 bg-accent text-white text-[12px] font-semibold py-2.5 rounded-sm hover:opacity-90 transition-opacity">
               Close
             </button>
           </div>

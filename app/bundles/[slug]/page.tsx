@@ -98,7 +98,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
       {/* Breadcrumb */}
       <div className="border-b border-black/8 bg-[#f9fafb]">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-10 flex items-center gap-1.5 overflow-x-auto">
-          <Link href="/software?view=bundles" className="flex items-center gap-1 text-[12px] text-[#86868b] hover:text-black transition-colors shrink-0">
+          <Link href="/software?view=bundles" className="flex items-center gap-1 text-[12px] text-muted hover:text-black transition-colors shrink-0">
             <ArrowLeft size={11} /> All Bundles
           </Link>
           <ChevronRight size={10} className="text-[#c7c7cc] shrink-0" />
@@ -121,7 +121,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
               </span>
             )}
             <h1 className="text-[26px] sm:text-[34px] font-semibold text-black tracking-tight">{bundle.name}</h1>
-            <p className="text-[14px] text-[#86868b] mt-0.5">{bundle.targetSize} · GCC Region · Activate in {bundle.activationDays} days</p>
+            <p className="text-[14px] text-muted mt-0.5">{bundle.targetSize} · GCC Region · Activate in {bundle.activationDays} days</p>
           </div>
         </div>
         <p className="text-[15px] text-[#555] leading-[1.65] max-w-[600px]">{bundle.description}</p>
@@ -135,18 +135,18 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
 
             {/* Billing + currency controls */}
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-1 bg-[#f5f5f7] p-0.5 rounded-sm">
+              <div className="flex items-center gap-1 bg-surface p-0.5 rounded-sm">
                 {(['monthly', 'annual'] as const).map(c => (
                   <button key={c} onClick={() => setBillingCycle(c)}
-                    className={`px-3 py-1.5 text-[11px] font-medium rounded-sm transition-all ${billingCycle === c ? 'bg-white text-black shadow-sm' : 'text-[#86868b] hover:text-black'}`}>
+                    className={`px-3 py-1.5 text-[11px] font-medium rounded-sm transition-all ${billingCycle === c ? 'bg-white text-black shadow-sm' : 'text-muted hover:text-black'}`}>
                     {c === 'annual' ? 'Annual (save 20%)' : 'Monthly'}
                   </button>
                 ))}
               </div>
-              <div className="flex items-center gap-1 bg-[#f5f5f7] p-0.5 rounded-sm">
+              <div className="flex items-center gap-1 bg-surface p-0.5 rounded-sm">
                 {(['USD', 'AED'] as const).map(c => (
                   <button key={c} onClick={() => setCurrency(c)}
-                    className={`px-3 py-1.5 text-[11px] font-semibold rounded-sm transition-all ${currency === c ? 'bg-white text-black shadow-sm' : 'text-[#86868b] hover:text-black'}`}>
+                    className={`px-3 py-1.5 text-[11px] font-semibold rounded-sm transition-all ${currency === c ? 'bg-white text-black shadow-sm' : 'text-muted hover:text-black'}`}>
                     {c}
                   </button>
                 ))}
@@ -157,7 +157,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
             <div className="border border-black/8 rounded-sm overflow-hidden">
               <div className="px-5 py-3.5 border-b border-black/8 bg-[#f9fafb] flex items-center justify-between">
                 <p className="text-[13px] font-semibold text-black">Included Software ({bundle.items.length} products)</p>
-                <span className="text-[11px] text-[#86868b]">All GCC-licensed</span>
+                <span className="text-[11px] text-muted">All GCC-licensed</span>
               </div>
               <div className="divide-y divide-black/5">
                 {bundle.items.map(item => {
@@ -174,18 +174,18 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
                       <div className="px-5 py-4 flex items-center justify-between gap-4 bg-white transition-colors"
                         style={{ backgroundColor: isExpanded ? '#f5f9ff' : undefined }}>
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-9 h-9 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+                          <div className="w-9 h-9 rounded-sm bg-surface border border-black/8 flex items-center justify-center shrink-0">
                             <span className="text-[10px] font-bold text-black">{item.product.slice(0, 2).toUpperCase()}</span>
                           </div>
                           <div className="min-w-0">
                             <p className="text-[13px] font-semibold text-black">{item.product}</p>
-                            <p className="text-[11px] text-[#86868b]">{item.vendor} · {item.category}</p>
+                            <p className="text-[11px] text-muted">{item.vendor} · {item.category}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2.5 shrink-0">
                           <div className="text-right">
-                            <p className="text-[13px] font-semibold text-black">{bPrice}<span className="text-[10px] text-[#86868b] font-normal">/user/mo</span></p>
-                            <p className="text-[10px] text-[#86868b] line-through">{oPrice}</p>
+                            <p className="text-[13px] font-semibold text-black">{bPrice}<span className="text-[10px] text-muted font-normal">/user/mo</span></p>
+                            <p className="text-[10px] text-muted line-through">{oPrice}</p>
                           </div>
                           {saving > 0 && (
                             <span className="text-[9px] font-bold bg-[#dcfce7] text-[#16a34a] px-1.5 py-0.5 rounded-sm hidden sm:inline">{saving}% off</span>
@@ -197,9 +197,9 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
                               title={isExpanded ? 'Hide product info' : 'What does this do?'}
                               className="w-7 h-7 rounded-full flex items-center justify-center transition-all shrink-0 border"
                               style={{
-                                background: isExpanded ? '#007AFF' : 'transparent',
-                                borderColor: isExpanded ? '#007AFF' : 'rgba(0,0,0,0.12)',
-                                color: isExpanded ? '#fff' : '#86868b',
+                                background: isExpanded ? 'var(--color-accent)' : 'transparent',
+                                borderColor: isExpanded ? 'var(--color-accent)' : 'rgba(0,0,0,0.12)',
+                                color: isExpanded ? '#fff' : 'var(--color-muted)',
                               }}>
                               {isExpanded ? <X size={12} strokeWidth={2.5} /> : <Info size={13} strokeWidth={1.8} />}
                             </button>
@@ -209,25 +209,26 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
 
                       {/* Expandable product info panel */}
                       {isExpanded && info && (
-                        <div className="px-5 py-4 border-t" style={{ background: '#eef5ff', borderColor: 'rgba(0,122,255,0.12)' }}>
+                        <div className="px-5 py-4 border-t"
+                          style={{ background: 'color-mix(in oklch, var(--color-accent) 6%, white)', borderColor: 'color-mix(in oklch, var(--color-accent) 15%, transparent)' }}>
                           {/* Use-case badge */}
                           <div className="flex items-center gap-2 mb-3">
                             <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm"
-                              style={{ background: 'rgba(0,122,255,0.12)', color: '#007AFF' }}>
+                              style={{ background: 'color-mix(in oklch, var(--color-accent) 12%, transparent)', color: 'var(--color-accent)' }}>
                               {info.usedFor}
                             </span>
                           </div>
 
                           {/* Description */}
-                          <p className="text-[13px] text-[#333] leading-[1.6] mb-3">{info.description}</p>
+                          <p className="text-[13px] leading-[1.6] mb-3" style={{ color: 'var(--th-body-color)' }}>{info.description}</p>
 
                           {/* Key features */}
                           <div className="mb-4">
-                            <p className="text-[10px] font-bold text-[#86868b] uppercase tracking-[0.08em] mb-2">Key features</p>
+                            <p className="text-[10px] font-bold text-muted uppercase tracking-[0.08em] mb-2">Key features</p>
                             <ul className="space-y-1.5">
                               {info.features.map(f => (
-                                <li key={f} className="flex items-start gap-2 text-[12px] text-[#444]">
-                                  <CheckCircle size={12} strokeWidth={2} className="shrink-0 mt-0.5" style={{ color: '#007AFF' }} />
+                                <li key={f} className="flex items-start gap-2 text-[12px]" style={{ color: 'var(--th-body-color)' }}>
+                                  <CheckCircle size={12} strokeWidth={2} className="shrink-0 mt-0.5" style={{ color: 'var(--color-accent)' }} />
                                   {f}
                                 </li>
                               ))}
@@ -237,8 +238,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
                           {/* View full details link */}
                           <Link
                             href={`/software/product/${info.slug}`}
-                            className="inline-flex items-center gap-1 text-[12px] font-semibold"
-                            style={{ color: '#007AFF' }}>
+                            className="inline-flex items-center gap-1 text-[12px] font-semibold text-accent">
                             View full product details <ExternalLink size={11} />
                           </Link>
                         </div>
@@ -251,7 +251,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
 
             {/* Highlights */}
             <div className="border border-black/8 rounded-sm p-5">
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-3">What&apos;s included</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">What&apos;s included</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {bundle.highlights.map(h => (
                   <div key={h} className="flex items-start gap-2 text-[13px] text-black">
@@ -264,7 +264,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
 
             {/* Other bundles */}
             <div>
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-3">Other Bundles</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">Other Bundles</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {otherBundles.map(b => (
                   <Link key={b.id} href={`/bundles/${b.slug}`}
@@ -275,9 +275,9 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[13px] font-semibold text-black">{b.name}</p>
-                      <p className="text-[11px] text-[#86868b]">{b.targetSize} · from ${b.monthlyPrice}/mo</p>
+                      <p className="text-[11px] text-muted">{b.targetSize} · from ${b.monthlyPrice}/mo</p>
                     </div>
-                    <ChevronRight size={14} className="text-[#86868b] shrink-0" />
+                    <ChevronRight size={14} className="text-muted shrink-0" />
                   </Link>
                 ))}
               </div>
@@ -289,19 +289,19 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
             <div className="border border-black/8 rounded-sm overflow-hidden">
               {/* Pricing header */}
               <div className="p-5 border-b border-black/8">
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-3">Bundle Price</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">Bundle Price</p>
                 <div className="flex items-baseline gap-2 mb-1">
                   <span className="text-[32px] font-semibold text-black">{showPrice}</span>
-                  <span className="text-[13px] text-[#86868b]">/mo</span>
+                  <span className="text-[13px] text-muted">/mo</span>
                 </div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[13px] text-[#86868b] line-through">{showOriginal}/mo</span>
+                  <span className="text-[13px] text-muted line-through">{showOriginal}/mo</span>
                   <span className="text-[11px] font-bold text-[#16a34a] bg-[#dcfce7] px-2 py-0.5 rounded-sm">
                     Save {bundle.savePct}%
                   </span>
                 </div>
                 {billingCycle === 'annual' && (
-                  <p className="text-[11px] text-[#007AFF] font-medium">Billed as {annualTotal}/year</p>
+                  <p className="text-[11px] text-accent font-medium">Billed as {annualTotal}/year</p>
                 )}
               </div>
 
@@ -314,7 +314,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
                   { icon: <Zap size={13} />, text: `${bundle.items.length} products included` },
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-[12px] text-[#555]">
-                    <span className="text-[#86868b]">{icon}</span> {text}
+                    <span className="text-muted">{icon}</span> {text}
                   </div>
                 ))}
               </div>
@@ -328,7 +328,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
                   Buy Bundle <ArrowRight size={14} strokeWidth={2} />
                 </Link>
                 <Link href="/software?view=bundles"
-                  className="flex items-center justify-center gap-1 w-full py-2.5 text-[12px] font-medium border border-black/10 text-black rounded-sm hover:bg-[#f5f5f7] transition-colors min-h-[44px]">
+                  className="flex items-center justify-center gap-1 w-full py-2.5 text-[12px] font-medium border border-black/10 text-black rounded-sm hover:bg-surface transition-colors min-h-[44px]">
                   Compare all bundles
                 </Link>
               </div>

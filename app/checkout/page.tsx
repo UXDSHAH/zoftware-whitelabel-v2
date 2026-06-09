@@ -182,7 +182,7 @@ function CheckoutContent() {
             <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-[0.07em] mb-2">Bundle includes</p>
             {bundle.items.map(item => (
               <div key={item.product} className="flex items-center gap-1.5 text-[11px] text-zinc-500 py-0.5">
-                <CheckCircle size={10} className="text-[#007AFF] shrink-0"/>{item.product}
+                <CheckCircle size={10} className="text-accent shrink-0"/>{item.product}
               </div>
             ))}
           </div>
@@ -229,7 +229,7 @@ function CheckoutContent() {
         </div>
 
         <div className="flex gap-2">
-          <Link href="/software" className="flex-1 flex items-center justify-center gap-2 bg-[#007AFF] text-white py-3 text-[13px] font-semibold rounded-xl hover:bg-[#0051D5] transition-colors">
+          <Link href="/software" className="flex-1 flex items-center justify-center gap-2 bg-accent text-white py-3 text-[13px] font-semibold rounded-xl hover:bg-accent-hover transition-colors">
             Browse More <ArrowRight size={13}/>
           </Link>
           <a href="mailto:success@zoftware.com" className="flex-1 flex items-center justify-center border border-zinc-200 text-zinc-700 py-3 text-[13px] font-medium rounded-xl hover:bg-zinc-50 transition-colors">
@@ -251,7 +251,7 @@ function CheckoutContent() {
 
         {/* Welcome strip */}
         <div className="flex items-center gap-3 bg-white border border-zinc-200 rounded-xl px-4 py-3 mb-6 shadow-sm">
-          <div className="w-8 h-8 rounded-full bg-[#007AFF] flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center shrink-0">
             <span className="text-[12px] font-bold text-white">RS</span>
           </div>
           <div className="flex-1 min-w-0">
@@ -268,7 +268,7 @@ function CheckoutContent() {
           {(['plan','payment'] as const).map((s, i) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0 ${
-                step === s || (s === 'plan' && step === 'payment') ? 'bg-[#007AFF] text-white' : 'bg-zinc-200 text-zinc-400'
+                step === s || (s === 'plan' && step === 'payment') ? 'bg-accent text-white' : 'bg-zinc-200 text-zinc-400'
               }`}>
                 {s === 'plan' && step === 'payment' ? <Check size={12} strokeWidth={2.5}/> : i + 1}
               </div>
@@ -298,14 +298,14 @@ function CheckoutContent() {
                       return (
                         <button key={c} onClick={() => setBillingCycle(c)}
                           className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all text-left ${
-                            billingCycle === c ? 'border-[#007AFF] bg-[#eff6ff]' : 'border-zinc-200 bg-white hover:border-zinc-300'
+                            billingCycle === c ? 'border-accent bg-[#eff6ff]' : 'border-zinc-200 bg-white hover:border-zinc-300'
                           }`}>
                           <div className="flex items-center gap-2 mb-2">
-                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${billingCycle === c ? 'border-[#007AFF] bg-[#007AFF]' : 'border-zinc-300'}`}>
+                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${billingCycle === c ? 'border-accent bg-accent' : 'border-zinc-300'}`}>
                               {billingCycle === c && <div className="w-1.5 h-1.5 rounded-full bg-white"/>}
                             </div>
                             <span className="text-[12px] font-semibold text-black">{label}</span>
-                            {c === 'annual' && <span className="text-[9px] font-bold text-[#007AFF] bg-[#007AFF]/10 px-1.5 py-0.5 rounded-full">−20%</span>}
+                            {c === 'annual' && <span className="text-[9px] font-bold text-accent bg-accent/10 px-1.5 py-0.5 rounded-full">−20%</span>}
                           </div>
                           <p className="text-[20px] font-bold text-black">{fmt(price * licenseMult)}</p>
                           <p className="text-[11px] text-zinc-400">/mo · {sub}</p>
@@ -334,7 +334,7 @@ function CheckoutContent() {
                           <Plus size={14}/>
                         </button>
                       </div>
-                      <a href="mailto:success@zoftware.com" className="mt-2 flex items-center justify-center gap-1 text-[11px] text-[#007AFF] hover:underline">
+                      <a href="mailto:success@zoftware.com" className="mt-2 flex items-center justify-center gap-1 text-[11px] text-accent hover:underline">
                         <MessageSquare size={10}/> Need custom volume? Talk to us
                       </a>
                     </div>
@@ -344,15 +344,15 @@ function CheckoutContent() {
                 {/* Professional Services */}
                 <div className="bg-white border border-zinc-200 rounded-xl p-5 sm:p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
-                    <Wrench size={15} strokeWidth={1.5} className="text-[#007AFF]"/>
+                    <Wrench size={15} strokeWidth={1.5} className="text-accent"/>
                     <h3 className="text-[14px] font-semibold text-black">Professional Services</h3>
                     <span className="ml-auto text-[10px] font-semibold text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded-full">Optional · One-time</span>
                   </div>
                   <p className="text-[12px] text-zinc-400 mb-4">Accelerate your go-live with expert-led services.</p>
                   <div className="space-y-2.5">
                     {PROF_SERVICES.map(svc => (
-                      <label key={svc.id} className={`flex items-start gap-3 p-3.5 border rounded-xl cursor-pointer transition-all ${profSel.includes(svc.id) ? 'border-[#007AFF]/40 bg-[#eff6ff]' : 'border-zinc-200 hover:border-zinc-300'}`}>
-                        <input type="checkbox" checked={profSel.includes(svc.id)} onChange={() => toggleProf(svc.id)} className="mt-0.5 accent-[#007AFF] w-4 h-4 shrink-0"/>
+                      <label key={svc.id} className={`flex items-start gap-3 p-3.5 border rounded-xl cursor-pointer transition-all ${profSel.includes(svc.id) ? 'border-accent/40 bg-[#eff6ff]' : 'border-zinc-200 hover:border-zinc-300'}`}>
+                        <input type="checkbox" checked={profSel.includes(svc.id)} onChange={() => toggleProf(svc.id)} className="mt-0.5 accent-accent w-4 h-4 shrink-0"/>
                         <div className="flex-1 min-w-0">
                           <p className="text-[13px] font-semibold text-black">{svc.label}</p>
                           <p className="text-[11px] text-zinc-400 leading-snug">{svc.desc}</p>
@@ -366,15 +366,15 @@ function CheckoutContent() {
                 {/* Managed Services */}
                 <div className="bg-white border border-zinc-200 rounded-xl p-5 sm:p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
-                    <Server size={15} strokeWidth={1.5} className="text-[#007AFF]"/>
+                    <Server size={15} strokeWidth={1.5} className="text-accent"/>
                     <h3 className="text-[14px] font-semibold text-black">Managed Services</h3>
                     <span className="ml-auto text-[10px] font-semibold text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded-full">Optional · Monthly</span>
                   </div>
                   <p className="text-[12px] text-zinc-400 mb-4">Ongoing managed support alongside your subscription.</p>
                   <div className="space-y-2.5">
                     {MANAGED_SERVICES.map(svc => (
-                      <label key={svc.id} className={`flex items-start gap-3 p-3.5 border rounded-xl cursor-pointer transition-all ${managedSel.includes(svc.id) ? 'border-[#007AFF]/40 bg-[#eff6ff]' : 'border-zinc-200 hover:border-zinc-300'}`}>
-                        <input type="checkbox" checked={managedSel.includes(svc.id)} onChange={() => toggleManaged(svc.id)} className="mt-0.5 accent-[#007AFF] w-4 h-4 shrink-0"/>
+                      <label key={svc.id} className={`flex items-start gap-3 p-3.5 border rounded-xl cursor-pointer transition-all ${managedSel.includes(svc.id) ? 'border-accent/40 bg-[#eff6ff]' : 'border-zinc-200 hover:border-zinc-300'}`}>
+                        <input type="checkbox" checked={managedSel.includes(svc.id)} onChange={() => toggleManaged(svc.id)} className="mt-0.5 accent-accent w-4 h-4 shrink-0"/>
                         <div className="flex-1 min-w-0">
                           <p className="text-[13px] font-semibold text-black">{svc.label}</p>
                           <p className="text-[11px] text-zinc-400 leading-snug">{svc.desc}</p>
@@ -386,7 +386,7 @@ function CheckoutContent() {
                 </div>
 
                 <button onClick={() => setStep('payment')}
-                  className="w-full flex items-center justify-center gap-2 bg-[#007AFF] text-white py-3.5 text-[14px] font-semibold rounded-xl hover:bg-[#0051D5] transition-colors min-h-[48px]">
+                  className="w-full flex items-center justify-center gap-2 bg-accent text-white py-3.5 text-[14px] font-semibold rounded-xl hover:bg-accent-hover transition-colors min-h-[48px]">
                   Continue to Payment <ArrowRight size={14} strokeWidth={2}/>
                 </button>
               </>
@@ -401,7 +401,7 @@ function CheckoutContent() {
                     <h2 className="text-[16px] font-semibold text-black">{basePrice === 0 ? 'Confirm Free Access' : 'Payment Details'}</h2>
                     {basePrice > 0 && (
                       <div className="flex items-center gap-1.5 bg-zinc-100 px-2.5 py-1 rounded-lg">
-                        <Shield size={10} className="text-[#007AFF]"/>
+                        <Shield size={10} className="text-accent"/>
                         <span className="text-[10px] font-bold text-black">Geidea</span>
                         <span className="text-[9px] text-zinc-400">GCC</span>
                       </div>
@@ -411,7 +411,7 @@ function CheckoutContent() {
                   {basePrice > 0 && (
                     <>
                       <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 mb-4">
-                        <p className="text-[10px] font-semibold text-[#007AFF] uppercase tracking-[0.08em] mb-0.5">Geidea Session</p>
+                        <p className="text-[10px] font-semibold text-accent uppercase tracking-[0.08em] mb-0.5">Geidea Session</p>
                         <p className="text-[11px] font-mono text-zinc-600">{geideaSession}</p>
                       </div>
 
@@ -443,7 +443,7 @@ function CheckoutContent() {
                 {/* Personal details */}
                 <div className="bg-white border border-zinc-200 rounded-xl p-5 sm:p-6 shadow-sm">
                   <h3 className="text-[15px] font-semibold text-black mb-1">Contact Details</h3>
-                  <p className="text-[12px] text-zinc-400 mb-4">Pre-filled from your account. <span className="text-[#007AFF] cursor-pointer hover:underline">Update profile</span></p>
+                  <p className="text-[12px] text-zinc-400 mb-4">Pre-filled from your account. <span className="text-accent cursor-pointer hover:underline">Update profile</span></p>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Full Name" value={details.fullName} onChange={v => setDetails(d=>({...d,fullName:v}))} placeholder="Ravi Sharma" icon={<User2 size={13}/>} error={errors.fullName}/>
@@ -461,7 +461,7 @@ function CheckoutContent() {
                 <div className="bg-white border border-zinc-200 rounded-xl p-5 sm:p-6 shadow-sm">
                   <h3 className="text-[15px] font-semibold text-black mb-3">Billing Address</h3>
                   <label className="flex items-center gap-2.5 cursor-pointer mb-4">
-                    <input type="checkbox" checked={sameAddress} onChange={e => setSameAddress(e.target.checked)} className="w-4 h-4 accent-[#007AFF]"/>
+                    <input type="checkbox" checked={sameAddress} onChange={e => setSameAddress(e.target.checked)} className="w-4 h-4 accent-accent"/>
                     <span className="text-[13px] text-black">Same as registered address</span>
                   </label>
                   {!sameAddress && (
@@ -510,7 +510,7 @@ function CheckoutContent() {
                   ))}
 
                   <button onClick={addContact}
-                    className="flex items-center gap-2 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors py-2">
+                    className="flex items-center gap-2 text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors py-2">
                     <Plus size={13}/> Add license holder
                   </button>
                 </div>
@@ -520,7 +520,7 @@ function CheckoutContent() {
                 </div>
 
                 <button onClick={handlePurchase}
-                  className="w-full flex items-center justify-center gap-2 bg-[#007AFF] text-white py-3.5 text-[14px] font-semibold rounded-xl hover:bg-[#0051D5] transition-colors min-h-[48px]">
+                  className="w-full flex items-center justify-center gap-2 bg-accent text-white py-3.5 text-[14px] font-semibold rounded-xl hover:bg-accent-hover transition-colors min-h-[48px]">
                   <Lock size={14}/>
                   {basePrice === 0 ? 'Activate Free Access' : `Complete Purchase · ${fmt(grandMonthly)}/mo`}
                 </button>

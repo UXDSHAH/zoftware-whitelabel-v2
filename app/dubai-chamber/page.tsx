@@ -167,7 +167,7 @@ export default function DubaiChamberPage() {
   if (!authReady) return null;
 
   if (!authed) return (
-    <div className="min-h-screen bg-[#f5f5f7] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-surface flex items-center justify-center px-4">
       <div className="w-full max-w-[380px]">
         {/* Generic logo mark */}
         <div className="flex items-center gap-2.5 mb-8 justify-center">
@@ -181,25 +181,25 @@ export default function DubaiChamberPage() {
 
         <div className="bg-white border border-black/8 rounded-sm p-8 shadow-sm">
           <div className="flex items-center gap-2 mb-1">
-            <Lock size={15} className="text-[#007AFF]" />
+            <Lock size={15} className="text-accent" />
             <p className="text-[15px] font-semibold text-black">Sign in to continue</p>
           </div>
-          <p className="text-[12px] text-[#86868b] mb-6">This workspace is access-controlled.</p>
+          <p className="text-[12px] text-muted mb-6">This workspace is access-controlled.</p>
 
           <form onSubmit={handleLogin} className="space-y-3.5">
             <label className="block">
-              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b] mb-1.5 block">Email</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted mb-1.5 block">Email</span>
               <input
                 type="email"
                 value={loginUser}
                 onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }}
                 placeholder="Enter your email"
                 autoComplete="username"
-                className="w-full h-10 border border-black/10 rounded-sm px-3 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10 bg-white"
+                className="w-full h-10 border border-black/10 rounded-sm px-3 text-[13px] text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10 bg-white"
               />
             </label>
             <label className="block">
-              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#86868b] mb-1.5 block">Password</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted mb-1.5 block">Password</span>
               <div className="relative">
                 <input
                   type={showPass ? 'text' : 'password'}
@@ -207,10 +207,10 @@ export default function DubaiChamberPage() {
                   onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }}
                   placeholder="Enter password"
                   autoComplete="current-password"
-                  className="w-full h-10 border border-black/10 rounded-sm px-3 pr-10 text-[13px] text-black outline-none focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10 bg-white"
+                  className="w-full h-10 border border-black/10 rounded-sm px-3 pr-10 text-[13px] text-black outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10 bg-white"
                 />
                 <button type="button" onClick={() => setShowPass(s => !s)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#86868b] hover:text-black transition-colors">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-black transition-colors">
                   {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
@@ -221,14 +221,14 @@ export default function DubaiChamberPage() {
             )}
 
             <button type="submit" disabled={logging || !loginUser || !loginPass}
-              className="w-full h-10 bg-[#007AFF] hover:bg-[#0051D5] disabled:opacity-50 text-white text-[13px] font-semibold rounded-sm transition-colors flex items-center justify-center gap-2">
+              className="w-full h-10 bg-accent hover:bg-accent-hover disabled:opacity-50 text-white text-[13px] font-semibold rounded-sm transition-colors flex items-center justify-center gap-2">
               {logging ? (
                 <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : 'Sign in'}
             </button>
           </form>
         </div>
-        <p className="text-center text-[11px] text-[#86868b] mt-4">
+        <p className="text-center text-[11px] text-muted mt-4">
           Powered by <span className="font-semibold text-black">Zoftware</span> · Software Gateway V2
         </p>
       </div>
@@ -241,13 +241,13 @@ export default function DubaiChamberPage() {
       {/* ── Top utility bar ──────────────────────────────────────── */}
       <div className="border-b border-black/8 bg-[#f9fafb]">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-9 flex items-center justify-between gap-4">
-          <button className="text-[12px] text-[#86868b] hover:text-black transition-colors flex items-center gap-1.5">
+          <button className="text-[12px] text-muted hover:text-black transition-colors flex items-center gap-1.5">
             <Globe size={12} /> Explore Chambers
           </button>
           <div className="flex items-center gap-4">
-            <span className="text-[12px] text-[#86868b] cursor-pointer hover:text-black transition-colors">عربي</span>
+            <span className="text-[12px] text-muted cursor-pointer hover:text-black transition-colors">عربي</span>
             <a href="https://connect.dubaichamber.com/" target="_blank" rel="noopener noreferrer"
-              className="text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+              className="text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors">
               Login
             </a>
           </div>
@@ -272,15 +272,15 @@ export default function DubaiChamberPage() {
           <nav className="hidden lg:flex items-center gap-0.5">
             {navItems.map(item => (
               <div key={item.label} className="relative group">
-                <button className="flex items-center gap-1 px-3.5 py-2 text-[13px] font-medium text-[#333] hover:text-black rounded-sm hover:bg-[#f5f5f7] transition-colors">
+                <button className="flex items-center gap-1 px-3.5 py-2 text-[13px] font-medium text-[#333] hover:text-black rounded-sm hover:bg-surface transition-colors">
                   {item.label}
-                  {item.children && <ChevronDown size={11} className="text-[#86868b]" />}
+                  {item.children && <ChevronDown size={11} className="text-muted" />}
                 </button>
                 {item.children && (
                   <div className="absolute top-full left-0 mt-1 bg-white border border-black/8 rounded-sm shadow-lg min-w-[240px] py-1 z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all">
                     {item.children.map(child => (
                       <a key={child.label} href={child.href} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center px-4 py-2.5 text-[13px] text-[#333] hover:bg-[#f5f5f7] hover:text-black transition-colors">
+                        className="flex items-center px-4 py-2.5 text-[13px] text-[#333] hover:bg-surface hover:text-black transition-colors">
                         {child.label}
                       </a>
                     ))}
@@ -304,7 +304,7 @@ export default function DubaiChamberPage() {
 
           {/* Mobile hamburger */}
           <button onClick={() => setMobileOpen(o => !o)}
-            className="lg:hidden w-10 h-10 flex items-center justify-center text-black hover:bg-[#f5f5f7] rounded-sm transition-colors">
+            className="lg:hidden w-10 h-10 flex items-center justify-center text-black hover:bg-surface rounded-sm transition-colors">
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -320,7 +320,7 @@ export default function DubaiChamberPage() {
                 <button onClick={() => setOpenNav(openNav === item.label ? null : item.label)}
                   className="w-full flex items-center justify-between px-2 py-3 text-[14px] font-medium text-black">
                   {item.label}
-                  <ChevronDown size={14} className={`text-[#86868b] transition-transform ${openNav === item.label ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={14} className={`text-muted transition-transform ${openNav === item.label ? 'rotate-180' : ''}`} />
                 </button>
                 {openNav === item.label && item.children && (
                   <div className="pl-4 pb-2">
@@ -367,25 +367,25 @@ export default function DubaiChamberPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               {/* Eyebrow badge */}
-              <div className="inline-flex items-center gap-2 border border-[#007AFF]/20 bg-[#007AFF]/6 px-3 py-1.5 rounded-full text-[11px] font-semibold text-[#007AFF] mb-6 tracking-wide">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#007AFF] animate-pulse" />
+              <div className="inline-flex items-center gap-2 border border-accent/20 bg-accent/6 px-3 py-1.5 rounded-full text-[11px] font-semibold text-accent mb-6 tracking-wide">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
                 Dubai Chamber of Commerce
               </div>
 
               <h1 className="text-[36px] sm:text-[48px] lg:text-[56px] font-semibold text-black tracking-tight leading-[1.05] mb-5">
                 Shaping Dubai&apos;s<br />
-                <span className="text-[#007AFF]">Business Landscape.</span>
+                <span className="text-accent">Business Landscape.</span>
               </h1>
               <p className="text-[15px] sm:text-[17px] text-[#555] leading-[1.7] max-w-[460px] mb-8">
                 Simplify your business set up in Dubai with extensive support, growth opportunities, and impactful connections across 30+ countries.
               </p>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <a href="https://www.dubaichambers.com/new-membership" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 bg-[#007AFF] text-white px-6 py-3 text-[14px] font-semibold rounded-sm hover:bg-[#0051D5] transition-all min-h-[44px] shadow-lg shadow-[#007AFF]/20">
+                  className="flex items-center justify-center gap-2 bg-accent text-white px-6 py-3 text-[14px] font-semibold rounded-sm hover:bg-accent-hover transition-all min-h-[44px] shadow-lg shadow-accent/20">
                   Become a Member <ArrowRight size={15} strokeWidth={2} />
                 </a>
                 <a href="https://www.dubaichambercommerce.com/en/business-groups-business-councils" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 border border-black/15 text-black px-6 py-3 text-[14px] font-medium rounded-sm hover:bg-[#f5f5f7] hover:border-black/25 transition-all min-h-[44px]">
+                  className="flex items-center justify-center gap-2 border border-black/15 text-black px-6 py-3 text-[14px] font-medium rounded-sm hover:bg-surface hover:border-black/25 transition-all min-h-[44px]">
                   Business Groups & Councils
                 </a>
               </div>
@@ -399,7 +399,7 @@ export default function DubaiChamberPage() {
                 ].map(({ n, l }) => (
                   <div key={l}>
                     <p className="text-[18px] font-semibold text-black">{n}</p>
-                    <p className="text-[11px] text-[#86868b]">{l}</p>
+                    <p className="text-[11px] text-muted">{l}</p>
                   </div>
                 ))}
               </div>
@@ -413,29 +413,29 @@ export default function DubaiChamberPage() {
                 { title: 'Business Groups & Councils', desc: 'Shape policies, expand trade, and enhance governance for the private sector.', href: 'https://www.dubaichambercommerce.com/en/business-groups-business-councils', tag: '200+ groups' },
               ].map(card => (
                 <a key={card.title} href={card.href} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-between border border-black/8 bg-white rounded-sm px-5 py-4 hover:border-[#007AFF]/25 hover:bg-[#f8fbff] hover:shadow-sm transition-all group">
+                  className="flex items-center justify-between border border-black/8 bg-white rounded-sm px-5 py-4 hover:border-accent/25 hover:bg-[#f8fbff] hover:shadow-sm transition-all group">
                   <div className="flex-1 min-w-0 mr-3">
                     <div className="flex items-center gap-2 mb-1">
                       <p className="text-[14px] font-semibold text-black">{card.title}</p>
-                      <span className="text-[9px] font-bold text-[#007AFF] bg-[#007AFF]/10 px-1.5 py-0.5 rounded-sm shrink-0">{card.tag}</span>
+                      <span className="text-[9px] font-bold text-accent bg-accent/10 px-1.5 py-0.5 rounded-sm shrink-0">{card.tag}</span>
                     </div>
-                    <p className="text-[12px] text-[#86868b] leading-snug hidden sm:block">{card.desc}</p>
+                    <p className="text-[12px] text-muted leading-snug hidden sm:block">{card.desc}</p>
                   </div>
-                  <ChevronRight size={16} className="text-[#c7c7cc] group-hover:text-[#007AFF] transition-colors shrink-0" />
+                  <ChevronRight size={16} className="text-[#c7c7cc] group-hover:text-accent transition-colors shrink-0" />
                 </a>
               ))}
 
               {/* Bottom CTA in hero cards */}
               <Link href="/software"
-                className="flex items-center justify-between border border-[#007AFF]/25 bg-[#007AFF]/6 rounded-sm px-5 py-4 hover:bg-[#007AFF]/12 hover:border-[#007AFF]/40 transition-all group">
+                className="flex items-center justify-between border border-accent/25 bg-accent/6 rounded-sm px-5 py-4 hover:bg-accent/12 hover:border-accent/40 transition-all group">
                 <div>
                   <p className="text-[14px] font-semibold text-black flex items-center gap-2">
-                    <Zap size={14} className="text-[#007AFF]" />
+                    <Zap size={14} className="text-accent" />
                     Software Gateway
                   </p>
-                  <p className="text-[12px] text-[#86868b] mt-0.5">Browse 50+ business software tools</p>
+                  <p className="text-[12px] text-muted mt-0.5">Browse 50+ business software tools</p>
                 </div>
-                <span className="text-[11px] font-semibold text-[#007AFF] border border-[#007AFF]/30 px-2.5 py-1 rounded-sm group-hover:bg-[#007AFF] group-hover:text-white transition-all shrink-0">
+                <span className="text-[11px] font-semibold text-accent border border-accent/30 px-2.5 py-1 rounded-sm group-hover:bg-accent group-hover:text-white transition-all shrink-0">
                   Explore →
                 </span>
               </Link>
@@ -454,14 +454,14 @@ export default function DubaiChamberPage() {
           {/* Section header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
             <div>
-              <div className="inline-flex items-center gap-2 bg-[#007AFF] text-white px-3 py-1.5 rounded-sm text-[10px] font-bold tracking-[0.1em] uppercase mb-4 shadow-sm shadow-[#007AFF]/30">
+              <div className="inline-flex items-center gap-2 bg-accent text-white px-3 py-1.5 rounded-sm text-[10px] font-bold tracking-[0.1em] uppercase mb-4 shadow-sm shadow-accent/20">
                 <Zap size={11} strokeWidth={2.5} /> Software Gateway
               </div>
               <h2 className="text-[26px] sm:text-[36px] font-medium text-black tracking-tight leading-[1.1] mb-3">
                 Procure the right software.<br />
-                <span className="text-[#007AFF]">In minutes, not months.</span>
+                <span className="text-accent">In minutes, not months.</span>
               </h2>
-              <p className="text-[13px] font-semibold text-[#007AFF] mb-2 flex items-center gap-1.5">
+              <p className="text-[13px] font-semibold text-accent mb-2 flex items-center gap-1.5">
                 <Sparkles size={13} strokeWidth={2} />
                 AI-powered digital collaboration hub for business growth
               </p>
@@ -583,22 +583,22 @@ export default function DubaiChamberPage() {
             ].map(({ v, l, c }) => (
               <div key={l} className="border border-black/8 rounded-sm px-4 py-3.5 bg-white hover:border-black/16 transition-colors">
                 <p className="text-[18px] font-semibold text-black leading-none mb-1" style={{ color: c }}>{v}</p>
-                <p className="text-[11px] text-[#86868b]">{l}</p>
+                <p className="text-[11px] text-muted">{l}</p>
               </div>
             ))}
           </div>
 
-          <p className="text-center text-[11px] text-[#86868b] mt-5">
+          <p className="text-center text-[11px] text-muted mt-5">
             Powered by <span className="font-semibold text-black">Zoftware</span> · Trusted by 5,000+ businesses across MENA & GCC
           </p>
         </div>
       </section>
 
       {/* ── IMPACT STATS ─────────────────────────────────────────── */}
-      <section className="bg-[#f5f5f7] border-y border-black/6">
+      <section className="bg-surface border-y border-black/6">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-10 sm:py-12">
           <div className="mb-6">
-            <p className="text-[11px] font-semibold text-[#86868b] tracking-[0.12em] uppercase">Impact in 2025</p>
+            <p className="text-[11px] font-semibold text-muted tracking-[0.12em] uppercase">Impact in 2025</p>
             <p className="text-[13px] text-[#555] mt-1 max-w-[680px]">
               Dubai Chamber of Commerce continued to make significant strides in advancing the interests of the business community — recording the largest annual increase in memberships in its history.
             </p>
@@ -607,7 +607,7 @@ export default function DubaiChamberPage() {
             {stats.map(({ value, label }) => (
               <div key={label} className="bg-white border border-black/8 rounded-sm px-4 py-4">
                 <p className="text-[20px] sm:text-[24px] font-semibold text-black tracking-tight leading-none mb-1.5">{value}</p>
-                <p className="text-[11px] text-[#86868b] leading-snug">{label}</p>
+                <p className="text-[11px] text-muted leading-snug">{label}</p>
               </div>
             ))}
           </div>
@@ -618,11 +618,11 @@ export default function DubaiChamberPage() {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <div className="flex items-end justify-between mb-6 sm:mb-8 gap-4 flex-wrap">
           <div>
-            <p className="text-[11px] font-semibold text-[#86868b] tracking-[0.1em] uppercase mb-1.5">Chamber Services</p>
+            <p className="text-[11px] font-semibold text-muted tracking-[0.1em] uppercase mb-1.5">Chamber Services</p>
             <h2 className="text-[22px] sm:text-[26px] font-semibold text-black tracking-tight">Explore Our Services</h2>
           </div>
           <a href="https://www.dubaichambers.com/en/web/dubai-chambers-1/services" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors min-h-[44px] items-center">
+            className="flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors min-h-[44px] items-center">
             View all services <ArrowRight size={12} />
           </a>
         </div>
@@ -632,10 +632,10 @@ export default function DubaiChamberPage() {
               className="border border-black/8 rounded-sm p-5 hover:border-black/20 hover:bg-[#f9fafb] transition-all group block">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-[14px] font-semibold text-black">{svc.name}</h3>
-                <ExternalLink size={12} className="text-[#86868b] group-hover:text-black transition-colors shrink-0" />
+                <ExternalLink size={12} className="text-muted group-hover:text-black transition-colors shrink-0" />
               </div>
               <p className="text-[12px] text-[#555] leading-[1.65] mb-3">{svc.desc}</p>
-              <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+              <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors">
                 Learn More <ChevronRight size={11} />
               </span>
             </a>
@@ -644,22 +644,22 @@ export default function DubaiChamberPage() {
       </section>
 
       {/* ── NEW HORIZONS + BUSINESS GROUPS ───────────────────────── */}
-      <section className="bg-[#f5f5f7] border-y border-black/8">
+      <section className="bg-surface border-y border-black/8">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white border border-black/8 rounded-sm p-6 sm:p-8">
-              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Initiative</p>
+              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Initiative</p>
               <h3 className="text-[20px] sm:text-[22px] font-semibold text-black tracking-tight mb-3">New Horizons</h3>
               <p className="text-[13px] text-[#555] leading-[1.7] mb-5">
                 The New Horizons initiative supports Dubai Chamber of Commerce members in expanding their reach to prominent global markets. The initiative offers a range of interactive workshops and opportunities to participate in targeted trade missions to priority markets, allowing businesses to gain valuable insights, connect with key stakeholders, and explore opportunities for international growth.
               </p>
               <a href="https://www.dubaichambercommerce.com/en/new-horizons" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors min-h-[44px] items-center">
+                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent hover:text-accent-hover transition-colors min-h-[44px] items-center">
                 Learn More <ArrowRight size={13} />
               </a>
             </div>
             <div className="bg-white border border-black/8 rounded-sm p-6 sm:p-8">
-              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Advocacy</p>
+              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Advocacy</p>
               <h3 className="text-[20px] sm:text-[22px] font-semibold text-black tracking-tight mb-3">Business Groups & Business Councils</h3>
               <p className="text-[13px] text-[#555] leading-[1.7] mb-4">
                 Operating under the umbrella of Dubai Chamber of Commerce, sector-specific Business Groups and country-specific Business Councils serve as bridges between the business community and the government — driving effective advocacy, legislative enhancements, and improving Dubai&apos;s favourable business environment.
@@ -673,12 +673,12 @@ export default function DubaiChamberPage() {
                 ].map(({ title, desc }) => (
                   <div key={title} className="border border-black/6 rounded-sm p-3 bg-[#f9fafb]">
                     <p className="text-[12px] font-semibold text-black mb-1">{title}</p>
-                    <p className="text-[11px] text-[#86868b] leading-snug">{desc}</p>
+                    <p className="text-[11px] text-muted leading-snug">{desc}</p>
                   </div>
                 ))}
               </div>
               <a href="https://www.dubaichambercommerce.com/en/business-groups-business-councils" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors min-h-[44px] items-center">
+                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent hover:text-accent-hover transition-colors min-h-[44px] items-center">
                 Learn More <ArrowRight size={13} />
               </a>
             </div>
@@ -690,7 +690,7 @@ export default function DubaiChamberPage() {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Centre</p>
+            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Centre</p>
             <h2 className="text-[22px] sm:text-[28px] font-semibold text-black tracking-tight mb-4">
               Dubai Centre for Family Businesses
             </h2>
@@ -698,7 +698,7 @@ export default function DubaiChamberPage() {
               The Dubai Centre for Family Businesses operates under the umbrella of Dubai Chambers to advance the interests of Dubai&apos;s family businesses ecosystem. The centre works closely with key public and private sector stakeholders to support the sustainable success of family businesses, leveraging strategic partnerships to shape innovative solutions that drive the sector&apos;s growth.
             </p>
             <a href="https://www.dubaichambercommerce.com/en/dubai-centre-for-family-businesses" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#007AFF] text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors min-h-[40px]">
+              className="inline-flex items-center gap-2 bg-accent text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-accent-hover transition-colors min-h-[40px]">
               Learn More <ArrowRight size={13} />
             </a>
           </div>
@@ -709,10 +709,10 @@ export default function DubaiChamberPage() {
               { icon: '🏛️', title: 'Stakeholder Engagement', desc: 'Close collaboration with public and private sector to shape policy and best practice.' },
               { icon: '💡', title: 'Sector Innovation', desc: 'Driving innovation and transformation in Dubai\'s family business ecosystem.' },
             ].map(({ icon, title, desc }) => (
-              <div key={title} className="border border-black/8 rounded-sm p-4 hover:border-[#007AFF]/20 hover:bg-[#f8fbff] transition-all">
+              <div key={title} className="border border-black/8 rounded-sm p-4 hover:border-accent/20 hover:bg-[#f8fbff] transition-all">
                 <p className="text-[20px] mb-2">{icon}</p>
                 <p className="text-[13px] font-semibold text-black mb-1">{title}</p>
-                <p className="text-[12px] text-[#86868b] leading-snug">{desc}</p>
+                <p className="text-[12px] text-muted leading-snug">{desc}</p>
               </div>
             ))}
           </div>
@@ -720,11 +720,11 @@ export default function DubaiChamberPage() {
       </section>
 
       {/* ── CENTRE FOR RESPONSIBLE BUSINESS ──────────────────────── */}
-      <section className="bg-[#f5f5f7] border-y border-black/8">
+      <section className="bg-surface border-y border-black/8">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <div>
-              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Sustainability</p>
+              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Sustainability</p>
               <h2 className="text-[22px] sm:text-[28px] font-semibold text-black tracking-tight mb-4">
                 Centre for Responsible Business
               </h2>
@@ -732,12 +732,12 @@ export default function DubaiChamberPage() {
                 Established in 2004, the Centre for Responsible Business (CRB) leads the way in promoting Corporate Social Responsibility (CSR) and sustainable business practices. The CRB provides platforms, knowledge, and tools to help businesses embed CSR and sustainability throughout their operations, enhancing performance and unlocking competitive advantages.
               </p>
               <a href="https://www.dubaichambercommerce.com/en/centre-for-responsible-business" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#007AFF] text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors min-h-[40px]">
+                className="inline-flex items-center gap-2 bg-accent text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-accent-hover transition-colors min-h-[40px]">
                 Learn More <ArrowRight size={13} />
               </a>
             </div>
             <div className="space-y-3">
-              <p className="text-[12px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-4">The CRB can help you:</p>
+              <p className="text-[12px] font-semibold text-muted uppercase tracking-[0.08em] mb-4">The CRB can help you:</p>
               {[
                 'Gain recognition and awards for your commitment to CSR and sustainability.',
                 'Connect with like-minded businesses to share best practices and collaborate on sustainability initiatives.',
@@ -747,8 +747,8 @@ export default function DubaiChamberPage() {
                 'Integrate CSR, sustainability, and good governance into your management and operational processes.',
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 bg-white border border-black/8 rounded-sm px-4 py-3.5">
-                  <div className="w-5 h-5 rounded-full bg-[#007AFF]/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-[10px] font-bold text-[#007AFF]">{i + 1}</span>
+                  <div className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-[10px] font-bold text-accent">{i + 1}</span>
                   </div>
                   <p className="text-[13px] text-[#555] leading-snug">{item}</p>
                 </div>
@@ -762,7 +762,7 @@ export default function DubaiChamberPage() {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Mobile</p>
+            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Mobile</p>
             <h2 className="text-[22px] sm:text-[28px] font-semibold text-black tracking-tight mb-4">
               Smart App For a<br />Smarter Business Future
             </h2>
@@ -771,7 +771,7 @@ export default function DubaiChamberPage() {
             </p>
             <div className="flex flex-wrap gap-2 mb-6">
               {['Membership Management', 'Document Attestation', 'Attestation Services', 'Application Tracking'].map(feat => (
-                <span key={feat} className="flex items-center gap-1.5 text-[12px] font-medium text-[#007AFF] bg-[#eff6ff] border border-[#007AFF]/15 px-3 py-1.5 rounded-sm">
+                <span key={feat} className="flex items-center gap-1.5 text-[12px] font-medium text-accent bg-[#eff6ff] border border-accent/15 px-3 py-1.5 rounded-sm">
                   <Check size={11} strokeWidth={2.5} /> {feat}
                 </span>
               ))}
@@ -782,7 +782,7 @@ export default function DubaiChamberPage() {
                 App Store
               </a>
               <a href="https://play.google.com/store/apps/details?id=com.ae.dubaichamber" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 border border-black/15 text-black px-4 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-[#f5f5f7] transition-colors">
+                className="flex items-center gap-2 border border-black/15 text-black px-4 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-surface transition-colors">
                 Google Play
               </a>
             </div>
@@ -794,10 +794,10 @@ export default function DubaiChamberPage() {
               { icon: '🔒', title: 'Trusted Gateway', desc: 'Designed with clarity and precision — your gateway to doing business in Dubai.' },
               { icon: '📱', title: 'Smart Experience', desc: 'Intelligent platform that transforms how businesses interact with the chamber.' },
             ].map(({ icon, title, desc }) => (
-              <div key={title} className="border border-black/8 rounded-sm p-4 hover:border-[#007AFF]/20 hover:bg-[#f8fbff] transition-all">
+              <div key={title} className="border border-black/8 rounded-sm p-4 hover:border-accent/20 hover:bg-[#f8fbff] transition-all">
                 <p className="text-[24px] mb-2">{icon}</p>
                 <p className="text-[13px] font-semibold text-black mb-1">{title}</p>
-                <p className="text-[12px] text-[#86868b] leading-snug">{desc}</p>
+                <p className="text-[12px] text-muted leading-snug">{desc}</p>
               </div>
             ))}
           </div>
@@ -808,11 +808,11 @@ export default function DubaiChamberPage() {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <div className="flex items-end justify-between mb-6 gap-4 flex-wrap">
           <div>
-            <p className="text-[11px] font-semibold text-[#86868b] tracking-[0.1em] uppercase mb-1.5">Latest</p>
+            <p className="text-[11px] font-semibold text-muted tracking-[0.1em] uppercase mb-1.5">Latest</p>
             <h2 className="text-[22px] sm:text-[26px] font-semibold text-black tracking-tight">News</h2>
           </div>
           <a href="https://www.dubaichambercommerce.com/en/news" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors min-h-[44px] items-center">
+            className="flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors min-h-[44px] items-center">
             View all articles <ArrowRight size={12} />
           </a>
         </div>
@@ -820,11 +820,11 @@ export default function DubaiChamberPage() {
           <a href={news[0].href} target="_blank" rel="noopener noreferrer"
             className="block border border-black/8 rounded-sm p-5 sm:p-6 hover:border-black/20 hover:bg-[#f9fafb] transition-all group">
             <div className="flex items-start gap-3 mb-2">
-              <span className="text-[10px] font-semibold text-white bg-[#007AFF] px-2 py-0.5 rounded-sm shrink-0">Featured</span>
-              <span className="text-[11px] text-[#86868b]">{news[0].date}</span>
+              <span className="text-[10px] font-semibold text-white bg-accent px-2 py-0.5 rounded-sm shrink-0">Featured</span>
+              <span className="text-[11px] text-muted">{news[0].date}</span>
             </div>
-            <h3 className="text-[15px] sm:text-[16px] font-semibold text-black group-hover:text-[#007AFF] transition-colors">{news[0].title}</h3>
-            <span className="inline-flex items-center gap-1 mt-3 text-[12px] font-semibold text-[#007AFF]">
+            <h3 className="text-[15px] sm:text-[16px] font-semibold text-black group-hover:text-accent transition-colors">{news[0].title}</h3>
+            <span className="inline-flex items-center gap-1 mt-3 text-[12px] font-semibold text-accent">
               Read More <ChevronRight size={11} />
             </span>
           </a>
@@ -832,8 +832,8 @@ export default function DubaiChamberPage() {
             {news.slice(1).map(n => (
               <a key={n.title} href={n.href} target="_blank" rel="noopener noreferrer"
                 className="border border-black/8 rounded-sm p-4 hover:border-black/20 hover:bg-[#f9fafb] transition-all group block">
-                <p className="text-[11px] text-[#86868b] mb-2">{n.date}</p>
-                <h3 className="text-[13px] font-medium text-black leading-snug group-hover:text-[#007AFF] transition-colors line-clamp-3">{n.title}</h3>
+                <p className="text-[11px] text-muted mb-2">{n.date}</p>
+                <h3 className="text-[13px] font-medium text-black leading-snug group-hover:text-accent transition-colors line-clamp-3">{n.title}</h3>
               </a>
             ))}
           </div>
@@ -845,7 +845,7 @@ export default function DubaiChamberPage() {
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>
-              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Global Reach</p>
+              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Global Reach</p>
               <h2 className="text-[22px] sm:text-[28px] font-semibold text-black tracking-tight mb-4">
                 Connecting Dubai Businesses to the World
               </h2>
@@ -859,13 +859,13 @@ export default function DubaiChamberPage() {
                   { v: '30+', l: 'Countries in trade mission network' },
                 ].map(({ v, l }) => (
                   <div key={l} className="border border-black/8 rounded-sm p-3 bg-white text-center">
-                    <p className="text-[22px] font-semibold text-[#007AFF] leading-none mb-1">{v}</p>
-                    <p className="text-[10px] text-[#86868b] leading-snug">{l}</p>
+                    <p className="text-[22px] font-semibold text-accent leading-none mb-1">{v}</p>
+                    <p className="text-[10px] text-muted leading-snug">{l}</p>
                   </div>
                 ))}
               </div>
               <a href="https://www.dubaichambercommerce.com/en/new-horizons" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#007AFF] text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors min-h-[40px]">
+                className="inline-flex items-center gap-2 bg-accent text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-accent-hover transition-colors min-h-[40px]">
                 Explore New Horizons <ArrowRight size={13} />
               </a>
             </div>
@@ -878,12 +878,12 @@ export default function DubaiChamberPage() {
                 { country: 'UK', meetings: 'Financial services focus', tag: 'G7' },
                 { country: 'Germany', meetings: 'Industrial cooperation', tag: 'EU Hub' },
               ].map(({ country, meetings, tag }) => (
-                <div key={country} className="border border-black/8 rounded-sm p-3.5 bg-white hover:border-[#007AFF]/20 transition-colors">
+                <div key={country} className="border border-black/8 rounded-sm p-3.5 bg-white hover:border-accent/20 transition-colors">
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-[13px] font-semibold text-black">{country}</p>
-                    <span className="text-[9px] font-bold text-[#007AFF] bg-[#007AFF]/8 px-1.5 py-0.5 rounded-sm">{tag}</span>
+                    <span className="text-[9px] font-bold text-accent bg-accent/8 px-1.5 py-0.5 rounded-sm">{tag}</span>
                   </div>
-                  <p className="text-[11px] text-[#86868b]">{meetings}</p>
+                  <p className="text-[11px] text-muted">{meetings}</p>
                 </div>
               ))}
             </div>
@@ -895,11 +895,11 @@ export default function DubaiChamberPage() {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-14">
         <div className="flex items-end justify-between mb-6 gap-4 flex-wrap">
           <div>
-            <p className="text-[11px] font-semibold text-[#86868b] tracking-[0.1em] uppercase mb-1.5">Calendar</p>
+            <p className="text-[11px] font-semibold text-muted tracking-[0.1em] uppercase mb-1.5">Calendar</p>
             <h2 className="text-[22px] sm:text-[26px] font-semibold text-black tracking-tight">Upcoming Events</h2>
           </div>
           <a href="https://www.dubaichambers.com/en/events" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+            className="flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors">
             View all events <ArrowRight size={12} />
           </a>
         </div>
@@ -916,11 +916,11 @@ export default function DubaiChamberPage() {
               className="border border-black/8 rounded-sm p-4 hover:border-black/20 hover:bg-[#f9fafb] transition-all group block">
               <div className="flex items-center gap-2 mb-2">
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-sm ${
-                  ev.featured ? 'bg-[#007AFF] text-white' : 'bg-[#f5f5f7] text-[#86868b]'
+                  ev.featured ? 'bg-accent text-white' : 'bg-surface text-muted'
                 }`}>{ev.category}</span>
-                <span className="text-[10px] text-[#86868b]">{ev.date}</span>
+                <span className="text-[10px] text-muted">{ev.date}</span>
               </div>
-              <h3 className="text-[13px] font-semibold text-black group-hover:text-[#007AFF] transition-colors leading-snug">{ev.title}</h3>
+              <h3 className="text-[13px] font-semibold text-black group-hover:text-accent transition-colors leading-snug">{ev.title}</h3>
             </a>
           ))}
         </div>
@@ -931,18 +931,18 @@ export default function DubaiChamberPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Responsible Business */}
           <div className="lg:col-span-2 border border-black/8 rounded-sm p-6 sm:p-8 bg-[#f8faff]">
-            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Sustainability</p>
+            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Sustainability</p>
             <h3 className="text-[20px] sm:text-[22px] font-semibold text-black tracking-tight mb-3">Centre for Responsible Business</h3>
             <p className="text-[13px] text-[#555] leading-[1.7] mb-5">
               The Centre for Responsible Business promotes ESG practices, sustainable supply chains, and ethical governance across Dubai&apos;s private sector. Helping members align with UAE Net Zero 2050 and global sustainability standards.
             </p>
             <div className="flex flex-wrap gap-2 mb-5">
               {['Net Zero 2050', 'ESG Reporting', 'Green Supply Chain', 'Circular Economy', 'Social Impact'].map(tag => (
-                <span key={tag} className="text-[11px] font-medium px-2.5 py-1 border border-[#007AFF]/20 text-[#007AFF] bg-[#007AFF]/5 rounded-sm">{tag}</span>
+                <span key={tag} className="text-[11px] font-medium px-2.5 py-1 border border-accent/20 text-accent bg-accent/5 rounded-sm">{tag}</span>
               ))}
             </div>
             <a href="https://www.dubaichambercommerce.com/en/centre-for-responsible-business" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+              className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent hover:text-accent-hover transition-colors">
               Learn More <ArrowRight size={13} />
             </a>
           </div>
@@ -950,7 +950,7 @@ export default function DubaiChamberPage() {
           {/* Quick CTA */}
           <div className="border border-black/8 rounded-sm p-6 bg-black flex flex-col justify-between">
             <div>
-              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#007AFF] mb-3">Member Benefits</p>
+              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-accent mb-3">Member Benefits</p>
               <h3 className="text-[18px] font-semibold text-white mb-3">Join 292,000+ member companies</h3>
               <p className="text-[12px] text-white/60 leading-relaxed mb-5">
                 Access exclusive benefits, networking events, and government relations support as a Dubai Chamber member.
@@ -958,7 +958,7 @@ export default function DubaiChamberPage() {
             </div>
             <div className="space-y-2">
               <a href="https://www.dubaichambers.com/new-membership" target="_blank" rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-[#007AFF] text-white py-2.5 text-[13px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors">
+                className="flex items-center justify-center gap-2 w-full bg-accent text-white py-2.5 text-[13px] font-semibold rounded-sm hover:bg-accent-hover transition-colors">
                 Apply for Membership <ArrowRight size={13} />
               </a>
               <a href="https://www.dubaichambers.com/services" target="_blank" rel="noopener noreferrer"
@@ -983,7 +983,7 @@ export default function DubaiChamberPage() {
                 </div>
                 <span className="text-[14px] font-bold text-black tracking-tight">LOGO</span>
               </div>
-              <p className="text-[12px] text-[#86868b] leading-[1.6] mb-3">
+              <p className="text-[12px] text-muted leading-[1.6] mb-3">
                 Shaping Dubai&apos;s business landscape since 1965.
               </p>
               <a href="tel:8002426237" className="flex items-center gap-1.5 text-[12px] text-[#555] hover:text-black mb-1">
@@ -994,50 +994,50 @@ export default function DubaiChamberPage() {
               </a>
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-3">Business Hub</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">Business Hub</p>
               {[
                 { l: 'Become a Member', h: 'https://www.dubaichambers.com/new-membership' },
                 { l: 'Business Groups', h: 'https://www.dubaichambercommerce.com/en/business-groups-business-councils' },
                 { l: 'Centre for Responsible Business', h: 'https://www.dubaichambercommerce.com/en/centre-for-responsible-business' },
               ].map(({ l, h }) => (
                 <a key={l} href={h} target="_blank" rel="noopener noreferrer"
-                  className="block text-[12px] text-black hover:text-[#007AFF] transition-colors mb-2">{l}</a>
+                  className="block text-[12px] text-black hover:text-accent transition-colors mb-2">{l}</a>
               ))}
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-3">Knowledge Centre</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">Knowledge Centre</p>
               {[
                 { l: 'Resource Toolkit', h: 'https://www.dubaichambers.com/resources' },
                 { l: 'Commercial Directory', h: 'https://dcdigitalservices.dubaichamber.com/' },
                 { l: 'Events', h: 'https://www.dubaichambers.com/en/events' },
               ].map(({ l, h }) => (
                 <a key={l} href={h} target="_blank" rel="noopener noreferrer"
-                  className="block text-[12px] text-black hover:text-[#007AFF] transition-colors mb-2">{l}</a>
+                  className="block text-[12px] text-black hover:text-accent transition-colors mb-2">{l}</a>
               ))}
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-3">Quick Links</p>
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">Quick Links</p>
               {[
                 { l: 'Family Businesses', h: 'https://www.dubaichambercommerce.com/en/dubai-centre-for-family-businesses' },
                 { l: 'Careers', h: 'https://careers.dubaichambers.com/' },
                 { l: 'Contact Us', h: 'https://www.dubaichambers.com/en/contact-us' },
               ].map(({ l, h }) => (
                 <a key={l} href={h} target="_blank" rel="noopener noreferrer"
-                  className="block text-[12px] text-black hover:text-[#007AFF] transition-colors mb-2">{l}</a>
+                  className="block text-[12px] text-black hover:text-accent transition-colors mb-2">{l}</a>
               ))}
               <Link href="/software"
-                className="flex items-center gap-1 text-[12px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors mt-1">
+                className="flex items-center gap-1 text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors mt-1">
                 <Package size={11} /> Software Gateway
               </Link>
             </div>
           </div>
           <div className="border-t border-black/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[11px] text-[#86868b]">© 2026 Dubai Chambers. All rights reserved.</p>
+            <p className="text-[11px] text-muted">© 2026 Dubai Chambers. All rights reserved.</p>
             <div className="flex items-center gap-4">
               <a href="https://www.dubaichambers.com/security-and-privacy-policy" target="_blank" rel="noopener noreferrer"
-                className="text-[11px] text-[#86868b] hover:text-black">Security & Privacy Policy</a>
+                className="text-[11px] text-muted hover:text-black">Security & Privacy Policy</a>
               <a href="https://www.dubaichambers.com/terms-and-conditions" target="_blank" rel="noopener noreferrer"
-                className="text-[11px] text-[#86868b] hover:text-black">Terms & Conditions</a>
+                className="text-[11px] text-muted hover:text-black">Terms & Conditions</a>
             </div>
           </div>
         </div>

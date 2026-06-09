@@ -206,8 +206,8 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
 
       {/* Progress bar */}
       {!done && !reviewing && (
-        <div className="h-0.5 bg-[#f5f5f7]">
-          <div className="h-full bg-[#007AFF] transition-all"
+        <div className="h-0.5 bg-surface">
+          <div className="h-full bg-accent transition-all"
             style={{ width: `${Math.round((currentIdx / totalSteps) * 100)}%` }} />
         </div>
       )}
@@ -217,12 +217,12 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
         onMouseMove={resetActivity} onKeyDown={resetActivity} onTouchStart={resetActivity}>
         {messages.map((msg, i) => (
           <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-            <div className="w-7 h-7 rounded-full bg-[#007AFF] flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center shrink-0 mt-0.5">
               {msg.role === 'bot' ? <BarChart2 size={13} className="text-white" strokeWidth={1.5} /> : <User size={13} className="text-white" strokeWidth={1.5} />}
             </div>
             <div className={`flex flex-col gap-2 max-w-[84%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
               <div className={`px-3.5 py-2.5 text-[13px] leading-[1.65] whitespace-pre-line rounded-2xl ${
-                msg.role === 'bot' ? 'bg-[#f5f5f7] text-black rounded-tl-sm' : 'bg-[#007AFF] text-white rounded-tr-sm'
+                msg.role === 'bot' ? 'bg-surface text-black rounded-tl-sm' : 'bg-accent text-white rounded-tr-sm'
               }`}>
                 <RichText text={msg.text} />
               </div>
@@ -232,7 +232,7 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
                 <div className="flex flex-wrap gap-2 mt-1">
                   {currentStep.options.map(opt => (
                     <button key={opt} onClick={() => advance(opt)}
-                      className="text-[12px] font-medium border border-[#007AFF]/30 text-[#007AFF] bg-white px-3 py-1.5 rounded-full hover:bg-[#007AFF]/8 hover:border-[#007AFF]/60 transition-all">
+                      className="text-[12px] font-medium border border-accent/30 text-accent bg-white px-3 py-1.5 rounded-full hover:bg-accent/8 hover:border-accent/60 transition-all">
                       {opt}
                     </button>
                   ))}
@@ -243,10 +243,10 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
               {msg.role === 'bot' && msg.stepId === 'review' && reviewing && isLastMsg(i) && (
                 <div className="w-full mt-1 space-y-2">
                   <button onClick={() => generateRoadmap()}
-                    className="flex items-center gap-2 bg-[#007AFF] text-white text-[12px] font-semibold px-4 py-2.5 rounded-sm hover:bg-[#0051D5] transition-colors">
+                    className="flex items-center gap-2 bg-accent text-white text-[12px] font-semibold px-4 py-2.5 rounded-sm hover:bg-accent-hover transition-colors">
                     <Sparkles size={13} /> Looks good — generate my roadmap
                   </button>
-                  <p className="text-[11px] text-[#86868b]">Or add any extra context below and hit send</p>
+                  <p className="text-[11px] text-muted">Or add any extra context below and hit send</p>
                 </div>
               )}
 
@@ -281,11 +281,11 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
                   ))}
                   <div className="flex gap-2 mt-2">
                     <Link href="/software/report/strategy" onClick={onClose}
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-[#007AFF] text-white text-[12px] font-semibold py-2.5 rounded-sm hover:bg-[#0051D5] transition-colors">
+                      className="flex-1 flex items-center justify-center gap-1.5 bg-accent text-white text-[12px] font-semibold py-2.5 rounded-sm hover:bg-accent-hover transition-colors">
                       <Sparkles size={12} /> View Full Roadmap
                     </Link>
                     <Link href="/software?view=bundles" onClick={onClose}
-                      className="flex-1 flex items-center justify-center gap-1.5 border border-black/10 text-black text-[12px] font-medium py-2.5 rounded-sm hover:bg-[#f5f5f7] transition-colors">
+                      className="flex-1 flex items-center justify-center gap-1.5 border border-black/10 text-black text-[12px] font-medium py-2.5 rounded-sm hover:bg-surface transition-colors">
                       View bundles <ArrowRight size={12} />
                     </Link>
                   </div>
@@ -300,8 +300,8 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
       {/* Idle nudge */}
       {showIdleNudge && !done && (
         <div className="mx-4 mb-2 flex items-center gap-3 bg-black text-white px-4 py-2.5 rounded-sm text-[12px] shadow-lg">
-          <Clock size={14} className="text-[#007AFF] shrink-0 animate-pulse" />
-          <span className="flex-1">Still there? Need a hand with your strategy? <span className="text-[#007AFF] font-semibold">We can help.</span></span>
+          <Clock size={14} className="text-accent shrink-0 animate-pulse" />
+          <span className="flex-1">Still there? Need a hand with your strategy? <span className="text-accent font-semibold">We can help.</span></span>
           <button onClick={resetActivity} className="text-white/50 hover:text-white transition-colors shrink-0"><X size={13} /></button>
         </div>
       )}
@@ -322,19 +322,19 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
                   }
                 }}
                 placeholder={reviewing ? 'Add any extra context… (optional)' : (!currentStep.options ? 'Type your answer…' : 'Or type your own answer…')}
-                className="flex-1 bg-[#f5f5f7] border-0 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:ring-2 focus:ring-[#007AFF]/20 placeholder-[#86868b]"
+                className="flex-1 bg-surface border-0 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:ring-2 focus:ring-accent/20 placeholder-muted"
               />
               <button
                 onClick={() => {
                   if (reviewing) { if (extraContext.trim()) generateRoadmap(extraContext); else generateRoadmap(); }
                   else if (input.trim()) advance(input.trim());
                 }}
-                className="w-9 h-9 rounded-full bg-[#007AFF] flex items-center justify-center text-white hover:opacity-90 transition-opacity shrink-0">
+                className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white hover:opacity-90 transition-opacity shrink-0">
                 <Send size={14} strokeWidth={2} />
               </button>
             </div>
             {!reviewing && (
-              <p className="text-[10px] text-[#86868b] mt-1.5 text-center">
+              <p className="text-[10px] text-muted mt-1.5 text-center">
                 {currentIdx} of ~{totalSteps} questions · Choose above or type freely
               </p>
             )}
@@ -342,11 +342,11 @@ export default function TechStrategyBuilder({ onClose }: { onClose: () => void }
         ) : (
           <div className="flex gap-2">
             <button onClick={handleReset}
-              className="flex-1 flex items-center justify-center gap-1.5 text-[12px] text-[#86868b] hover:text-black py-2 transition-colors">
+              className="flex-1 flex items-center justify-center gap-1.5 text-[12px] text-muted hover:text-black py-2 transition-colors">
               <RefreshCw size={11} /> Start over
             </button>
             <button onClick={onClose}
-              className="flex-1 bg-[#007AFF] text-white text-[12px] font-semibold py-2.5 rounded-sm hover:opacity-90 transition-opacity">
+              className="flex-1 bg-accent text-white text-[12px] font-semibold py-2.5 rounded-sm hover:opacity-90 transition-opacity">
               Close
             </button>
           </div>

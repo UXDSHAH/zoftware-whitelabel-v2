@@ -48,7 +48,7 @@ function StarFill({ rating, size = 13 }: { rating: number; size?: number }) {
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map(i => (
         <Star key={i} size={size} fill={i <= Math.round(rating) ? '#007AFF' : 'none'}
-          className={i <= Math.round(rating) ? 'text-[#007AFF]' : 'text-[#e5e5e7]'} />
+          className={i <= Math.round(rating) ? 'text-accent' : 'text-[#e5e5e7]'} />
       ))}
     </div>
   );
@@ -58,8 +58,8 @@ function RatingBar({ label, value }: { label: string; value: number }) {
   return (
     <div className="flex items-center gap-3">
       <p className="text-[12px] text-[#555] w-32 shrink-0">{label}</p>
-      <div className="flex-1 bg-[#f5f5f7] rounded-full h-1.5">
-        <div className="bg-[#007AFF] h-1.5 rounded-full" style={{ width: `${(value / 5) * 100}%` }} />
+      <div className="flex-1 bg-surface rounded-full h-1.5">
+        <div className="bg-accent h-1.5 rounded-full" style={{ width: `${(value / 5) * 100}%` }} />
       </div>
       <p className="text-[12px] font-semibold text-black w-5 text-right">{value}</p>
     </div>
@@ -94,12 +94,12 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
       {/* Breadcrumb */}
       <div className="border-b border-black/8 bg-[#f9fafb]">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-10 flex items-center gap-1.5 overflow-x-auto">
-          <Link href="/software" className="flex items-center gap-1 text-[12px] text-[#86868b] hover:text-black transition-colors shrink-0">
+          <Link href="/software" className="flex items-center gap-1 text-[12px] text-muted hover:text-black transition-colors shrink-0">
             <ArrowLeft size={11} /> Software Gateway
           </Link>
           <ChevronRight size={10} className="text-[#c7c7cc] shrink-0" />
           <Link href={`/software/category/${product.categorySlug}`}
-            className="text-[12px] text-[#86868b] hover:text-black transition-colors shrink-0">{product.category}</Link>
+            className="text-[12px] text-muted hover:text-black transition-colors shrink-0">{product.category}</Link>
           <ChevronRight size={10} className="text-[#c7c7cc] shrink-0" />
           <span className="text-[12px] text-black font-medium truncate">{product.name}</span>
         </div>
@@ -108,7 +108,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
       {/* Product header */}
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 pt-6 pb-4">
         <div className="flex items-start gap-4">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-sm bg-[#f5f5f7] border border-black/8 flex items-center justify-center shrink-0">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-sm bg-surface border border-black/8 flex items-center justify-center shrink-0">
             <span className="text-[13px] font-bold text-black">{product.logo}</span>
           </div>
           <div className="flex-1 min-w-0">
@@ -118,17 +118,17 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 {product.discountPct}% off — GCC
               </span>
             </div>
-            <p className="text-[13px] text-[#86868b] mb-2">by {product.vendor} · {product.category} · {product.deployment}</p>
+            <p className="text-[13px] text-muted mb-2">by {product.vendor} · {product.category} · {product.deployment}</p>
             <div className="flex items-center gap-2 flex-wrap">
               <StarFill rating={product.rating} />
               <span className="text-[13px] font-semibold text-black">{product.rating}</span>
-              <span className="text-[12px] text-[#86868b]">({product.reviews.toLocaleString()} reviews on Zoftware)</span>
+              <span className="text-[12px] text-muted">({product.reviews.toLocaleString()} reviews on Zoftware)</span>
             </div>
           </div>
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-2 shrink-0">
             <Link href={checkoutUrl}
-              className="flex items-center gap-2 bg-[#007AFF] text-white px-5 py-2.5 text-[13px] font-medium rounded-sm hover:bg-[#0051D5] transition-colors min-h-[44px]">
+              className="flex items-center gap-2 bg-accent text-white px-5 py-2.5 text-[13px] font-medium rounded-sm hover:bg-accent-hover transition-colors min-h-[44px]">
               Buy Now — {fmt(gcPrice)}/user/mo <ArrowRight size={13} strokeWidth={2} />
             </Link>
           </div>
@@ -142,7 +142,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
             {TABS.map(tab => (
               <button key={tab} onClick={() => setActiveTab(tab)}
                 className={`px-4 py-3 text-[13px] font-medium whitespace-nowrap border-b-2 transition-colors ${
-                  activeTab === tab ? 'border-[#007AFF] text-[#007AFF]' : 'border-transparent text-[#86868b] hover:text-black'
+                  activeTab === tab ? 'border-accent text-accent' : 'border-transparent text-muted hover:text-black'
                 }`}>
                 {tab}
               </button>
@@ -162,17 +162,17 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
             {activeTab === 'Overview' && (
               <div className="space-y-5">
                 <div className="bg-[#f9fafb] border border-black/8 rounded-sm p-5">
-                  <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-3">About {product.name}</p>
+                  <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">About {product.name}</p>
                   <p className="text-[14px] text-[#333] leading-[1.75]">{product.overview}</p>
                 </div>
 
                 <div className="border border-black/8 rounded-sm p-5">
-                  <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-3">What makes it different</p>
+                  <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">What makes it different</p>
                   <p className="text-[14px] text-[#333] leading-[1.75]">{product.usp}</p>
                 </div>
 
                 <div className="border border-black/8 rounded-sm p-5">
-                  <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-4">Product Details</p>
+                  <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-4">Product Details</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {[
                       { icon: <Building2 size={13} />, label: 'Vendor', value: product.vendor },
@@ -183,16 +183,16 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                       { icon: <Mail size={13} />, label: 'Support Email', value: product.supportEmail },
                     ].map(({ icon, label, value }) => (
                       <div key={label} className="flex items-start gap-2.5">
-                        <span className="text-[#86868b] mt-0.5 shrink-0">{icon}</span>
+                        <span className="text-muted mt-0.5 shrink-0">{icon}</span>
                         <div>
-                          <p className="text-[10px] font-semibold text-[#86868b] uppercase tracking-[0.05em]">{label}</p>
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.05em]">{label}</p>
                           <p className="text-[13px] text-black font-medium mt-0.5">{value}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                   <a href={product.website} target="_blank" rel="noopener noreferrer"
-                    className="mt-4 flex items-center gap-1.5 text-[12px] text-[#007AFF] hover:text-[#0051D5] transition-colors font-medium">
+                    className="mt-4 flex items-center gap-1.5 text-[12px] text-accent hover:text-accent-hover transition-colors font-medium">
                     <ExternalLink size={11} /> Visit {product.vendor} website
                   </a>
                 </div>
@@ -200,15 +200,15 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 {/* Key features (first 6) */}
                 <div className="border border-black/8 rounded-sm p-5">
                   <div className="flex items-center justify-between mb-4">
-                    <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em]">Key Features</p>
-                    <button onClick={() => setActiveTab('Features')} className="text-[11px] font-semibold text-[#007AFF] hover:text-[#0051D5]">
+                    <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em]">Key Features</p>
+                    <button onClick={() => setActiveTab('Features')} className="text-[11px] font-semibold text-accent hover:text-accent-hover">
                       See all →
                     </button>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {product.features.slice(0, 6).map(f => (
                       <div key={f} className="flex items-center gap-2.5 bg-[#f9fafb] border border-black/8 rounded-sm px-3 py-2">
-                        <div className="w-4 h-4 rounded-sm bg-[#007AFF] flex items-center justify-center shrink-0">
+                        <div className="w-4 h-4 rounded-sm bg-accent flex items-center justify-center shrink-0">
                           <Check size={9} className="text-white" strokeWidth={2.5} />
                         </div>
                         <span className="text-[12px] text-black font-medium">{f}</span>
@@ -219,7 +219,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
 
                 {/* Ratings */}
                 <div className="border border-black/8 rounded-sm p-5">
-                  <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-4">Ratings Breakdown</p>
+                  <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-4">Ratings Breakdown</p>
                   <div className="space-y-3">
                     <RatingBar label="Ease of Use" value={product.ratings.easeOfUse} />
                     <RatingBar label="Value for Money" value={product.ratings.valueForMoney} />
@@ -227,16 +227,16 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                     <RatingBar label="Features" value={product.ratings.features} />
                     <RatingBar label="Implementation" value={product.ratings.implementation} />
                   </div>
-                  <p className="text-[11px] text-[#86868b] mt-3">Source: Zoftware · {product.reviews.toLocaleString()} verified reviews</p>
+                  <p className="text-[11px] text-muted mt-3">Source: Zoftware · {product.reviews.toLocaleString()} verified reviews</p>
                 </div>
 
                 {/* Integrations */}
                 {product.integrations.length > 0 && (
                   <div className="border border-black/8 rounded-sm p-5">
-                    <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em] mb-3">Key Integrations</p>
+                    <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">Key Integrations</p>
                     <div className="flex flex-wrap gap-2">
                       {product.integrations.map(int => (
-                        <span key={int} className="text-[12px] font-medium bg-[#f5f5f7] border border-black/8 text-[#333] px-3 py-1.5 rounded-sm">
+                        <span key={int} className="text-[12px] font-medium bg-surface border border-black/8 text-[#333] px-3 py-1.5 rounded-sm">
                           {int}
                         </span>
                       ))}
@@ -255,7 +255,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-none">
                   {product.features.map((f, i) => (
                     <div key={f} className={`flex items-start gap-3 px-5 py-3.5 ${i % 2 === 0 ? 'sm:border-r border-black/5' : ''} border-b border-black/5`}>
-                      <div className="w-5 h-5 rounded-sm bg-[#007AFF] flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-sm bg-accent flex items-center justify-center shrink-0 mt-0.5">
                         <Check size={10} className="text-white" strokeWidth={2.5} />
                       </div>
                       <span className="text-[13px] text-black leading-[1.5]">{f}</span>
@@ -270,18 +270,18 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
               <div className="space-y-5">
                 {/* Controls */}
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-1 bg-[#f5f5f7] p-0.5 rounded-sm">
+                  <div className="flex items-center gap-1 bg-surface p-0.5 rounded-sm">
                     {(['monthly', 'annual'] as const).map(c => (
                       <button key={c} onClick={() => setBillingCycle(c)}
-                        className={`px-3 py-1.5 text-[11px] font-medium rounded-sm transition-all ${billingCycle === c ? 'bg-white text-black shadow-sm' : 'text-[#86868b] hover:text-black'}`}>
+                        className={`px-3 py-1.5 text-[11px] font-medium rounded-sm transition-all ${billingCycle === c ? 'bg-white text-black shadow-sm' : 'text-muted hover:text-black'}`}>
                         {c === 'annual' ? 'Annual (−20%)' : 'Monthly'}
                       </button>
                     ))}
                   </div>
-                  <div className="flex items-center gap-1 bg-[#f5f5f7] p-0.5 rounded-sm">
+                  <div className="flex items-center gap-1 bg-surface p-0.5 rounded-sm">
                     {(['USD', 'AED'] as const).map(c => (
                       <button key={c} onClick={() => setCurrency(c)}
-                        className={`px-3 py-1.5 text-[11px] font-semibold rounded-sm transition-all ${currency === c ? 'bg-white text-black shadow-sm' : 'text-[#86868b] hover:text-black'}`}>
+                        className={`px-3 py-1.5 text-[11px] font-semibold rounded-sm transition-all ${currency === c ? 'bg-white text-black shadow-sm' : 'text-muted hover:text-black'}`}>
                         {c}
                       </button>
                     ))}
@@ -289,35 +289,35 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 </div>
 
                 {/* GCC special offer card */}
-                <div className="border-2 border-[#007AFF] rounded-sm p-5">
+                <div className="border-2 border-accent rounded-sm p-5">
                   <div className="flex items-start justify-between mb-3 flex-wrap gap-2">
                     <div>
-                      <span className="text-[10px] font-bold text-white bg-[#007AFF] px-2 py-0.5 rounded-sm">GCC Exclusive Offer</span>
+                      <span className="text-[10px] font-bold text-white bg-accent px-2 py-0.5 rounded-sm">GCC Exclusive Offer</span>
                       <h3 className="text-[18px] font-semibold text-black mt-2">{product.discountPct}% off — Standard Plan</h3>
                     </div>
                     <div className="text-right">
                       <div className="flex items-baseline gap-1">
                         <span className="text-[28px] font-semibold text-black">{fmt(gcPrice)}</span>
-                        <span className="text-[13px] text-[#86868b]">/user/mo</span>
+                        <span className="text-[13px] text-muted">/user/mo</span>
                       </div>
-                      <p className="text-[12px] text-[#86868b] line-through">{fmt(product.originalPrice * multiplier)}</p>
+                      <p className="text-[12px] text-muted line-through">{fmt(product.originalPrice * multiplier)}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 mb-4 text-[11px] text-[#555]">
-                    <div className="flex items-center gap-1.5"><Clock size={11} className="text-[#86868b]" /> Activates in {product.activationDays} days</div>
-                    <div className="flex items-center gap-1.5"><Shield size={11} className="text-[#86868b]" /> GCC-licensed · Single invoice</div>
-                    <div className="flex items-center gap-1.5"><Zap size={11} className="text-[#86868b]" /> Offer code: {product.offerCode}</div>
-                    <div className="flex items-center gap-1.5"><Users size={11} className="text-[#86868b]" /> Min 1 user · Unlimited max</div>
+                    <div className="flex items-center gap-1.5"><Clock size={11} className="text-muted" /> Activates in {product.activationDays} days</div>
+                    <div className="flex items-center gap-1.5"><Shield size={11} className="text-muted" /> GCC-licensed · Single invoice</div>
+                    <div className="flex items-center gap-1.5"><Zap size={11} className="text-muted" /> Offer code: {product.offerCode}</div>
+                    <div className="flex items-center gap-1.5"><Users size={11} className="text-muted" /> Min 1 user · Unlimited max</div>
                   </div>
                   <Link href={checkoutUrl}
-                    className="flex items-center justify-center gap-2 w-full bg-[#007AFF] text-white py-3 text-[14px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors min-h-[44px]">
+                    className="flex items-center justify-center gap-2 w-full bg-accent text-white py-3 text-[14px] font-semibold rounded-sm hover:bg-accent-hover transition-colors min-h-[44px]">
                     Buy Now — {fmt(gcPrice)}/user/mo <ArrowRight size={14} strokeWidth={2} />
                   </Link>
                 </div>
 
                 {/* Standard vendor plans */}
                 <div>
-                  <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-3">Standard Vendor Plans</p>
+                  <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-3">Standard Vendor Plans</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {product.plans.map(plan => (
                       <div key={plan.name} className="border border-black/8 rounded-sm p-4">
@@ -327,20 +327,20 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                             <p className="text-[14px] font-semibold text-black">
                               {plan.price === 0 ? 'Free' : fmt(plan.price * multiplier)}
                             </p>
-                            {plan.price > 0 && <p className="text-[10px] text-[#86868b]">/{plan.billing}</p>}
+                            {plan.price > 0 && <p className="text-[10px] text-muted">/{plan.billing}</p>}
                           </div>
                         </div>
                         <ul className="space-y-1">
                           {plan.features.map(f => (
                             <li key={f} className="flex items-start gap-2 text-[12px] text-[#555]">
-                              <Check size={11} className="text-[#007AFF] shrink-0 mt-0.5" strokeWidth={2} /> {f}
+                              <Check size={11} className="text-accent shrink-0 mt-0.5" strokeWidth={2} /> {f}
                             </li>
                           ))}
                         </ul>
                       </div>
                     ))}
                   </div>
-                  <p className="text-[11px] text-[#86868b] mt-3">* GCC pricing may differ from vendor list prices. Our GCC offer gives you the best available rate.</p>
+                  <p className="text-[11px] text-muted mt-3">* GCC pricing may differ from vendor list prices. Our GCC offer gives you the best available rate.</p>
                 </div>
               </div>
             )}
@@ -352,8 +352,8 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                   {product.name} is included in the following software bundles — save up to 40% by buying as a package.
                 </p>
                 {relatedBundles.length === 0 ? (
-                  <div className="border border-black/8 rounded-sm p-6 text-center text-[13px] text-[#86868b]">
-                    No bundle includes this product yet. <Link href="/software?view=bundles" className="text-[#007AFF]">Browse all bundles →</Link>
+                  <div className="border border-black/8 rounded-sm p-6 text-center text-[13px] text-muted">
+                    No bundle includes this product yet. <Link href="/software?view=bundles" className="text-accent">Browse all bundles →</Link>
                   </div>
                 ) : (
                   relatedBundles.map(bundle => (
@@ -366,13 +366,13 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                           </div>
                           <div>
                             <p className="text-[14px] font-semibold text-black">{bundle.name}</p>
-                            <p className="text-[11px] text-[#86868b]">{bundle.targetSize} · {bundle.items.length} products included</p>
+                            <p className="text-[11px] text-muted">{bundle.targetSize} · {bundle.items.length} products included</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="text-right">
-                            <p className="text-[18px] font-semibold text-black">${bundle.monthlyPrice}<span className="text-[12px] text-[#86868b] font-normal">/mo</span></p>
-                            <p className="text-[11px] text-[#86868b] line-through">${bundle.originalMonthlyPrice}/mo</p>
+                            <p className="text-[18px] font-semibold text-black">${bundle.monthlyPrice}<span className="text-[12px] text-muted font-normal">/mo</span></p>
+                            <p className="text-[11px] text-muted line-through">${bundle.originalMonthlyPrice}/mo</p>
                           </div>
                           <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm"
                             style={{ backgroundColor: bundle.color + '18', color: bundle.color }}>
@@ -383,7 +383,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                       <div className="px-5 pb-4 flex items-center justify-between gap-3 border-t border-black/5">
                         <div className="flex flex-wrap gap-1">
                           {bundle.items.slice(0, 4).map(item => (
-                            <span key={item.product} className="text-[10px] bg-[#f5f5f7] text-[#555] px-2 py-0.5 rounded-sm">{item.product}</span>
+                            <span key={item.product} className="text-[10px] bg-surface text-[#555] px-2 py-0.5 rounded-sm">{item.product}</span>
                           ))}
                         </div>
                         <Link href={`/bundles/${bundle.slug}`}
@@ -396,7 +396,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                   ))
                 )}
                 <Link href="/software?view=bundles"
-                  className="flex items-center gap-1.5 text-[13px] font-semibold text-[#007AFF] hover:text-[#0051D5] transition-colors">
+                  className="flex items-center gap-1.5 text-[13px] font-semibold text-accent hover:text-accent-hover transition-colors">
                   Browse all bundles <ArrowRight size={13} />
                 </Link>
               </div>
@@ -408,16 +408,16 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
             <div className="border border-black/8 rounded-sm overflow-hidden">
               <div className="p-5 border-b border-black/8">
                 <div className="flex items-center justify-between mb-1">
-                  <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.07em]">GCC Price</p>
+                  <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em]">GCC Price</p>
                   <span className="text-[10px] font-bold text-[#16a34a] bg-[#dcfce7] px-1.5 py-0.5 rounded-sm">{product.discountPct}% off</span>
                 </div>
                 <div className="flex items-baseline gap-1 mb-0.5">
                   <span className="text-[26px] font-semibold text-black">{fmt(gcPrice)}</span>
-                  <span className="text-[12px] text-[#86868b]">/user/mo</span>
+                  <span className="text-[12px] text-muted">/user/mo</span>
                 </div>
-                <p className="text-[11px] text-[#86868b] line-through mb-3">{fmt(originalPrice)}/user/mo</p>
+                <p className="text-[11px] text-muted line-through mb-3">{fmt(originalPrice)}/user/mo</p>
                 <Link href={checkoutUrl}
-                  className="flex items-center justify-center gap-2 w-full bg-[#007AFF] text-white py-2.5 text-[13px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors min-h-[44px]">
+                  className="flex items-center justify-center gap-2 w-full bg-accent text-white py-2.5 text-[13px] font-semibold rounded-sm hover:bg-accent-hover transition-colors min-h-[44px]">
                   Buy Now <ArrowRight size={13} strokeWidth={2} />
                 </Link>
               </div>
@@ -428,7 +428,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                   { icon: <Users size={12} />, text: product.targetSize.join(' · ') },
                   { icon: <Zap size={12} />, text: `${product.reviews.toLocaleString()} verified reviews` },
                 ].map(({ icon, text }) => (
-                  <div key={text} className="flex items-center gap-2 text-[11px] text-[#86868b]">{icon} {text}</div>
+                  <div key={text} className="flex items-center gap-2 text-[11px] text-muted">{icon} {text}</div>
                 ))}
               </div>
             </div>
@@ -436,16 +436,16 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
             {/* Related bundles */}
             {relatedBundles.length > 0 && (
               <div className="mt-4">
-                <p className="text-[11px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-2.5">Save more in a bundle</p>
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-2.5">Save more in a bundle</p>
                 {relatedBundles.slice(0, 2).map(b => (
                   <Link key={b.id} href={`/bundles/${b.slug}`}
                     className="flex items-center gap-3 border border-black/8 rounded-sm p-3.5 mb-2.5 hover:border-black/20 hover:bg-[#f9fafb] transition-all">
                     <Package size={15} strokeWidth={1.5} style={{ color: b.color }} className="shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-[12px] font-semibold text-black">{b.name}</p>
-                      <p className="text-[10px] text-[#86868b]">Save {b.savePct}% · ${b.monthlyPrice}/mo</p>
+                      <p className="text-[10px] text-muted">Save {b.savePct}% · ${b.monthlyPrice}/mo</p>
                     </div>
-                    <ChevronRight size={12} className="text-[#86868b] shrink-0" />
+                    <ChevronRight size={12} className="text-muted shrink-0" />
                   </Link>
                 ))}
               </div>
@@ -462,7 +462,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
             <p className="text-[10px] text-[#16a34a] font-semibold">{product.discountPct}% off — GCC exclusive</p>
           </div>
           <Link href={checkoutUrl}
-            className="flex items-center gap-2 bg-[#007AFF] text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-[#0051D5] transition-colors min-h-[44px]">
+            className="flex items-center gap-2 bg-accent text-white px-5 py-2.5 text-[13px] font-semibold rounded-sm hover:bg-accent-hover transition-colors min-h-[44px]">
             Buy Now <ArrowRight size={13} strokeWidth={2} />
           </Link>
         </div>
