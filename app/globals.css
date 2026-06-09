@@ -288,6 +288,14 @@ body {
 [data-theme="2"] .bg-\[\#f9fafb\],
 [data-theme="2"] .bg-gray-50       { background-color: #FAF7F4 !important; }
 
+/* ── CSM (Success Manager) card ── */
+.csm-card {
+  background: linear-gradient(160deg, #0051D5 0%, #003CA6 100%);
+}
+[data-theme="2"] .csm-card {
+  background: linear-gradient(160deg, var(--color-accent) 0%, var(--color-accent-hover) 100%) !important;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────
    Scrollbar
    ───────────────────────────────────────────────────────────────────────── */

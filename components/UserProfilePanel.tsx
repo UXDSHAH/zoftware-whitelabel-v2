@@ -216,7 +216,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
         <div className="shrink-0 h-12 border-b border-black/8 flex items-center justify-between px-5 bg-white z-10">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold shrink-0"
-              style={{ background: 'linear-gradient(135deg, #007AFF, #0051D5)' }}>
+              style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
               {mockUser.avatar}
             </div>
             <div className="flex items-center gap-2">
@@ -291,8 +291,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
             </nav>
 
             {/* ── CSM card — always visible at bottom ── */}
-            <div className="shrink-0 border-t border-black/8 overflow-hidden"
-              style={{ background: 'linear-gradient(160deg, #0051D5 0%, #003CA6 100%)' }}>
+            <div className="csm-card shrink-0 border-t border-black/8 overflow-hidden">
               <div className="p-4">
                 <p className="text-[9px] font-bold uppercase tracking-[0.1em] mb-3" style={{ color: 'rgba(255,255,255,0.55)' }}>
                   Your Success Manager
@@ -325,7 +324,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                 <div className="flex gap-2">
                   <a href={`mailto:${mockContact.email}`}
                     className="flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-sm transition-colors"
-                    style={{ background: '#fff', color: '#0051D5' }}>
+                    style={{ background: '#fff', color: 'var(--color-accent)' }}>
                     <Mail size={11} /> Email
                   </a>
                   <a href={`https://wa.me/${mockContact.whatsapp}`} target="_blank" rel="noopener noreferrer"
@@ -633,7 +632,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                             {r.phases.map((ph, i) => (
                               <div key={ph} className="flex items-center gap-2 text-[12px] text-[#555]">
                                 <span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0"
-                                  style={{ backgroundColor: i === 0 ? '#007AFF' : i === 1 ? '#0051D5' : '#000' }}>
+                                  style={{ backgroundColor: i === 0 ? 'var(--color-accent)' : i === 1 ? 'var(--color-accent-hover)' : '#000' }}>
                                   {i + 1}
                                 </span>
                                 {ph}
@@ -760,7 +759,7 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                     </div>
                     <div className="divide-y divide-black/6">
                       {[
-                        { v: mockPurchases.length.toString(), l: 'Active subscriptions', c: '#007AFF' },
+                        { v: mockPurchases.length.toString(), l: 'Active subscriptions', c: 'var(--color-accent)' },
                         { v: '$1,520/mo', l: 'Monthly spend', c: '#000' },
                         { v: '$680 saved', l: 'vs list price', c: '#16a34a' },
                         { v: cartItems.length.toString(), l: 'Items in cart', c: '#000' },
