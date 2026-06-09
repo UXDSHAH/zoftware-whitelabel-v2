@@ -50,4 +50,38 @@ Prior work in this codebase (earlier sessions before SESSIONS.md was created):
 
 ---
 
+## Session 02 — Warm Studio Pixel-Perfect Audit
+**Tag:** `session/02-warm-studio-fixes`
+**Commit:** `acd6d33`
+**Branch:** `theme-2`
+**Date:** Jun 10, 2026
+
+Complete Theme 2 redesign from dark Enterprise Slate → light Warm Studio, then a full pixel-
+perfect audit pass fixing all visual regressions.
+
+### Theme Redesign (dark → Warm Studio light)
+- Rejected dark (#0D1117 near-black, violet) in favour of a warm cream / rose-crimson palette
+  inspired by BordUp HR, Codename CRM, FundView reference screenshots
+- **Warm Studio tokens**: accent `#DB3D5E` (rose-crimson), page bg `#F6F1EB` (cream),
+  surface `#EDE6DF` (warm stone), muted `#9E8E84`, warm card shadows, Plus Jakarta Sans
+- ThemeToggle: "Classic" vs "Warm Studio" labels + colour swatches; landing page shows full
+  dropdown with `showLabel` prop; nav bars show compact Palette icon only
+
+### UI Audit & Bug Fixes
+- **Oval/circular feature cards**: Root cause: `[data-theme="2"] a.border { border-radius:
+  100px }` was pill-shaping ALL anchor+border elements. Removed that broad rule; pill shape
+  now targets only `.bg-accent` CTAs.
+- **Blue hero gradient**: inline `style={{ background: '#f0f7ff...' }}` can't be overridden
+  by CSS. Added class names `th-hero-section`, `th-hero-dots`, `th-hero-glow` to elements;
+  CSS overrides in globals.css suppress glow divs and replace gradient with warm cream.
+- **Software Gateway blue section**: added `th-section-warm` / `th-section-glow` classes;
+  CSS overrides → warm gradient.
+- **gatewayTools / stat colors**: JS object values `'#007AFF'` → `'var(--color-accent)'`
+  so inline `style={{ color: tool.color }}` respects the CSS variable in Theme 2.
+- **Checkout page**: bulk sed — `bg-[#eff6ff]`→`bg-accent/8`, `bg-blue-50`→`bg-accent/6`,
+  `border-blue-100`→`border-accent/20`, `border-zinc-*`→`border-black/8|10`,
+  `text-zinc-*`→`text-muted`, `bg-zinc-50`→`bg-surface`, `rounded-xl`→`rounded-lg`
+- **globals.css CSS overrides** for `bg-[#eff6ff]`, `bg-blue-50`, `border-zinc-200/100`,
+  `text-zinc-400`, `hover:bg-[#f8fbff]` / `hover:bg-[#f9fafb]` → warm equivalents
+
 <!-- New sessions appended below -->
