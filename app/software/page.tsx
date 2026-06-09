@@ -23,8 +23,8 @@ function StarRow({ rating }: { rating: number }) {
   return (
     <div className="flex items-center gap-0.5">
       {[1,2,3,4,5].map(i => (
-        <Star key={i} size={9} fill={i <= Math.round(rating) ? '#2563EB' : 'none'}
-          className={i <= Math.round(rating) ? 'text-[#2563EB]' : 'text-zinc-300'} />
+        <Star key={i} size={9} fill={i <= Math.round(rating) ? 'var(--color-accent)' : 'none'}
+          className={i <= Math.round(rating) ? 'text-accent' : 'text-zinc-300'} />
       ))}
     </div>
   );
@@ -69,7 +69,7 @@ function SoftwareContent() {
       <div className="bg-zinc-900">
         <div className="max-w-[1300px] mx-auto px-6 sm:px-10 lg:px-14 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-[#2563EB] flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center shrink-0">
               <Zap size={13} strokeWidth={2} className="text-white" />
             </div>
             <div>
@@ -97,7 +97,7 @@ function SoftwareContent() {
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search 50+ software products…"
-              className="w-full bg-white border border-zinc-200 pl-10 pr-4 py-2.5 text-[14px] rounded-xl outline-none focus:border-[#2563EB]/40 focus:ring-2 focus:ring-[#2563EB]/10 transition-all min-h-[42px]" />
+              className="w-full bg-white border border-zinc-200 pl-10 pr-4 py-2.5 text-[14px] rounded-xl outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10 transition-all min-h-[42px]" />
           </div>
           <button onClick={() => setOnlyDeals(d => !d)}
             className={`flex items-center gap-1.5 text-[12px] font-semibold px-3.5 py-2.5 rounded-xl border transition-all ${onlyDeals ? 'bg-orange-50 border-orange-200 text-orange-600' : 'border-zinc-200 text-zinc-500 hover:border-zinc-300 bg-white'}`}>
@@ -141,7 +141,7 @@ function SoftwareContent() {
                 <span className="text-zinc-400 font-normal ml-2">{filtered.length} results</span>
               </p>
               {search && (
-                <button onClick={() => setSearch('')} className="text-[12px] text-[#2563EB] hover:underline flex items-center gap-1">
+                <button onClick={() => setSearch('')} className="text-[12px] text-accent hover:underline flex items-center gap-1">
                   <X size={11}/> Clear search
                 </button>
               )}
@@ -151,7 +151,7 @@ function SoftwareContent() {
               <div className="text-center py-20 border border-zinc-100 rounded-2xl bg-zinc-50">
                 <p className="text-[16px] font-semibold text-zinc-900 mb-2">No products found</p>
                 <button onClick={() => { setSearch(''); setActiveCat('all'); setOnlyDeals(false); }}
-                  className="text-[13px] text-[#2563EB]">Clear all filters</button>
+                  className="text-[13px] text-accent">Clear all filters</button>
               </div>
             ) : (
               <>
@@ -175,7 +175,7 @@ function SoftwareContent() {
                           {/* Text Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-1">
-                              <p className="text-[14px] font-semibold text-zinc-900 leading-tight group-hover:text-[#2563EB] transition-colors">{p.name}</p>
+                              <p className="text-[14px] font-semibold text-zinc-900 leading-tight group-hover:text-accent transition-colors">{p.name}</p>
                               <span className="text-[11px] text-zinc-400">by {p.vendor}</span>
                               {p.discountPct > 0 && (
                                 <span className="text-[9px] font-bold bg-orange-50 text-orange-600 border border-orange-100 px-1.5 py-0.5 rounded-full shrink-0">
@@ -208,7 +208,7 @@ function SoftwareContent() {
                                   <span className="text-[16px] font-bold text-zinc-900">{fmt(p.gcPrice)}</span>
                                   <span className="text-[11px] text-zinc-400">/mo</span>
                                 </div>
-                                <span className="text-[10px] text-[#2563EB] font-medium block">
+                                <span className="text-[10px] text-accent font-medium block">
                                   {fmt(Math.round(p.gcPrice * 0.8))}/mo annual
                                 </span>
                               </div>
@@ -218,7 +218,7 @@ function SoftwareContent() {
                           {/* CTAs */}
                           <div className="flex items-center gap-2">
                             <Link href={checkoutUrl}
-                              className="px-4 py-2 bg-[#2563EB] text-white text-[12px] font-semibold rounded-xl hover:bg-[#1D4ED8] transition-colors whitespace-nowrap">
+                              className="px-4 py-2 bg-accent text-white text-[12px] font-semibold rounded-xl hover:bg-accent-hover transition-colors whitespace-nowrap">
                               Buy Now
                             </Link>
                             <Link href={detailUrl}
@@ -262,7 +262,7 @@ function SoftwareContent() {
                     style={{ background: `linear-gradient(135deg, ${bundle.color}12, ${bundle.color}04)` }}>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <p className="text-[15px] font-bold text-zinc-900 truncate group-hover:text-[#2563EB] transition-colors">{bundle.name}</p>
+                        <p className="text-[15px] font-bold text-zinc-900 truncate group-hover:text-accent transition-colors">{bundle.name}</p>
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white shrink-0"
                           style={{ backgroundColor: bundle.color }}>−{bundle.savePct}%</span>
                       </div>
@@ -319,7 +319,7 @@ function SoftwareContent() {
                 <p className="text-[12px] font-semibold text-zinc-700 mb-1">Need a custom bundle?</p>
                 <p className="text-[11px] text-zinc-400 mb-3">Our team builds tailored packages for your stack</p>
                 <a href="mailto:success@zoftware.com"
-                  className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#2563EB] hover:underline">
+                  className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent hover:underline">
                   Talk to us <ArrowRight size={11}/>
                 </a>
               </div>
@@ -332,7 +332,7 @@ function SoftwareContent() {
       <div className={`fixed bottom-24 left-4 sm:left-6 z-50 max-w-[300px] transition-all duration-300 ${toast ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
         <div className="bg-zinc-900 text-white rounded-2xl shadow-xl overflow-hidden">
           <div className="flex items-start gap-3 px-4 py-3.5">
-            <div className="w-8 h-8 rounded-xl bg-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-xl bg-accent flex items-center justify-center shrink-0 mt-0.5">
               <Sparkles size={14} className="text-white" />
             </div>
             <div className="flex-1 min-w-0">
@@ -342,7 +342,7 @@ function SoftwareContent() {
             <button onClick={() => setToast(false)} className="text-white/30 hover:text-white shrink-0 p-0.5"><X size={14}/></button>
           </div>
           <div className="h-0.5 bg-white/10">
-            <div className="h-full bg-[#2563EB]" style={{ animation: toast ? 'shrink 7s linear forwards' : 'none' }}/>
+            <div className="h-full bg-accent" style={{ animation: toast ? 'shrink 7s linear forwards' : 'none' }}/>
           </div>
         </div>
       </div>

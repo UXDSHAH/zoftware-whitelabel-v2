@@ -47,7 +47,7 @@ function StarFill({ rating, size = 13 }: { rating: number; size?: number }) {
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map(i => (
-        <Star key={i} size={size} fill={i <= Math.round(rating) ? '#007AFF' : 'none'}
+        <Star key={i} size={size} fill={i <= Math.round(rating) ? 'var(--color-accent)' : 'none'}
           className={i <= Math.round(rating) ? 'text-accent' : 'text-[#e5e5e7]'} />
       ))}
     </div>
@@ -92,7 +92,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
     <div className="bg-white min-h-screen pb-24">
 
       {/* Breadcrumb */}
-      <div className="border-b border-black/8 bg-[#f9fafb]">
+      <div className="border-b border-black/8 bg-white">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-10 flex items-center gap-1.5 overflow-x-auto">
           <Link href="/software" className="flex items-center gap-1 text-[12px] text-muted hover:text-black transition-colors shrink-0">
             <ArrowLeft size={11} /> Software Gateway
@@ -161,7 +161,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
             {/* ── OVERVIEW ── */}
             {activeTab === 'Overview' && (
               <div className="space-y-5">
-                <div className="bg-[#f9fafb] border border-black/8 rounded-sm p-5">
+                <div className="bg-white border border-black/8 rounded-sm p-5">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em] mb-3">About {product.name}</p>
                   <p className="text-[14px] text-[#333] leading-[1.75]">{product.overview}</p>
                 </div>
@@ -207,9 +207,9 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {product.features.slice(0, 6).map(f => (
-                      <div key={f} className="flex items-center gap-2.5 bg-[#f9fafb] border border-black/8 rounded-sm px-3 py-2">
-                        <div className="w-4 h-4 rounded-sm bg-accent flex items-center justify-center shrink-0">
-                          <Check size={9} className="text-white" strokeWidth={2.5} />
+                      <div key={f} className="flex items-center gap-2.5 bg-white border border-black/8 rounded-sm px-3 py-2">
+                        <div className="w-4 h-4 rounded-sm border border-black/10 bg-white flex items-center justify-center shrink-0">
+                          <Check size={9} className="text-accent" strokeWidth={2.5} />
                         </div>
                         <span className="text-[12px] text-black font-medium">{f}</span>
                       </div>
@@ -249,14 +249,14 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
             {/* ── FEATURES ── */}
             {activeTab === 'Features' && (
               <div className="border border-black/8 rounded-sm overflow-hidden">
-                <div className="px-5 py-3.5 border-b border-black/8 bg-[#f9fafb]">
+                <div className="px-5 py-3.5 border-b border-black/8 bg-white">
                   <p className="text-[13px] font-semibold text-black">All Features ({product.features.length})</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-none">
                   {product.features.map((f, i) => (
                     <div key={f} className={`flex items-start gap-3 px-5 py-3.5 ${i % 2 === 0 ? 'sm:border-r border-black/5' : ''} border-b border-black/5`}>
-                      <div className="w-5 h-5 rounded-sm bg-accent flex items-center justify-center shrink-0 mt-0.5">
-                        <Check size={10} className="text-white" strokeWidth={2.5} />
+                      <div className="w-5 h-5 rounded-sm border border-black/10 bg-white flex items-center justify-center shrink-0 mt-0.5">
+                        <Check size={10} className="text-accent" strokeWidth={2.5} />
                       </div>
                       <span className="text-[13px] text-black leading-[1.5]">{f}</span>
                     </div>
@@ -439,7 +439,7 @@ export default function GatewayProductPage({ params }: { params: Promise<{ slug:
                 <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.08em] mb-2.5">Save more in a bundle</p>
                 {relatedBundles.slice(0, 2).map(b => (
                   <Link key={b.id} href={`/bundles/${b.slug}`}
-                    className="flex items-center gap-3 border border-black/8 rounded-sm p-3.5 mb-2.5 hover:border-black/20 hover:bg-[#f9fafb] transition-all">
+                    className="flex items-center gap-3 border border-black/8 rounded-sm p-3.5 mb-2.5 hover:border-black/20 hover:bg-surface transition-all">
                     <Package size={15} strokeWidth={1.5} style={{ color: b.color }} className="shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-[12px] font-semibold text-black">{b.name}</p>
