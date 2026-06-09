@@ -101,7 +101,7 @@ const gatewayTools = [
     label: 'Smart Search',
     desc: 'Find the right software from 50+ verified products in seconds.',
     href: '/software?mode=search',
-    color: '#007AFF',
+    color: 'var(--color-accent)',
     external: false,
   },
   {
@@ -109,7 +109,7 @@ const gatewayTools = [
     label: 'Tech Requirement Builder',
     desc: 'Generate a detailed technical requirements document for your procurement.',
     href: '/software?mode=requirements',
-    color: '#0051D5',
+    color: 'var(--color-accent)',
     external: false,
   },
   {
@@ -117,7 +117,7 @@ const gatewayTools = [
     label: 'Tech Strategy Builder',
     desc: 'Get a full tech strategy and implementation roadmap in under 1 minute.',
     href: '/software?mode=strategy',
-    color: '#007AFF',
+    color: 'var(--color-accent)',
     external: false,
   },
   {
@@ -354,15 +354,15 @@ export default function DubaiChamberPage() {
       </div>
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #f0f7ff 0%, #f8fbff 50%, #ffffff 100%)' }}>
+      <section className="th-hero-section relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #f0f7ff 0%, #f8fbff 50%, #ffffff 100%)' }}>
         {/* Dot-grid decorative background */}
-        <div className="absolute inset-0 opacity-[0.4]"
+        <div className="th-hero-dots absolute inset-0 opacity-[0.4]"
           style={{ backgroundImage: 'radial-gradient(circle, #007AFF18 1px, transparent 1px)', backgroundSize: '36px 36px' }} />
-        {/* Subtle blue glow top-right */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-20"
+        {/* Subtle glow top-right */}
+        <div className="th-hero-glow absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-20"
           style={{ background: 'radial-gradient(circle, #007AFF 0%, transparent 70%)', transform: 'translate(25%, -25%)' }} />
-        {/* Subtle warm accent bottom-left */}
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full opacity-8"
+        {/* Subtle accent bottom-left */}
+        <div className="th-hero-glow absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full opacity-8"
           style={{ background: 'radial-gradient(circle, #0051D5 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
 
         <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 py-14 sm:py-20">
@@ -415,7 +415,7 @@ export default function DubaiChamberPage() {
                 { title: 'Business Groups & Councils', desc: 'Shape policies, expand trade, and enhance governance for the private sector.', href: 'https://www.dubaichambercommerce.com/en/business-groups-business-councils', tag: '200+ groups' },
               ].map(card => (
                 <a key={card.title} href={card.href} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-between border border-black/8 bg-white rounded-sm px-5 py-4 hover:border-accent/25 hover:bg-[#f8fbff] hover:shadow-sm transition-all group">
+                  className="flex items-center justify-between border border-black/8 bg-white rounded-sm px-5 py-4 hover:border-accent/25 hover:bg-surface hover:shadow-sm transition-all group">
                   <div className="flex-1 min-w-0 mr-3">
                     <div className="flex items-center gap-2 mb-1">
                       <p className="text-[14px] font-semibold text-black">{card.title}</p>
@@ -447,9 +447,9 @@ export default function DubaiChamberPage() {
       </section>
 
       {/* ── SOFTWARE GATEWAY ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f8faff 0%, #ffffff 100%)' }}>
+      <section className="th-section-warm relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f8faff 0%, #ffffff 100%)' }}>
         {/* Subtle background orb */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-[0.07]"
+        <div className="th-section-glow absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-[0.07]"
           style={{ background: 'radial-gradient(ellipse, #007AFF 0%, transparent 70%)' }} />
 
         <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-16 border-b border-black/8">
@@ -578,9 +578,9 @@ export default function DubaiChamberPage() {
           {/* Stats strip below gateway */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { v: '50+', l: 'Verified products', c: '#007AFF' },
-              { v: '35', l: 'Software categories', c: '#0051D5' },
-              { v: 'Up to 40%', l: 'Bundle savings', c: '#007AFF' },
+              { v: '50+', l: 'Verified products', c: 'var(--color-accent)' },
+              { v: '35', l: 'Software categories', c: 'var(--color-accent)' },
+              { v: 'Up to 40%', l: 'Bundle savings', c: 'var(--color-accent)' },
               { v: '7 days', l: 'Average activation', c: '#FF9500' },
             ].map(({ v, l, c }) => (
               <div key={l} className="border border-black/8 rounded-sm px-4 py-3.5 bg-white hover:border-black/16 transition-colors">

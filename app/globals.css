@@ -190,11 +190,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* ── Secondary / outline buttons also get pill treatment ── */
-[data-theme="2"] .border-accent  { border-radius: 100px !important; }
-[data-theme="2"] a.border,
-[data-theme="2"] button.border { border-radius: 100px !important; }
-
 /* ── bg-black buttons (e.g. Sign In) → rose accent ── */
 [data-theme="2"] a.bg-black,
 [data-theme="2"] button.bg-black {
@@ -257,6 +252,40 @@ body {
 
 /* ── Subtle warm overlay for modals/drawers ── */
 [data-theme="2"] .bg-black\/20 { background-color: rgba(26,19,12,0.35) !important; }
+
+/* ── Hero section — warm gradient replaces blue tint ── */
+[data-theme="2"] .th-hero-section {
+  background: linear-gradient(160deg, #FAF5EF 0%, #F6F1EB 60%, #F6F1EB 100%) !important;
+}
+[data-theme="2"] .th-hero-dots    { opacity: 0 !important; }
+[data-theme="2"] .th-hero-glow    { opacity: 0 !important; }
+[data-theme="2"] .th-section-warm {
+  background: linear-gradient(180deg, #FAF5EF 0%, #F6F1EB 100%) !important;
+}
+[data-theme="2"] .th-section-glow { opacity: 0 !important; }
+
+/* ── Hover backgrounds with blue tint → warm cream ── */
+[data-theme="2"] .hover\:bg-\[\#f8fbff\]:hover,
+[data-theme="2"] .hover\:bg-\[\#f9fafb\]:hover { background-color: #F0EAE2 !important; }
+
+/* ── Blue-tinted selected/active states (checkout, forms) ── */
+[data-theme="2"] .bg-\[\#eff6ff\]  { background-color: color-mix(in oklch, var(--color-accent) 8%, white) !important; }
+[data-theme="2"] .bg-blue-50       { background-color: color-mix(in oklch, var(--color-accent) 6%, white) !important; }
+[data-theme="2"] .border-blue-100  { border-color: color-mix(in oklch, var(--color-accent) 20%, transparent) !important; }
+[data-theme="2"] .text-blue-700    { color: var(--color-accent) !important; }
+
+/* ── Zinc colour overrides → warm stone equivalents ── */
+[data-theme="2"] .border-zinc-200,
+[data-theme="2"] .border-zinc-100  { border-color: #E2D9D0 !important; }
+[data-theme="2"] .hover\:border-zinc-300:hover { border-color: #D0C5BB !important; }
+[data-theme="2"] .text-zinc-400    { color: #9E8E84 !important; }
+[data-theme="2"] .bg-zinc-50,
+[data-theme="2"] .hover\:bg-zinc-50:hover { background-color: #F6F1EB !important; }
+[data-theme="2"] .bg-\[\#f9fafb\] { background-color: #FAF7F4 !important; }
+
+/* ── Light gray/cool page sections → warm tint ── */
+[data-theme="2"] .bg-\[\#f9fafb\],
+[data-theme="2"] .bg-gray-50       { background-color: #FAF7F4 !important; }
 
 /* ─────────────────────────────────────────────────────────────────────────
    Scrollbar
