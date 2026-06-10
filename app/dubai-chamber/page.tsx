@@ -10,9 +10,9 @@ import {
   Eye, EyeOff, Lock
 } from 'lucide-react';
 
-// ─── Login credentials (update when real creds are provided) ─────────────────
-const AUTH_USER = 'digital@zoftwarehub.com';
-const AUTH_PASS = '0987';
+// ─── Login credentials — set via environment variables, never hardcode ────────
+const AUTH_USER = process.env.NEXT_PUBLIC_AUTH_USER ?? 'digital@zoftwarehub.com';
+const AUTH_PASS = process.env.NEXT_PUBLIC_AUTH_PASS ?? '';
 const AUTH_KEY  = 'dc_v2_auth';
 
 // ─── Nav structure ────────────────────────────────────────────────────────────
