@@ -94,7 +94,7 @@ function getCallContext() {
 
   return {
     pagePath: url.pathname,
-    pageUrl: url.href,
+    pageUrl: `${url.origin}${url.pathname}`,
     productId: url.searchParams.get('product_id')?.trim() || '',
     productName,
   };
@@ -142,6 +142,13 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
     accumulatedTranscriptRef.current = null;
   }, []);
 
+  const clearStatusTimeout = useCallback(() => {
+    if (statusTimeoutRef.current) {
+      clearTimeout(statusTimeoutRef.current);
+      statusTimeoutRef.current = null;
+    }
+  }, []);
+
   const restoreMutedAudio = useCallback(() => {
     mutedAudioElementsRef.current.forEach(({ audio, muted }) => {
       if (audio.isConnected) audio.muted = muted;
@@ -168,10 +175,15 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
         setCallStatus('idle');
 
         vapi.on('call-start', () => {
+          clearStatusTimeout();
+          restoreMutedAudio();
+          vapi.setMuted(false);
           setCallStatus('active');
           setElapsedTime(0);
           setErrorMessage('');
           setIsMuted(false);
+          setIsSpeaking(false);
+          setIsVolumeMuted(false);
         });
 
         vapi.on('call-end', () => {
@@ -187,7 +199,7 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
             transcriptTimeoutRef.current = null;
           }
 
-          if (statusTimeoutRef.current) clearTimeout(statusTimeoutRef.current);
+          clearStatusTimeout();
           statusTimeoutRef.current = setTimeout(() => {
             setCallStatus('idle');
           }, 1600);
@@ -241,13 +253,13 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
     return () => {
       disposed = true;
       clearTranscriptBuffer();
-      if (statusTimeoutRef.current) clearTimeout(statusTimeoutRef.current);
+      clearStatusTimeout();
       restoreMutedAudio();
       vapiRef.current?.removeAllListeners();
       void vapiRef.current?.stop().catch(() => undefined);
       vapiRef.current = null;
     };
-  }, [clearTranscriptBuffer, commitAccumulatedTranscript, restoreMutedAudio]);
+  }, [clearStatusTimeout, clearTranscriptBuffer, commitAccumulatedTranscript, restoreMutedAudio]);
 
   useEffect(() => {
     if (callStatus !== 'active') return undefined;
@@ -273,10 +285,15 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
 
     const context = getCallContext();
     clearTranscriptBuffer();
+    clearStatusTimeout();
+    restoreMutedAudio();
     setErrorMessage('');
     setMessages([]);
     setShowTranscript(true);
     setElapsedTime(0);
+    setIsMuted(false);
+    setIsSpeaking(false);
+    setIsVolumeMuted(false);
     setCallStatus('connecting');
 
     try {
