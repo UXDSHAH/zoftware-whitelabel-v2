@@ -23,7 +23,8 @@ function getBackTarget(pathname: string): string | null {
   if (pathname.startsWith('/software/category/')) return '/software';
   if (pathname.startsWith('/bundles/'))          return '/software?view=bundles';
   if (pathname === '/checkout')                  return '/software';
-  return null; // no back button on root-level pages like /software itself
+  if (pathname === '/software')                  return '/software-gateway';
+  return null;
 }
 
 export default function GatewayHeader() {

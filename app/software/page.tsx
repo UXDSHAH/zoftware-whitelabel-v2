@@ -95,7 +95,7 @@ function SoftwareContent() {
 
   // Close handlers
   const handleCloseRequest = () => setShowCloseConfirm(true);
-  const handleConfirmedClose = () => { router.back(); setShowCloseConfirm(false); };
+  const handleConfirmedClose = () => { router.push('/software'); setShowCloseConfirm(false); };
 
   // Toast nudge
   useEffect(() => {
