@@ -716,27 +716,26 @@ export default function SoftwareGatewayPage() {
               </div>
               <h3 className="text-[13px] font-semibold text-black mb-1 leading-snug">AI Productivity &amp; Collaboration Hub</h3>
               <p className="text-[10px] text-muted mb-3 leading-snug">Top AI tools trusted by 10,000+ businesses</p>
-              {/* Brand logo badges */}
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
+              {/* Brand logo badges — horizontal scroll, no wrap */}
+              <div className="flex items-center gap-2 mb-3 overflow-x-auto" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
                 {[
-                  { name: 'Claude',  abbr: 'Cl', bg: '#CC785C', logo: 'https://logo.clearbit.com/anthropic.com' },
-                  { name: 'ChatGPT', abbr: 'G',  bg: '#10A37F', logo: 'https://logo.clearbit.com/openai.com' },
-                  { name: 'Copilot', abbr: 'Co', bg: '#0078D4', logo: 'https://logo.clearbit.com/microsoft.com' },
-                  { name: 'Notion',  abbr: 'N',  bg: '#191919', logo: 'https://logo.clearbit.com/notion.so' },
-                  { name: 'Gemini',  abbr: 'Ge', bg: '#fff',    logo: 'https://logo.clearbit.com/gemini.google.com' },
+                  { name: 'Claude',  abbr: 'Cl', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://claude.ai&size=128' },
+                  { name: 'ChatGPT', abbr: 'G',  url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://chatgpt.com&size=128' },
+                  { name: 'Copilot', abbr: 'Co', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://copilot.microsoft.com&size=128' },
+                  { name: 'Notion',  abbr: 'N',  url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://notion.so&size=128' },
+                  { name: 'Gemini',  abbr: 'Ge', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gemini.google.com&size=128' },
                 ].map(t => (
-                  <div key={t.name} title={t.name} className="flex flex-col items-center gap-0.5">
-                    <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-black/6 flex items-center justify-center"
-                      style={{ backgroundColor: t.bg }}>
+                  <div key={t.name} className="flex flex-col items-center gap-0.5 shrink-0">
+                    <div className="w-9 h-9 rounded-xl overflow-hidden border border-black/8 bg-zinc-50 flex items-center justify-center">
                       <img
-                        src={t.logo}
+                        src={t.url}
                         alt={t.name}
-                        className="w-7 h-7 object-contain"
+                        className="w-full h-full object-contain"
                         onError={e => {
-                          const el = e.currentTarget;
+                          const el = e.currentTarget as HTMLImageElement;
                           el.style.display = 'none';
-                          const parent = el.parentElement!;
-                          parent.innerHTML = `<span style="color:#fff;font-size:10px;font-weight:700">${t.abbr}</span>`;
+                          el.parentElement!.style.background = '#6366F1';
+                          el.parentElement!.innerHTML += `<span style="color:#fff;font-size:10px;font-weight:700">${t.abbr}</span>`;
                         }}
                       />
                     </div>
