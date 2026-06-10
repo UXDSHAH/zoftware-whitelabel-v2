@@ -29,7 +29,7 @@ const tools = [
     desc: 'Get a full tech strategy and implementation roadmap in under 1 minute.',
     href: '/software?tool=strategy',
     color: '#7C3AED',
-    badge: 'AI-generated',
+    badge: 'Free · Instant',
     external: false,
   },
   {
