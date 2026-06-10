@@ -1,113 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { FileText, BarChart2, X, Maximize2, Minimize2, Phone, PhoneOff, Mic, Send, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { FileText, BarChart2, X, Maximize2, Minimize2, Phone } from 'lucide-react';
 import TechRequirementBuilder from './TechRequirementBuilder';
 import TechStrategyBuilder from './TechStrategyBuilder';
-
-// ── Voice call modal ──────────────────────────────────────────────────────
-const SCRIPTS = [
-  "Hello! I'm Zain, your AI software advisor. How can I help you today?",
-  "I can find the right software for your business. What are you looking for?",
-  "Based on your needs, I'd suggest exploring our GCC-optimised bundles. Shall I walk you through them?",
-  "Is there anything else I can help you with today?",
-];
-
-function VoiceCallModal({ onClose }: { onClose: () => void }) {
-  const [phase, setPhase] = useState<'connecting'|'listening'|'speaking'|'ended'>('connecting');
-  const [idx, setIdx] = useState(0);
-  const [muted, setMuted] = useState(false);
-  const [sec, setSec] = useState(0);
-
-  useEffect(() => {
-    const t1 = setTimeout(() => setPhase('speaking'), 1400);
-    const t2 = setTimeout(() => setPhase('listening'), 4200);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
-
-  useEffect(() => {
-    if (phase === 'ended') return;
-    const t = setInterval(() => setSec(s => s + 1), 1000);
-    return () => clearInterval(t);
-  }, [phase]);
-
-  const fmt = (s: number) => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
-
-  const tapMic = () => {
-    setMuted(true);
-    setTimeout(() => { setMuted(false); setPhase('speaking'); setTimeout(() => { setIdx(i => Math.min(i+1, SCRIPTS.length-1)); setPhase('listening'); }, 2800); }, 1800);
-  };
-
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(16px)' }}>
-      <div className="w-full max-w-[320px] rounded-3xl overflow-hidden" style={{ background: 'linear-gradient(160deg,#09090b,#18181b,#1c1917)' }}>
-        <div className="px-6 pt-9 pb-3 text-center">
-          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-[0.14em] mb-1">
-            {phase === 'connecting' ? 'Connecting…' : phase === 'ended' ? 'Call ended' : fmt(sec)}
-          </p>
-          <p className="text-[17px] font-semibold text-white">Zain AI</p>
-          <p className="text-[12px] text-white/40 mt-0.5">Software Advisor</p>
-        </div>
-
-        <div className="flex flex-col items-center py-7">
-          {/* Avatar */}
-          <div className="relative mb-5">
-            {phase === 'speaking' && <>
-              <div className="absolute inset-0 rounded-full animate-ping opacity-15 scale-[1.5]" style={{ background: 'radial-gradient(circle,#f97316,#ec4899)' }} />
-              <div className="absolute inset-0 rounded-full animate-ping opacity-10 scale-[2.1]" style={{ background: 'radial-gradient(circle,#f97316,#ec4899)', animationDelay: '0.35s' }} />
-            </>}
-            <div className="relative w-20 h-20 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#f97316,#ec4899)' }}>
-              <Sparkles size={34} strokeWidth={1.5} className="text-white" />
-            </div>
-          </div>
-
-          <p className={`text-[12px] font-medium mb-5 ${phase === 'speaking' ? 'text-orange-400' : phase === 'listening' ? 'text-pink-400' : 'text-white/30'}`}>
-            {phase === 'connecting' ? 'Connecting…' : phase === 'speaking' ? '● Speaking' : phase === 'listening' ? '◎ Listening' : 'Ended'}
-          </p>
-
-          {/* Waveform */}
-          <div className="flex items-center gap-0.5 h-10 mb-5">
-            {Array.from({ length: 24 }).map((_, i) => (
-              <div key={i} className="w-0.5 rounded-full transition-all duration-150"
-                style={{
-                  height: (phase === 'speaking' || (phase === 'listening' && !muted)) ? `${8 + Math.abs(Math.sin(i * 0.7)) * 22}px` : '3px',
-                  background: phase === 'speaking' ? 'linear-gradient(180deg,#f97316,#ec4899)' : phase === 'listening' ? 'linear-gradient(180deg,#ec4899,#8b5cf6)' : 'rgba(255,255,255,0.15)',
-                  animation: (phase === 'speaking' || (phase === 'listening' && !muted)) ? `wb ${0.3 + (i%6)*0.08}s ease-in-out infinite alternate` : 'none',
-                  animationDelay: `${i*0.04}s`,
-                }} />
-            ))}
-          </div>
-          <style>{`@keyframes wb{from{transform:scaleY(.25)}to{transform:scaleY(1)}}`}</style>
-
-          {phase === 'speaking' && (
-            <div className="mx-6 rounded-2xl px-4 py-3 mb-4 text-center" style={{ background: 'rgba(255,255,255,0.06)' }}>
-              <p className="text-[12px] text-white/70 leading-relaxed">{SCRIPTS[idx]}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Controls */}
-        <div className="flex items-center justify-center gap-5 px-6 pb-9">
-          <button onClick={() => { setMuted(m => !m); if (!muted) tapMic(); }}
-            className="w-13 h-13 w-12 h-12 rounded-full flex items-center justify-center transition-all"
-            style={{ background: muted ? 'rgba(239,68,68,0.18)' : 'rgba(255,255,255,0.09)' }}>
-            <Mic size={18} className={muted ? 'text-red-400' : 'text-white'} strokeWidth={2} />
-          </button>
-          <button onClick={() => { setPhase('ended'); setTimeout(onClose, 700); }}
-            className="w-16 h-16 rounded-full flex items-center justify-center shadow-xl"
-            style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>
-            <PhoneOff size={22} className="text-white" strokeWidth={2} />
-          </button>
-          <button onClick={tapMic}
-            className="w-12 h-12 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(255,255,255,0.09)' }}>
-            <Send size={16} className="text-white" strokeWidth={2} />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+import ZainVoiceCall from './ZainVoiceCall';
 
 // ── Button config — fresh modern palette ──────────────────────────────────
 const BTNS = [
@@ -173,6 +70,7 @@ export default function FloatingBuilders() {
             </span>
 
             <button
+              aria-label={btn.label}
               onClick={() => {
                 if (btn.id === 'req')   { setShowReq(true);   setReqFs(false); }
                 if (btn.id === 'strat') { setShowStrat(true); setStratFs(false); }
@@ -203,7 +101,7 @@ export default function FloatingBuilders() {
         <TechStrategyBuilder onClose={() => setShowStrat(false)} />
       </Modal>
 
-      {showCall && <VoiceCallModal onClose={() => setShowCall(false)} />}
+      {showCall && <ZainVoiceCall onClose={() => setShowCall(false)} />}
     </>
   );
 }
