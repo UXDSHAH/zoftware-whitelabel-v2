@@ -121,6 +121,7 @@ export default function DubaiChamberPage() {
     setTimeout(() => {
       if (loginUser.trim() === AUTH_USER && loginPass === AUTH_PASS) {
         localStorage.setItem(AUTH_KEY, 'true');
+        document.cookie = 'zg_auth=1; path=/; max-age=86400; SameSite=Strict';
         setAuthed(true);
         setLoginErr('');
       } else {

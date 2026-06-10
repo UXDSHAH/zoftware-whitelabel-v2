@@ -14,9 +14,10 @@ import { bundles } from '@/data/bundles';
 import { gatewayProducts } from '@/data/gateway-products';
 import { AED_RATE } from '@/data/billing-options';
 
-// ── Curated category filter chips (7 shown + All) ────────────────────────────
+// ── Curated category filter chips ────────────────────────────────────────────
 const ALL_CATS = [
   { slug: 'all',              name: 'All Products' },
+  { slug: 'ai-productivity',  name: '✦ AI Products' },
   { slug: 'crm-sales',        name: 'CRM & Sales' },
   { slug: 'erp',              name: 'ERP' },
   { slug: 'finance-accounting', name: 'Finance & Accounting' },
@@ -24,6 +25,20 @@ const ALL_CATS = [
   { slug: 'marketing',        name: 'Marketing' },
   { slug: 'digital-workspace', name: 'Digital Workspace' },
   { slug: 'security',         name: 'Security' },
+];
+
+// ── Top 10 AI Products with current 2026 pricing ──────────────────────────────
+const AI_PRODUCTS = [
+  { id: 'ai-1',  name: 'Claude Pro',          vendor: 'Anthropic',  category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'claude-pro',        logo: 'Cl', tagline: 'Advanced AI for writing, coding, and complex analysis tasks.',   gcPrice: 20,  discountPct: 0,  rating: 4.9, reviews: 8420 },
+  { id: 'ai-2',  name: 'ChatGPT Plus',         vendor: 'OpenAI',     category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'chatgpt-plus',      logo: 'G',  tagline: 'GPT-4o with browsing, image generation, and code interpreter.',  gcPrice: 20,  discountPct: 0,  rating: 4.8, reviews: 12300 },
+  { id: 'ai-3',  name: 'Microsoft Copilot Pro', vendor: 'Microsoft',  category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'copilot-pro',       logo: 'Co', tagline: 'AI embedded in Word, Excel, PowerPoint, Outlook, and Teams.',    gcPrice: 30,  discountPct: 0,  rating: 4.6, reviews: 5100 },
+  { id: 'ai-4',  name: 'GitHub Copilot',        vendor: 'GitHub',     category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'github-copilot',    logo: 'GH', tagline: 'AI pair programmer that suggests code in real-time in your IDE.', gcPrice: 10,  discountPct: 10, rating: 4.7, reviews: 9800 },
+  { id: 'ai-5',  name: 'Notion AI',             vendor: 'Notion',     category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'notion-ai',         logo: 'N',  tagline: 'AI writing, summarising, and knowledge management in Notion.',   gcPrice: 10,  discountPct: 0,  rating: 4.5, reviews: 4600 },
+  { id: 'ai-6',  name: 'Gemini Advanced',       vendor: 'Google',     category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'gemini-advanced',   logo: 'Ge', tagline: 'Google\'s most capable AI with 1M context window and Deep Research.', gcPrice: 20, discountPct: 0, rating: 4.6, reviews: 3900 },
+  { id: 'ai-7',  name: 'Jasper AI',             vendor: 'Jasper',     category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'jasper-ai',         logo: 'Ja', tagline: 'AI content platform for marketing copy, blog posts, and campaigns.',gcPrice: 49,  discountPct: 15, rating: 4.4, reviews: 2700 },
+  { id: 'ai-8',  name: 'Grammarly Business',    vendor: 'Grammarly',  category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'grammarly-business',logo: 'Gr', tagline: 'AI writing assistant with tone, clarity, and plagiarism checks.',  gcPrice: 25,  discountPct: 0,  rating: 4.5, reviews: 6100 },
+  { id: 'ai-9',  name: 'Perplexity Pro',        vendor: 'Perplexity', category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'perplexity-pro',    logo: 'Px', tagline: 'AI search engine with cited answers and real-time web access.',    gcPrice: 20,  discountPct: 0,  rating: 4.6, reviews: 2100 },
+  { id: 'ai-10', name: 'Gamma AI',              vendor: 'Gamma',      category: 'AI Productivity', categorySlug: 'ai-productivity', slug: 'gamma-ai',          logo: 'Gm', tagline: 'AI presentation and document builder — create decks in seconds.',  gcPrice: 15,  discountPct: 0,  rating: 4.5, reviews: 1800 },
 ];
 
 function StarRow({ rating }: { rating: number }) {
@@ -76,15 +91,18 @@ function SoftwareContent() {
   const fmt = (usd: number) => usd === 0 ? 'Free' :
     currency === 'AED' ? `AED ${Math.round(usd * AED_RATE)}` : `$${usd}`;
 
-  // Filter products
-  const filtered = gatewayProducts.filter(p => {
-    const matchCat   = activeCat === 'all' || p.categorySlug === activeCat;
-    const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) ||
-                        p.vendor.toLowerCase().includes(search.toLowerCase()) ||
-                        p.tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
-    const matchDeals = !onlyDeals || p.discountPct > 0;
-    return matchCat && matchSearch && matchDeals;
-  });
+  // Filter products — AI category uses a curated list, others use gatewayProducts
+  const filtered = (activeCat === 'ai-productivity'
+    ? AI_PRODUCTS.filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.vendor.toLowerCase().includes(search.toLowerCase()))
+    : gatewayProducts.filter(p => {
+        const matchCat    = activeCat === 'all' || p.categorySlug === activeCat;
+        const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) ||
+                            p.vendor.toLowerCase().includes(search.toLowerCase()) ||
+                            p.tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
+        const matchDeals  = !onlyDeals || p.discountPct > 0;
+        return matchCat && matchSearch && matchDeals;
+      })
+  ) as typeof gatewayProducts;
 
   return (
     <div className="min-h-screen bg-white">
@@ -153,7 +171,7 @@ function SoftwareContent() {
                 {cat.name}
                 {cat.slug !== 'all' && (
                   <span className={`text-[10px] ${activeCat === cat.slug ? 'text-white/60' : 'text-zinc-400'}`}>
-                    {gatewayProducts.filter(p => p.categorySlug === cat.slug).length}
+                    {cat.slug === 'ai-productivity' ? AI_PRODUCTS.length : gatewayProducts.filter(p => p.categorySlug === cat.slug).length}
                   </span>
                 )}
               </button>
@@ -279,7 +297,7 @@ function SoftwareContent() {
             <div className="flex items-center gap-2 mb-4">
               <Package size={14} className="text-zinc-500" strokeWidth={1.5}/>
               <p className="text-[13px] font-semibold text-zinc-900">Pre-built Bundles</p>
-              <span className="ml-auto text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Save up to 40%</span>
+              <span className="ml-auto text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Save up to 25%</span>
             </div>
 
             <div className="space-y-4">

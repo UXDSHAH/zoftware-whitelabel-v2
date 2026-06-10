@@ -5,7 +5,8 @@ import Link from 'next/link';
 import {
   Search, FileText, BarChart2, TrendingDown, ArrowRight, Zap,
   Phone, X, Send, Sparkles, ChevronRight,
-  ExternalLink, PhoneOff, Check, Star, SlidersHorizontal
+  ExternalLink, PhoneOff, Check, Star, SlidersHorizontal,
+  ChevronDown, User
 } from 'lucide-react';
 import { gatewayProducts } from '@/data/gateway-products';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -616,6 +617,13 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
 export default function SoftwareGatewayPage() {
   const [smartSearchOpen, setSmartSearchOpen] = useState(false);
   const [rightPanel, setRightPanel] = useState<'requirements' | 'strategy' | null>(null);
+  const [profileDropdown, setProfileDropdown] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const h = (e: MouseEvent) => { if (profileRef.current && !profileRef.current.contains(e.target as Node)) setProfileDropdown(false); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, []);
 
   return (
     <div className="bg-white min-h-screen font-sans">
@@ -637,6 +645,36 @@ export default function SoftwareGatewayPage() {
               className="flex items-center gap-1.5 bg-black text-white text-[12px] font-semibold px-4 py-2 rounded-sm hover:bg-[#333] transition-colors min-h-[36px]">
               Browse All <ArrowRight size={12} />
             </Link>
+            {/* Profile dropdown */}
+            <div ref={profileRef} className="relative">
+              <button onClick={() => setProfileDropdown(d => !d)}
+                className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl hover:bg-black/5 transition-colors">
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold"
+                  style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
+                  RS
+                </div>
+                <ChevronDown size={11} className={`text-muted transition-transform ${profileDropdown ? 'rotate-180' : ''}`} />
+              </button>
+              {profileDropdown && (
+                <div className="absolute right-0 top-full mt-1.5 bg-white border border-black/8 rounded-xl shadow-xl py-1 z-50 min-w-[180px]">
+                  <div className="px-4 py-2 border-b border-black/6 mb-1">
+                    <p className="text-[12px] font-semibold text-black">Ravi Sharma</p>
+                    <p className="text-[10px] text-muted">Gulf Enterprises LLC</p>
+                  </div>
+                  <Link href="/software" onClick={() => setProfileDropdown(false)}
+                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-[#333] hover:bg-[#f4f4f6] transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
+                    <User size={13} className="text-muted" /> Business
+                  </Link>
+                  <a href="https://platform-five-plum-39.vercel.app/admin" target="_blank" rel="noopener noreferrer"
+                    onClick={() => setProfileDropdown(false)}
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-[#333] hover:bg-[#f4f4f6] transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
+                    <ExternalLink size={13} className="text-muted" /> Partner
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -668,7 +706,7 @@ export default function SoftwareGatewayPage() {
             </div>
 
             {/* AI Productivity card replacing "Browse All Software" button */}
-            <div className="relative border border-black/8 rounded-sm p-5 bg-white overflow-hidden shrink-0 lg:w-[240px]">
+            <div className="relative border border-black/8 rounded-sm p-5 bg-white overflow-hidden shrink-0 lg:w-[256px]">
               <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-15 pointer-events-none"
                 style={{ background: 'radial-gradient(circle, #6366F1 0%, transparent 70%)' }} />
               <div className="flex items-center justify-between mb-3">
@@ -681,15 +719,28 @@ export default function SoftwareGatewayPage() {
                 </span>
               </div>
               <h3 className="text-[13px] font-semibold text-black mb-1 leading-snug">AI Productivity &amp; Collaboration</h3>
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                {['Claude', 'ChatGPT', 'Copilot', 'Notion AI', 'Gemini'].map(name => (
-                  <span key={name} className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200">
-                    {name}
-                  </span>
+              <p className="text-[10px] text-muted mb-3 leading-snug">Top AI tools trusted by 10,000+ businesses</p>
+              {/* Brand-color logo badges */}
+              <div className="flex items-center gap-2 mb-3 flex-wrap">
+                {[
+                  { name: 'Claude',   abbr: 'Cl', bg: '#CC785C', fg: '#fff' },
+                  { name: 'ChatGPT',  abbr: 'G',  bg: '#10A37F', fg: '#fff' },
+                  { name: 'Copilot',  abbr: 'Co', bg: '#0078D4', fg: '#fff' },
+                  { name: 'Notion',   abbr: 'N',  bg: '#000',    fg: '#fff' },
+                  { name: 'Gemini',   abbr: 'Ge', bg: '#4285F4', fg: '#fff' },
+                ].map(t => (
+                  <div key={t.name} title={t.name}
+                    className="flex flex-col items-center gap-0.5">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold shadow-sm"
+                      style={{ backgroundColor: t.bg, color: t.fg }}>
+                      {t.abbr}
+                    </div>
+                    <span className="text-[8px] text-muted">{t.name}</span>
+                  </div>
                 ))}
               </div>
-              <Link href="/software" className="inline-flex items-center gap-1 text-[11px] font-semibold hover:gap-2 transition-all" style={{ color: '#6366F1' }}>
-                Explore all tools <ArrowRight size={10} />
+              <Link href="/software?cat=ai-productivity" className="inline-flex items-center gap-1 text-[11px] font-semibold hover:gap-2 transition-all" style={{ color: '#6366F1' }}>
+                Explore AI tools <ArrowRight size={10} />
               </Link>
             </div>
           </div>
@@ -768,7 +819,7 @@ export default function SoftwareGatewayPage() {
             {[
               { v: '50+', l: 'Verified products',  c: 'var(--color-accent)' },
               { v: '12',  l: 'Software categories', c: 'var(--color-accent)' },
-              { v: 'Up to 40%', l: 'Bundle savings', c: 'var(--color-accent)' },
+              { v: 'Up to 25%', l: 'Bundle savings', c: 'var(--color-accent)' },
               { v: '7 days', l: 'Average activation', c: '#FF9500' },
             ].map(({ v, l, c }) => (
               <div key={l} className="border border-black/8 rounded-sm px-4 py-3 bg-white">
@@ -779,14 +830,22 @@ export default function SoftwareGatewayPage() {
           </div>
 
           {/* Logo strip — moved above "Powered by" line */}
-          <div className="mb-5 overflow-hidden border border-black/6 rounded-sm bg-white py-3">
-            <div className="relative">
+          <div className="mb-5 overflow-hidden border border-black/6 rounded-sm bg-white py-4">
+            <div className="relative overflow-hidden">
               <div className="th-logo-fade-l absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none" />
               <div className="th-logo-fade-r absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" />
-              <div className="flex items-center w-max" style={{ animation: 'marquee 32s linear infinite' }}>
+              <div className="flex items-center" style={{ animation: 'marquee 28s linear infinite', width: 'max-content' }}>
                 {(Array(4).fill(logos).flat() as typeof logos).map((brand, idx) => (
-                  <div key={idx} className="flex items-center shrink-0 px-7">
-                    <img src={brand.src} alt={brand.name} className="h-5 w-auto max-w-[80px] object-contain" />
+                  <div key={idx} className="flex items-center justify-center shrink-0 px-8" style={{ minWidth: '120px' }}>
+                    <img
+                      src={brand.src}
+                      alt={brand.name}
+                      width={80}
+                      height={24}
+                      className="object-contain opacity-70 hover:opacity-100 transition-opacity"
+                      style={{ maxHeight: '24px', width: 'auto' }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
                   </div>
                 ))}
               </div>
@@ -802,11 +861,11 @@ export default function SoftwareGatewayPage() {
       {/* ── Smart Search popup ── */}
       {smartSearchOpen && <SmartSearchModal onClose={() => setSmartSearchOpen(false)} />}
 
-      {/* ── Right panel for Tech Builders ── */}
+      {/* ── Right panel for Tech Builders (z-[55] keeps it above FABs at z-50) ── */}
       {rightPanel && (
         <>
-          <div className="fixed inset-0 z-[39] bg-black/8 backdrop-blur-[1px]" onClick={() => setRightPanel(null)} />
-          <div className="fixed top-0 right-0 h-screen z-40 flex flex-col bg-white border-l border-black/10 shadow-2xl transition-transform duration-300 ease-in-out translate-x-0"
+          <div className="fixed inset-0 z-[54] bg-black/8 backdrop-blur-[1px]" onClick={() => setRightPanel(null)} />
+          <div className="fixed top-0 right-0 h-screen z-[55] flex flex-col bg-white border-l border-black/10 shadow-2xl transition-transform duration-300 ease-in-out translate-x-0"
             style={{ width: 'min(420px, 95vw)' }}>
             <div className="flex items-center gap-3 px-5 py-4 border-b border-black/8 shrink-0"
               style={{ background: 'linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 100%)' }}>

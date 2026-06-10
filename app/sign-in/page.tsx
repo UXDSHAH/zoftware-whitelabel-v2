@@ -30,6 +30,7 @@ function SignInContent() {
           name: 'Ravi Sharma', email: 'ravi.sharma@gulf-enterprises.ae',
           company: 'Gulf Enterprises LLC', source: 'dubai-chamber', loggedIn: true,
         }));
+        document.cookie = 'zg_auth=1; path=/; max-age=86400; SameSite=Strict';
         router.push(redirect);
       }, 1800);
     }
@@ -42,6 +43,7 @@ function SignInContent() {
         name: 'Ravi Sharma', email: 'ravi.sharma@gulf-enterprises.ae',
         company: 'Gulf Enterprises LLC', source: 'dubai-chamber', loggedIn: true,
       }));
+      document.cookie = 'zg_auth=1; path=/; max-age=86400; SameSite=Strict';
       router.push(redirect);
     }, 1500);
   };
@@ -57,6 +59,7 @@ function SignInContent() {
         name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
         email, company: '', source: 'direct', loggedIn: true,
       }));
+      document.cookie = 'zg_auth=1; path=/; max-age=86400; SameSite=Strict';
       router.push(redirect);
     }, 1200);
   };
