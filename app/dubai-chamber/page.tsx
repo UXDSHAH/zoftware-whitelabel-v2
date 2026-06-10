@@ -145,6 +145,9 @@ export default function DubaiChamberPage() {
           </div>
           <span className="text-[18px] font-bold text-black tracking-tight">LOGO</span>
         </div>
+        <p className="text-center text-[11px] text-muted mb-6 leading-[1.6]">
+          Zoftware: embedded software gateway for SME digital growth
+        </p>
 
         <div className="bg-white border border-black/8 rounded-sm p-8 shadow-sm">
           <div className="flex items-center gap-2 mb-1">
@@ -405,7 +408,7 @@ export default function DubaiChamberPage() {
                     <Zap size={14} className="text-accent" />
                     Software Gateway
                   </p>
-                  <p className="text-[12px] text-white/50 mt-0.5">AI tools · 50+ verified products</p>
+                  <p className="text-[12px] text-white mt-0.5">AI tools · 50+ verified products</p>
                 </div>
                 <span className="relative text-[11px] font-semibold text-white border border-white/20 bg-white/10 px-2.5 py-1 rounded-sm group-hover:bg-accent group-hover:border-accent transition-all shrink-0">
                   Explore →

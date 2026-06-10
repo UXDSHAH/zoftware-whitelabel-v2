@@ -10,6 +10,8 @@ import {
 import { gatewayProducts } from '@/data/gateway-products';
 import ThemeToggle from '@/components/ThemeToggle';
 import ZainChatbot from '@/components/ZainChatbot';
+import TechRequirementBuilder from '@/components/TechRequirementBuilder';
+import TechStrategyBuilder from '@/components/TechStrategyBuilder';
 
 // ── Tool cards ────────────────────────────────────────────────────────────────
 const tools = [
@@ -158,7 +160,7 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
       style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}>
       <div className={modalCls}
-        style={{ maxWidth: '600px', maxHeight: 'min(92vh, 760px)', height: '100%' }}
+        style={{ maxWidth: '500px', maxHeight: 'min(92vh, 760px)', height: '100%' }}
         onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center gap-3 px-6 py-4 border-b border-black/8 shrink-0">
@@ -255,7 +257,7 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
       style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}>
       <div className={modalCls}
-        style={{ maxWidth: '1020px', maxHeight: 'min(92vh, 840px)', height: '100%' }}
+        style={{ maxWidth: '860px', maxHeight: 'min(92vh, 840px)', height: '100%' }}
         onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center gap-2 px-5 py-4 border-b border-black/8 shrink-0">
@@ -420,7 +422,7 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
       style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}>
       <div className={modalCls}
-        style={{ maxWidth: '1100px', maxHeight: 'min(92vh, 840px)', height: '100%' }}
+        style={{ maxWidth: '920px', maxHeight: 'min(92vh, 840px)', height: '100%' }}
         onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center gap-2 px-5 py-4 border-b border-black/8 shrink-0">
@@ -612,6 +614,8 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 export default function SoftwareGatewayPage() {
+  const [smartSearchOpen, setSmartSearchOpen] = useState(false);
+  const [rightPanel, setRightPanel] = useState<'requirements' | 'strategy' | null>(null);
 
   return (
     <div className="bg-white min-h-screen font-sans">
@@ -637,16 +641,16 @@ export default function SoftwareGatewayPage() {
         </div>
       </header>
 
-      {/* ── Main section — all on first fold ── */}
+      {/* ── Main section ── */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f8faff 0%, #ffffff 100%)' }}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] opacity-[0.07]"
           style={{ background: 'radial-gradient(ellipse, #007AFF 0%, transparent 70%)' }} />
 
         <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 pt-8 pb-6">
 
-          {/* Section header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-6">
-            <div>
+          {/* Section header — heading left, AI productivity card right */}
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-6">
+            <div className="flex-1">
               <div className="inline-flex items-center gap-2 bg-accent text-white px-3 py-1.5 rounded-sm text-[10px] font-bold tracking-[0.1em] uppercase mb-4 shadow-sm shadow-accent/20">
                 <Zap size={11} strokeWidth={2.5} /> Exclusive Software Gateway
               </div>
@@ -662,32 +666,39 @@ export default function SoftwareGatewayPage() {
                 Access 50+ verified products with GCC-exclusive pricing, bundle deals, and AI-powered recommendations built in.
               </p>
             </div>
-            <Link href="/software"
-              className="flex items-center gap-2 bg-black text-white px-6 py-3 text-[13px] font-semibold rounded-sm hover:bg-[#222] transition-colors shrink-0 min-h-[44px] whitespace-nowrap self-start sm:self-auto">
-              Browse All Software <ArrowRight size={13} strokeWidth={2} />
-            </Link>
-          </div>
 
-          {/* Logo strip */}
-          <div className="mb-5 overflow-hidden border border-black/6 rounded-sm bg-white py-3">
-            <div className="relative">
-              <div className="th-logo-fade-l absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none" />
-              <div className="th-logo-fade-r absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" />
-              <div className="flex items-center w-max" style={{ animation: 'marquee 32s linear infinite' }}>
-                {(Array(4).fill(logos).flat() as typeof logos).map((brand, i) => (
-                  <div key={i} className="flex items-center shrink-0 px-7">
-                    <img src={brand.src} alt={brand.name} className="h-5 w-auto max-w-[80px] object-contain" />
-                  </div>
+            {/* AI Productivity card replacing "Browse All Software" button */}
+            <div className="relative border border-black/8 rounded-sm p-5 bg-white overflow-hidden shrink-0 lg:w-[240px]">
+              <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-15 pointer-events-none"
+                style={{ background: 'radial-gradient(circle, #6366F1 0%, transparent 70%)' }} />
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-9 h-9 rounded-sm flex items-center justify-center" style={{ backgroundColor: '#6366F114' }}>
+                  <Sparkles size={16} style={{ color: '#6366F1' }} />
+                </div>
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ color: '#6366F1', backgroundColor: '#6366F112', border: '1px solid #6366F128' }}>
+                  AI Tools
+                </span>
+              </div>
+              <h3 className="text-[13px] font-semibold text-black mb-1 leading-snug">AI Productivity &amp; Collaboration</h3>
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {['Claude', 'ChatGPT', 'Copilot', 'Notion AI', 'Gemini'].map(name => (
+                  <span key={name} className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200">
+                    {name}
+                  </span>
                 ))}
               </div>
+              <Link href="/software" className="inline-flex items-center gap-1 text-[11px] font-semibold hover:gap-2 transition-all" style={{ color: '#6366F1' }}>
+                Explore all tools <ArrowRight size={10} />
+              </Link>
             </div>
           </div>
 
-          {/* 4 tool cards */}
+          {/* 4 tool cards — strategy/requirements open right panel, smart search opens popup */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
             {tools.map((tool, i) => {
               const accentColor = tool.color === 'var(--color-accent)' ? '#007AFF' : tool.color;
-              const shared = `relative border border-black/8 rounded-sm p-5 hover:border-black/20 hover:shadow-md transition-all overflow-hidden bg-white group`;
+              const shared = `relative border border-black/8 rounded-sm p-5 hover:border-black/20 hover:shadow-md transition-all overflow-hidden bg-white group text-left w-full`;
 
               const inner = (
                 <>
@@ -718,10 +729,30 @@ export default function SoftwareGatewayPage() {
 
               if (tool.external) {
                 return (
-                  <a key={tool.label} href={tool.href} target="_blank" rel="noopener noreferrer"
-                    className={`${shared} cursor-pointer`}>
+                  <a key={tool.label} href={tool.href} target="_blank" rel="noopener noreferrer" className={shared}>
                     {inner}
                   </a>
+                );
+              }
+              if (tool.label === 'Smart Search') {
+                return (
+                  <button key={tool.label} onClick={() => setSmartSearchOpen(true)} className={shared}>
+                    {inner}
+                  </button>
+                );
+              }
+              if (tool.label === 'Tech Strategy Builder') {
+                return (
+                  <button key={tool.label} onClick={() => setRightPanel('strategy')} className={shared}>
+                    {inner}
+                  </button>
+                );
+              }
+              if (tool.label === 'Tech Requirement Builder') {
+                return (
+                  <button key={tool.label} onClick={() => setRightPanel('requirements')} className={shared}>
+                    {inner}
+                  </button>
                 );
               }
               return (
@@ -733,7 +764,7 @@ export default function SoftwareGatewayPage() {
           </div>
 
           {/* Stats strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
             {[
               { v: '50+', l: 'Verified products',  c: 'var(--color-accent)' },
               { v: '12',  l: 'Software categories', c: 'var(--color-accent)' },
@@ -747,14 +778,62 @@ export default function SoftwareGatewayPage() {
             ))}
           </div>
 
+          {/* Logo strip — moved above "Powered by" line */}
+          <div className="mb-5 overflow-hidden border border-black/6 rounded-sm bg-white py-3">
+            <div className="relative">
+              <div className="th-logo-fade-l absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none" />
+              <div className="th-logo-fade-r absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" />
+              <div className="flex items-center w-max" style={{ animation: 'marquee 32s linear infinite' }}>
+                {(Array(4).fill(logos).flat() as typeof logos).map((brand, idx) => (
+                  <div key={idx} className="flex items-center shrink-0 px-7">
+                    <img src={brand.src} alt={brand.name} className="h-5 w-auto max-w-[80px] object-contain" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <p className="text-center text-[11px] text-muted">
-            Powered by <span className="font-semibold text-black">Zoftware</span> · Trusted by 5,000+ businesses across MENA & GCC
+            Powered by <span className="font-semibold text-black">Zoftware</span> · Trusted by 5,000+ businesses across MENA &amp; GCC
           </p>
         </div>
       </section>
 
-      {/* ── Zain chatbot + caller ── */}
-      <ZainChatbot />
+      {/* ── Smart Search popup ── */}
+      {smartSearchOpen && <SmartSearchModal onClose={() => setSmartSearchOpen(false)} />}
+
+      {/* ── Right panel for Tech Builders ── */}
+      {rightPanel && (
+        <>
+          <div className="fixed inset-0 z-[39] bg-black/8 backdrop-blur-[1px]" onClick={() => setRightPanel(null)} />
+          <div className="fixed top-0 right-0 h-screen z-40 flex flex-col bg-white border-l border-black/10 shadow-2xl transition-transform duration-300 ease-in-out translate-x-0"
+            style={{ width: 'min(420px, 95vw)' }}>
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-black/8 shrink-0"
+              style={{ background: 'linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 100%)' }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}>
+                {rightPanel === 'requirements'
+                  ? <FileText size={15} className="text-white" />
+                  : <BarChart2 size={15} className="text-white" />}
+              </div>
+              <p className="text-[14px] font-semibold text-white flex-1 leading-none">
+                {rightPanel === 'requirements' ? 'Tech Requirement Builder' : 'Tech Strategy Builder'}
+              </p>
+              <button onClick={() => setRightPanel(null)}
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors shrink-0">
+                <X size={16} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto" style={{ minHeight: 0 }}>
+              {rightPanel === 'requirements'
+                ? <TechRequirementBuilder onClose={() => setRightPanel(null)} />
+                : <TechStrategyBuilder onClose={() => setRightPanel(null)} />}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── Zain chatbot — auto-opens on this page ── */}
+      <ZainChatbot defaultOpen={true} />
     </div>
   );
 }

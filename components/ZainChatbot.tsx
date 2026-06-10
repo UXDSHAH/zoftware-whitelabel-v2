@@ -134,8 +134,8 @@ function BrowserCaller({ onClose }: { onClose: () => void }) {
 }
 
 // ── ZainChatbot FABs + drawer ─────────────────────────────────────────────────
-export default function ZainChatbot() {
-  const [open,    setOpen]   = useState(false);
+export default function ZainChatbot({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  const [open,    setOpen]   = useState(defaultOpen);
   const [calling, setCalling] = useState(false);
   const [input,   setInput]  = useState('');
   const [messages, setMsgs]  = useState<Message[]>([GREETING]);
@@ -198,7 +198,7 @@ export default function ZainChatbot() {
 
       {/* ── Scrim ── */}
       {open && (
-        <div className="fixed inset-0 z-[39] bg-black/20 backdrop-blur-[2px]" onClick={() => setOpen(false)} />
+        <div className="fixed inset-0 z-[39] bg-black/8 backdrop-blur-[1px]" onClick={() => setOpen(false)} />
       )}
 
       {/* ── Right drawer ── */}
