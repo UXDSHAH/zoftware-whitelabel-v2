@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { getBundleBySlug, bundles } from '@/data/bundles';
 import { AED_RATE } from '@/data/billing-options';
-import ZainChat from '@/components/ZainChat';
 
 // ── Product info lookup ────────────────────────────────────────────────────
 const productInfo: Record<string, {
@@ -352,8 +351,6 @@ export default function BundleDetailPage({ params }: { params: Promise<{ slug: s
           </Link>
         </div>
       </div>
-
-      <ZainChat />
     </div>
   );
 }

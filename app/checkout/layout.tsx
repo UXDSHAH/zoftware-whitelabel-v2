@@ -1,5 +1,6 @@
 import GatewayHeader from '@/components/GatewayHeader';
 import FloatingBuilders from '@/components/FloatingBuilders';
+import ZainChat from '@/components/ZainChat';
 
 export default function CheckoutLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,7 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
       <GatewayHeader />
       {children}
       <FloatingBuilders />
+      <ZainChat />
     </>
   );
 }

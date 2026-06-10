@@ -13,7 +13,6 @@ import { getCatalogByCategory, CatalogProduct } from '@/data/products-catalog';
 import { getGatewayProductsByCategory } from '@/data/gateway-products';
 import { bundles } from '@/data/bundles';
 import { AED_RATE } from '@/data/billing-options';
-import ZainChat from '@/components/ZainChat';
 
 function StarRow({ rating }: { rating: number }) {
   return (
@@ -397,8 +396,6 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
           </aside>
         </div>
       </div>
-
-      <ZainChat />
     </div>
   );
 }

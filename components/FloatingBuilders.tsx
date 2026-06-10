@@ -1,78 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { FileText, BarChart2, X, Maximize2, Minimize2, Phone, PhoneOff, Mic, Send, Sparkles, MessageSquare } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileText, BarChart2, X, Maximize2, Minimize2, Phone, PhoneOff, Mic, Send, Sparkles } from 'lucide-react';
 import TechRequirementBuilder from './TechRequirementBuilder';
 import TechStrategyBuilder from './TechStrategyBuilder';
-
-// ── Inline Zain chat ──────────────────────────────────────────────────────
-const ZAIN_QUICK: { kw: string[]; reply: string }[] = [
-  { kw: ['hello','hi','hey'], reply: "Hi! I'm Zain, your AI software advisor. How can I help you today?" },
-  { kw: ['crm','sales'], reply: "For CRM I recommend **Freshsales** ($72/user/mo) or **Zoho CRM** ($21.85/user/mo) — both GCC-optimised with 7-day activation." },
-  { kw: ['bundle'], reply: "We have 3 bundles: **Starter** ($299/mo, −40%), **Growth** ($599/mo, −33%), and **Expansion** ($999/mo, −33%)." },
-  { kw: ['price','cost'], reply: "All prices include GCC-exclusive discounts up to 40% off. Toggle USD/AED and monthly/annual on any product page." },
-  { kw: ['erp'], reply: "Top ERP picks for GCC: **Odoo** (best value), **Microsoft Dynamics 365**, and **SAP Business One**." },
-  { kw: ['support','help'], reply: "Reach us at support@zoftware.com or WhatsApp +971 55 000 0000. Available Sun–Thu, 9am–6pm GST." },
-];
-
-function ZainChat({ onClose }: { onClose: () => void }) {
-  const [msgs, setMsgs] = useState([{ role: 'bot', text: "Hi! I'm **Zain**, your AI software advisor. Ask me anything about software, pricing, or bundles." }]);
-  const [input, setInput] = useState('');
-  const [typing, setTyping] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [msgs]);
-
-  const send = () => {
-    const q = input.trim(); if (!q) return;
-    setMsgs(m => [...m, { role: 'user', text: q }]);
-    setInput(''); setTyping(true);
-    const low = q.toLowerCase();
-    const match = ZAIN_QUICK.find(r => r.kw.some(k => low.includes(k)));
-    const reply = match?.reply || "Great question! Try our Tech Requirement Builder for personalised recommendations, or I can connect you with our team.";
-    setTimeout(() => { setTyping(false); setMsgs(m => [...m, { role: 'bot', text: reply }]); }, 800);
-  };
-
-  const rich = (t: string) => t.split(/\*\*(.*?)\*\*/g).map((p, i) => i % 2 === 1 ? <strong key={i}>{p}</strong> : <span key={i}>{p}</span>);
-
-  return (
-    <div className="flex flex-col h-full bg-white">
-      <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ maxHeight: '380px' }}>
-        {msgs.map((m, i) => (
-          <div key={i} className={`flex gap-2 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            {m.role === 'bot' && (
-              <div className="w-7 h-7 rounded-full shrink-0 mt-0.5 flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#f97316,#ec4899)' }}>
-                <Sparkles size={13} strokeWidth={2} className="text-white" />
-              </div>
-            )}
-            <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-[1.55] ${m.role === 'bot' ? 'bg-[#f4f4f5] text-black rounded-tl-sm' : 'bg-[#2563EB] text-white rounded-tr-sm'}`}>
-              {rich(m.text)}
-            </div>
-          </div>
-        ))}
-        {typing && (
-          <div className="flex gap-2 justify-start">
-            <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#f97316,#ec4899)' }}>
-              <Sparkles size={13} strokeWidth={2} className="text-white" />
-            </div>
-            <div className="bg-[#f4f4f5] rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1 items-center">
-              {[0,1,2].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-zinc-400 animate-bounce" style={{ animationDelay: `${i*0.12}s` }} />)}
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-      <div className="border-t border-zinc-100 p-3 flex gap-2">
-        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()}
-          placeholder="Ask Zain anything…"
-          className="flex-1 bg-[#f4f4f5] rounded-full px-4 py-2.5 text-[13px] outline-none focus:ring-2 focus:ring-orange-200 placeholder-zinc-400" />
-        <button onClick={send} className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white"
-          style={{ background: 'linear-gradient(135deg,#f97316,#ec4899)' }}>
-          <Send size={14} strokeWidth={2} />
-        </button>
-      </div>
-    </div>
-  );
-}
 
 // ── Voice call modal ──────────────────────────────────────────────────────
 const SCRIPTS = [
@@ -182,8 +113,7 @@ function VoiceCallModal({ onClose }: { onClose: () => void }) {
 const BTNS = [
   { id: 'req',   label: 'Tech Requirement Builder', bg: '#2563EB', ring: 'rgba(37,99,235,0.4)',  delay: '0s'   },
   { id: 'strat', label: 'Tech Strategy Builder',    bg: '#7C3AED', ring: 'rgba(124,58,237,0.4)', delay: '0.55s' },
-  { id: 'zain',  label: 'Zain AI Chat',             bg: '#f97316', ring: 'rgba(249,115,22,0.4)', delay: '1.1s'  },
-  { id: 'call',  label: 'Talk to Zain',             bg: '#059669', ring: 'rgba(5,150,105,0.4)',  delay: '1.65s' },
+  { id: 'call',  label: 'Talk to Zain',             bg: '#059669', ring: 'rgba(5,150,105,0.4)',  delay: '1.1s'  },
 ];
 
 // ── Shared modal shell ────────────────────────────────────────────────────
@@ -220,11 +150,9 @@ function Modal({ show, onClose, fs, setFs, title, accentBg, children }: {
 export default function FloatingBuilders() {
   const [showReq,  setShowReq]  = useState(false);
   const [showStrat,setShowStrat]= useState(false);
-  const [showZain, setShowZain] = useState(false);
   const [showCall, setShowCall] = useState(false);
   const [reqFs,    setReqFs]    = useState(false);
   const [stratFs,  setStratFs]  = useState(false);
-  const [zainFs,   setZainFs]   = useState(false);
 
   return (
     <>
@@ -233,7 +161,7 @@ export default function FloatingBuilders() {
         .fpulse{animation:fpulse 2.2s cubic-bezier(.4,0,.6,1) infinite}
       `}</style>
 
-      {/* ── 4 floating buttons ── */}
+      {/* ── Floating buttons ── */}
       <div className="fixed left-4 bottom-4 z-40 flex flex-col gap-3.5">
         {BTNS.map(btn => (
           <div key={btn.id} className="group relative flex items-center justify-start">
@@ -248,7 +176,6 @@ export default function FloatingBuilders() {
               onClick={() => {
                 if (btn.id === 'req')   { setShowReq(true);   setReqFs(false); }
                 if (btn.id === 'strat') { setShowStrat(true); setStratFs(false); }
-                if (btn.id === 'zain')  { setShowZain(true);  setZainFs(false); }
                 if (btn.id === 'call')  setShowCall(true);
               }}
               className="relative w-10 h-10 rounded-full flex items-center justify-center hover:scale-[1.12] active:scale-95 transition-transform duration-150"
@@ -259,7 +186,6 @@ export default function FloatingBuilders() {
 
               {btn.id === 'req'   && <FileText      size={16} strokeWidth={2}   className="text-white relative z-10" />}
               {btn.id === 'strat' && <BarChart2     size={16} strokeWidth={2}   className="text-white relative z-10" />}
-              {btn.id === 'zain'  && <MessageSquare size={16} strokeWidth={2}   className="text-white relative z-10" />}
               {btn.id === 'call'  && <Phone         size={16} strokeWidth={2}   className="text-white relative z-10" />}
             </button>
           </div>
@@ -275,11 +201,6 @@ export default function FloatingBuilders() {
       <Modal show={showStrat} onClose={() => setShowStrat(false)} fs={stratFs} setFs={setStratFs}
         title="Tech Strategy Builder" accentBg="#7C3AED">
         <TechStrategyBuilder onClose={() => setShowStrat(false)} />
-      </Modal>
-
-      <Modal show={showZain} onClose={() => setShowZain(false)} fs={zainFs} setFs={setZainFs}
-        title="Zain AI Chat" accentBg="linear-gradient(135deg,#f97316,#ec4899)">
-        <ZainChat onClose={() => setShowZain(false)} />
       </Modal>
 
       {showCall && <VoiceCallModal onClose={() => setShowCall(false)} />}

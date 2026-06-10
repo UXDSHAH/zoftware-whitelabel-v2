@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, type UIMessage } from 'ai';
 import { X, Send, ChevronDown } from 'lucide-react';
 
 // Zain Bot SVG — inline so the sparkle stars can be animated
@@ -46,120 +48,165 @@ function ZainBotIcon({ size = 36 }: { size?: number }) {
   );
 }
 
-type Message = { role: 'zain' | 'user'; text: string; ts?: string };
+const WELCOME_TEXT =
+  "Hi! I'm **Zain**, your AI software advisor. I can help you find software, compare pricing, or explore bundles. What are you looking for?";
 
-const ZAIN_RESPONSES: { keywords: string[]; reply: string }[] = [
-  {
-    keywords: ['hello', 'hi', 'hey', 'start'],
-    reply: "Hi there! I'm Zain, your AI software advisor powered by Zoftware. I can help you find the right software, build a tech strategy, or compare products. What are you looking for today?",
-  },
-  {
-    keywords: ['crm', 'sales', 'customer relationship'],
-    reply: "Great choice! For CRM, I recommend starting with **Freshsales** (GCC-optimised, 10% off at $72/user/mo) or **Freshworks Enterprise** (40% off at $47.40/user/mo). Both activate within 7 days. Want me to compare them side by side?",
-  },
-  {
-    keywords: ['support', 'chat', 'helpdesk', 'customer service'],
-    reply: "For customer support, **Freshchat** is our top pick — live chat + AI bots at $46.55/user/mo (5% off). For helpdesk ticketing, **Freshdesk** at $52.25/user/mo with 5-day activation. Want to see both on the same screen?",
-  },
-  {
-    keywords: ['bundle', 'package', 'combo', 'starter', 'growth', 'expansion'],
-    reply: "Our bundles save up to 40% vs buying individually:\n\n• **Starter Bundle** — $299/mo (team up to 10)\n• **Growth Bundle** — $599/mo (team up to 25)\n• **Expansion Bundle** — $999/mo (enterprise, 50+)\n\nAll include email, chat, calling, and more. Which bundle fits your team size?",
-  },
-  {
-    keywords: ['price', 'cost', 'pricing', 'aed', 'usd', 'dirham'],
-    reply: "All our products are priced in USD and AED (rate: 3.67). For example, Freshchat at $46.55/user/mo = AED 170.9/user/mo. Would you like pricing for a specific product or bundle?",
-  },
-  {
-    keywords: ['strategy', 'plan', 'roadmap', 'recommend'],
-    reply: "I can build a tech strategy for your business in under a minute! Click **Tech Strategy Builder** in the menu above. You'll answer 5 quick questions and get a personalised software roadmap with recommended products and a phased implementation plan.",
-  },
-  {
-    keywords: ['requirement', 'rfp', 'document', 'spec'],
-    reply: "Need a tech requirements document? Use our **Tech Requirement Builder** — answer a few questions about your business needs and get a structured requirements doc ready to share with vendors. Click the button above to start.",
-  },
-  {
-    keywords: ['email', 'mail', 'zoho'],
-    reply: "For business email, **Zoho Mail Premium** is $19.60/user (billed half-yearly, 2% off). 50GB mailbox, custom domain, zero ads. It's included in all our bundles too. Want to add it to a bundle?",
-  },
-  {
-    keywords: ['it', 'itsm', 'service management', 'freshservice'],
-    reply: "**Freshservice** is our top IT Service Management pick — $46.55/user/mo (5% off, was $49). Includes asset tracking, incident management, and change management. Activates in 7 days. Part of our Growth and Expansion bundles.",
-  },
-  {
-    keywords: ['call', 'calling', 'voip', 'phone', 'freshcaller'],
-    reply: "**Freshcaller** gives you a cloud call center with IVR, smart escalations, and real-time dashboards at $37.05/user/mo (5% off). Included in all bundles. Want to buy it standalone or as part of a bundle?",
-  },
-  {
-    keywords: ['activate', 'activation', 'how long', 'when'],
-    reply: "Most software activates within **7 days** of purchase. Freshdesk is faster at **5 days**. You'll receive a confirmation email immediately after checkout, and our team will guide you through onboarding.",
-  },
-  {
-    keywords: ['compare', 'comparison', 'vs', 'difference'],
-    reply: "I can help you compare! Head to /compare to put up to 5 products side by side. Or tell me which two products you're comparing and I'll give you a quick breakdown here.",
-  },
-];
+const quickChips = ['Show bundles', 'Best CRM', 'Pricing in AED', 'Tech Strategy'];
 
-function getZainReply(userMsg: string): string {
-  const lower = userMsg.toLowerCase();
-  for (const { keywords, reply } of ZAIN_RESPONSES) {
-    if (keywords.some(k => lower.includes(k))) return reply;
-  }
-  return "I'd be happy to help! Could you tell me more about your business — for example, your industry, team size, or the specific problem you're trying to solve? That'll help me recommend the right software.";
+function messageText(message: UIMessage) {
+  return message.parts
+    .map(part => (part.type === 'text' ? part.text : ''))
+    .join('')
+    .trim();
 }
 
-function now() {
-  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+function hasText(message: UIMessage) {
+  return messageText(message).length > 0;
+}
+
+function latestAssistantHasText(messages: UIMessage[]) {
+  for (let i = messages.length - 1; i >= 0; i -= 1) {
+    if (messages[i].role === 'assistant') {
+      return hasText(messages[i]);
+    }
+  }
+
+  return false;
+}
+
+function friendlyErrorMessage(error?: Error) {
+  if (!error) return '';
+
+  try {
+    const parsed = JSON.parse(error.message) as { error?: string };
+    if (parsed.error) return parsed.error;
+  } catch {
+    // AI SDK errors are sometimes plain text and sometimes serialized JSON.
+  }
+
+  return error.message || 'Please try again.';
+}
+
+function safeLinkProps(href: string) {
+  if (href.startsWith('/') && !href.startsWith('//')) {
+    return { href, isExternal: false };
+  }
+
+  try {
+    const url = new URL(href);
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      return { href: url.href, isExternal: true };
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
 }
 
 export default function ZainChat() {
   const [open, setOpen] = useState(false);
   const [minimised, setMinimised] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'zain',
-      text: "Hi! I'm **Zain**, your AI software advisor. I can help you find software, build a tech strategy, or explore bundles. What are you looking for?",
-      ts: now(),
-    },
-  ]);
   const [input, setInput] = useState('');
-  const [typing, setTyping] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const transport = useMemo(() => new DefaultChatTransport({ api: '/api/chat' }), []);
+  const { messages, sendMessage, status, error } = useChat({
+    transport,
+    experimental_throttle: 80,
+  });
+  const isBusy = status === 'submitted' || status === 'streaming';
+  const hasConversation = messages.some(message => message.role === 'user' || message.role === 'assistant');
+  const showQuickChips = !hasConversation && !isBusy;
+  const showTyping = status === 'submitted' || (status === 'streaming' && !latestAssistantHasText(messages));
+  const errorMessage = friendlyErrorMessage(error);
+  const visibleMessages = [
+    { id: 'welcome', role: 'assistant' as const, text: WELCOME_TEXT },
+    ...messages
+      .map(message => ({
+        id: message.id,
+        role: message.role,
+        text: messageText(message),
+      }))
+      .filter(message => message.role !== 'system' && message.text.length > 0),
+  ];
 
   useEffect(() => {
     if (open && !minimised) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, open, minimised]);
+  }, [messages, status, open, minimised]);
+
+  const sendText = (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed || isBusy) return;
+    void sendMessage({ text: trimmed });
+    setInput('');
+  };
 
   const send = () => {
     const text = input.trim();
     if (!text) return;
-    const userMsg: Message = { role: 'user', text, ts: now() };
-    setMessages(m => [...m, userMsg]);
-    setInput('');
-    setTyping(true);
-    setTimeout(() => {
-      const reply = getZainReply(text);
-      setMessages(m => [...m, { role: 'zain', text: reply, ts: now() }]);
-      setTyping(false);
-    }, 900);
+    sendText(text);
   };
 
   const renderText = (text: string) =>
-    text.split(/\*\*(.*?)\*\*/g).map((part, i) =>
-      i % 2 === 1 ? <strong key={i}>{part}</strong> : <span key={i}>{part}</span>
-    );
+    text
+      .split(/(\*\*.*?\*\*|\[[^\]]+\]\([^)]+\))/g)
+      .filter(Boolean)
+      .map((part, i) => {
+        const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+        if (link) {
+          const linkProps = safeLinkProps(link[2]);
+          if (!linkProps) return <span key={i}>{link[1]}</span>;
+
+          return (
+            <a
+              key={i}
+              href={linkProps.href}
+              target={linkProps.isExternal ? '_blank' : undefined}
+              rel={linkProps.isExternal ? 'noopener noreferrer' : undefined}
+              className="font-semibold underline underline-offset-2"
+            >
+              {link[1]}
+            </a>
+          );
+        }
+
+        const bold = part.match(/^\*\*(.*?)\*\*$/);
+        return bold ? <strong key={i}>{bold[1]}</strong> : <span key={i}>{part}</span>;
+      });
 
   return (
     <>
+      <style>{`
+        @keyframes zain-chat-pulse {
+          0% { transform: scale(1); opacity: .36; }
+          80% { transform: scale(2.05); opacity: 0; }
+          100% { transform: scale(2.05); opacity: 0; }
+        }
+
+        .zain-chat-pulse {
+          animation: zain-chat-pulse 2.2s cubic-bezier(.4, 0, .6, 1) infinite;
+        }
+      `}</style>
+
       {/* Floating button */}
       {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center hover:scale-110 transition-all border border-black/6"
-          aria-label="Open Zain AI Chat"
-          style={{ boxShadow: '0 4px 20px rgba(100,0,255,0.18), 0 1px 6px rgba(0,0,0,0.1)' }}
-        >
-          <ZainBotIcon size={40} />
-        </button>
+        <div className="fixed bottom-6 right-6 z-50 group w-14 h-14">
+          <span className="zain-chat-pulse absolute inset-0 rounded-full bg-[#007AFF]" />
+          <span className="zain-chat-pulse absolute inset-0 rounded-full bg-[#FF4CAE]" style={{ animationDelay: '0.65s' }} />
+          <button
+            onClick={() => setOpen(true)}
+            className="relative z-10 w-14 h-14 rounded-full bg-white flex items-center justify-center hover:scale-[1.12] active:scale-95 transition-transform duration-150 border border-white/80 overflow-hidden"
+            aria-label="Open Zain AI Chat"
+            style={{
+              boxShadow: '0 8px 28px rgba(0,122,255,0.32), 0 6px 22px rgba(255,76,174,0.22), 0 1px 7px rgba(0,0,0,0.12)',
+            }}
+          >
+            <span className="absolute inset-0 rounded-full bg-gradient-to-br from-[#DF8DFF]/25 via-[#3371FF]/20 to-[#FF4CAE]/25 opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+            <span className="relative z-10">
+              <ZainBotIcon size={40} />
+            </span>
+          </button>
+        </div>
       )}
 
       {/* Chat panel */}
@@ -179,11 +226,15 @@ export default function ZainChat() {
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <button onClick={() => setMinimised(m => !m)}
+              <button
+                onClick={() => setMinimised(m => !m)}
+                aria-label={minimised ? 'Expand Zain chat' : 'Minimise Zain chat'}
                 className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white rounded-full hover:bg-white/10 transition-colors">
                 <ChevronDown size={15} className={`transition-transform ${minimised ? 'rotate-180' : ''}`} />
               </button>
-              <button onClick={() => { setOpen(false); setMinimised(false); }}
+              <button
+                onClick={() => { setOpen(false); setMinimised(false); }}
+                aria-label="Close Zain chat"
                 className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white rounded-full hover:bg-white/10 transition-colors">
                 <X size={15} />
               </button>
@@ -194,19 +245,18 @@ export default function ZainChat() {
             <>
               {/* Messages */}
               <div className="flex-1 overflow-y-auto bg-white p-4 space-y-3" style={{ maxHeight: '360px' }}>
-                {messages.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {visibleMessages.map(msg => (
+                  <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 ${
-                      msg.role === 'zain'
+                      msg.role === 'assistant'
                         ? 'bg-[#f5f5f7] text-black rounded-tl-sm'
                         : 'bg-[#007AFF] text-white rounded-tr-sm'
                     }`}>
                       <p className="text-[13px] leading-[1.5] whitespace-pre-line">{renderText(msg.text)}</p>
-                      {msg.ts && <p className={`text-[10px] mt-1 ${msg.role === 'zain' ? 'text-[#86868b]' : 'text-white/60'}`}>{msg.ts}</p>}
                     </div>
                   </div>
                 ))}
-                {typing && (
+                {showTyping && (
                   <div className="flex justify-start">
                     <div className="bg-[#f5f5f7] rounded-2xl rounded-tl-sm px-4 py-2.5 flex items-center gap-1">
                       {[0, 1, 2].map(i => (
@@ -216,30 +266,53 @@ export default function ZainChat() {
                     </div>
                   </div>
                 )}
+                {errorMessage && (
+                  <div className="flex justify-start">
+                    <div className="max-w-[80%] rounded-2xl rounded-tl-sm px-3.5 py-2.5 bg-red-50 text-red-700 border border-red-100">
+                      <p className="text-[12px] leading-[1.5]">
+                        Zain could not connect. {errorMessage}
+                      </p>
+                    </div>
+                  </div>
+                )}
                 <div ref={bottomRef} />
               </div>
 
               {/* Quick chips */}
-              <div className="bg-white border-t border-black/5 px-3 py-2 flex gap-2 overflow-x-auto">
-                {['Show bundles', 'Best CRM', 'Pricing in AED', 'Tech Strategy'].map(chip => (
-                  <button key={chip} onClick={() => { setInput(chip); }}
-                    className="shrink-0 text-[11px] font-medium text-[#007AFF] border border-[#007AFF]/30 px-2.5 py-1 rounded-full hover:bg-[#007AFF]/8 transition-colors whitespace-nowrap">
-                    {chip}
-                  </button>
-                ))}
-              </div>
+              {showQuickChips && (
+                <div className="bg-white border-t border-black/5 px-3 py-2 flex flex-wrap gap-2">
+                  {quickChips.map(chip => (
+                    <button
+                      key={chip}
+                      onClick={() => sendText(chip)}
+                      className="text-[11px] font-medium text-[#007AFF] border border-[#007AFF]/30 px-2.5 py-1 rounded-full hover:bg-[#007AFF]/8 transition-colors whitespace-nowrap"
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Input */}
               <div className="bg-white border-t border-black/8 p-3 flex items-center gap-2">
                 <input
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && send()}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      send();
+                    }
+                  }}
+                  disabled={isBusy}
                   placeholder="Ask Zain anything…"
-                  className="flex-1 bg-[#f5f5f7] border-0 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:ring-2 focus:ring-[#007AFF]/20 placeholder-[#86868b]"
+                  className="flex-1 bg-[#f5f5f7] border-0 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:ring-2 focus:ring-[#007AFF]/20 placeholder-[#86868b] disabled:opacity-70"
                 />
-                <button onClick={send}
-                  className="w-9 h-9 rounded-full bg-[#007AFF] flex items-center justify-center text-white hover:bg-[#0051D5] transition-colors shrink-0">
+                <button
+                  onClick={send}
+                  disabled={isBusy || !input.trim()}
+                  aria-label="Send message to Zain"
+                  className="w-9 h-9 rounded-full bg-[#007AFF] flex items-center justify-center text-white hover:bg-[#0051D5] transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed">
                   <Send size={14} strokeWidth={2} />
                 </button>
               </div>
