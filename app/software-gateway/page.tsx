@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Search, FileText, BarChart2, TrendingDown, ArrowRight, Zap,
@@ -74,32 +74,63 @@ function getScore(p: typeof gatewayProducts[0], q: string): number {
   return Math.min(97, s);
 }
 
-// ── Smart Search Modal ────────────────────────────────────────────────────────
+// ── Smart Search constants ────────────────────────────────────────────────────
+const SS_BUDGETS = [
+  { id: 'b1', label: '$0–500/mo',       min: 0,    max: 500   },
+  { id: 'b2', label: '$500–1,000/mo',   min: 500,  max: 1000  },
+  { id: 'b3', label: '$1,000–5,000/mo', min: 1000, max: 5000  },
+  { id: 'b4', label: 'Custom',          min: 0,    max: 999999 },
+];
+const SS_SIZES = ['< 100', '100–1,000', '1,000–10,000', '10,000+'];
+const SS_SIZE_MAP: Record<string, string[]> = {
+  '< 100':        ['SME'],
+  '100–1,000':    ['SME', 'Mid-Market'],
+  '1,000–10,000': ['Mid-Market', 'Enterprise'],
+  '10,000+':      ['Enterprise'],
+};
+const SS_SUPPORTS: Record<string, string> = {
+  'Cloud':      'Web · iOS · Android',
+  'On-Premise': 'Windows · Linux · Web',
+  'Hybrid':     'Web · Windows · iOS · Android',
+};
+
+// ── Smart Search Modal (3-step flow) ─────────────────────────────────────────
 function SmartSearchModal({ onClose }: { onClose: () => void }) {
+  const [step,        setStep]        = useState<1|2|3>(1);
   const [query,       setQuery]       = useState('');
+  const [budget,      setBudget]      = useState<string | null>(null);
+  const [companySize, setCompanySize] = useState<string | null>(null);
+  const [industry,    setIndustry]    = useState('');
   const [selected,    setSelected]    = useState<string[]>([]);
-  const [comparing,   setComparing]   = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { inputRef.current?.focus(); }, []);
-
-  // Close on Escape
+  useEffect(() => { if (step === 1) inputRef.current?.focus(); }, [step]);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [onClose]);
 
-  const suggestions = [
-    'CRM for 50 users', 'ERP for manufacturing', 'HR management',
-    'Marketing automation', 'Cloud security', 'Accounting',
-  ];
+  const results = useMemo(() => {
+    const q = [query, industry].filter(Boolean).join(' ').toLowerCase().trim();
+    let prods = gatewayProducts
+      .map(p => ({ ...p, score: getScore(p, q) }))
+      .filter(p => !q || p.score > 58);
+    if (budget && budget !== 'b4') {
+      const r = SS_BUDGETS.find(b => b.id === budget);
+      if (r) prods = prods.filter(p => p.gcPrice >= r.min && p.gcPrice <= r.max);
+    }
+    if (companySize) {
+      const allowed = SS_SIZE_MAP[companySize] || [];
+      prods = prods.filter(p => p.targetSize.some(s => allowed.includes(s)));
+    }
+    return prods.sort((a, b) => b.score - a.score).slice(0, 12);
+  }, [query, industry, budget, companySize]);
 
-  const results = gatewayProducts
-    .map(p => ({ ...p, score: getScore(p, query) }))
-    .filter(p => !query.trim() || p.score > 62)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 12);
+  const compareList = useMemo(
+    () => results.filter(p => selected.includes(p.id)),
+    [results, selected]
+  );
 
   const toggleSelect = (id: string) => {
     setSelected(prev =>
@@ -108,118 +139,183 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
     );
   };
 
-  const compareList = results.filter(p => selected.includes(p.id));
-
   const scoreColor = (s: number) =>
-    s >= 85 ? '#16A34A' : s >= 72 ? '#D97706' : '#9CA3AF';
+    s >= 85 ? '#16A34A' : s >= 70 ? '#D97706' : '#6366F1';
 
-  const scoreLabel = (s: number) =>
-    s >= 85 ? 'Excellent' : s >= 72 ? 'Good' : 'Partial';
+  const modalCls = `bg-white w-full flex flex-col shadow-2xl border border-black/8 overflow-hidden sm:rounded-2xl`;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+  const closeBtn = (
+    <button onClick={onClose}
+      className="w-8 h-8 rounded-xl flex items-center justify-center text-muted hover:text-black hover:bg-surface transition-colors shrink-0">
+      <X size={15} />
+    </button>
+  );
+
+  // ── STEP 1: Search + Filters ──────────────────────────────────────────────
+  if (step === 1) return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
       style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}>
-      <div className="bg-white rounded-2xl w-full max-w-[860px] flex flex-col shadow-2xl border border-black/8 overflow-hidden"
-        style={{ maxHeight: 'min(88vh, 780px)' }}
+      <div className={modalCls}
+        style={{ maxWidth: '600px', maxHeight: 'min(92vh, 760px)', height: '100%' }}
         onClick={e => e.stopPropagation()}>
-
-        {/* ── Header ── */}
+        {/* Header */}
         <div className="flex items-center gap-3 px-6 py-4 border-b border-black/8 shrink-0">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center"
             style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
             <Search size={16} className="text-white" strokeWidth={2} />
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[15px] font-semibold text-black">Smart Search</p>
-            <p className="text-[11px] text-muted">AI-powered match scoring across 50+ verified products</p>
-          </div>
-          {selected.length >= 2 && !comparing && (
-            <button onClick={() => setComparing(true)}
-              className="flex items-center gap-1.5 text-[12px] font-semibold text-white px-4 py-2 rounded-xl mr-2"
-              style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
-              <SlidersHorizontal size={12} /> Compare {selected.length}
-            </button>
-          )}
-          {comparing && (
-            <button onClick={() => setComparing(false)}
-              className="text-[12px] font-semibold text-accent hover:underline mr-2">
-              ← Back
-            </button>
-          )}
-          <button onClick={onClose}
-            className="w-8 h-8 rounded-xl flex items-center justify-center text-muted hover:text-black hover:bg-surface transition-colors">
-            <X size={15} />
-          </button>
+          <p className="text-[15px] font-semibold text-black flex-1">Smart Search</p>
+          {closeBtn}
         </div>
 
-        {!comparing ? (
-          <>
-            {/* ── Search bar ── */}
-            <div className="px-6 pt-4 pb-3 border-b border-black/8 shrink-0">
-              <div className="relative mb-3">
-                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
-                <input ref={inputRef} value={query} onChange={e => setQuery(e.target.value)}
-                  placeholder="Describe what you need — e.g. CRM for 50 users, ERP for retail…"
-                  className="w-full pl-10 pr-4 py-3 text-[14px] bg-[#f9fafb] border border-black/10 rounded-xl outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/8 focus:bg-white transition-all"
-                />
-                {query && (
-                  <button onClick={() => setQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-black">
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {suggestions.map(s => (
-                  <button key={s} onClick={() => setQuery(s)}
-                    className={`text-[11px] font-medium px-2.5 py-1 rounded-full border transition-all ${
-                      query === s
-                        ? 'border-accent/40 text-accent bg-accent/8'
-                        : 'border-black/10 text-[#555] hover:border-accent/30 hover:text-accent hover:bg-accent/5'
-                    }`}>
-                    {s}
-                  </button>
-                ))}
-              </div>
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto px-6 py-6">
+          <h2 className="text-[24px] font-semibold text-black leading-tight mb-1.5">
+            What are you looking for?
+          </h2>
+          <p className="text-[13px] text-muted mb-6 leading-[1.6]">
+            Describe your needs and we'll match you with the right software from 50+ verified products.
+          </p>
+
+          <div className="relative mb-7">
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
+            <input ref={inputRef} value={query} onChange={e => setQuery(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') setStep(2); }}
+              placeholder="e.g. CRM for a 50-person team, ERP for retail…"
+              className="w-full pl-11 pr-4 py-3.5 text-[14px] border border-black/12 rounded-xl outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/10 bg-[#fafafa] focus:bg-white transition-all"
+            />
+          </div>
+
+          <p className="text-[10px] font-bold text-black uppercase tracking-[0.1em] mb-4">Quick Filters</p>
+
+          <div className="mb-5">
+            <p className="text-[12px] font-semibold text-[#444] mb-2.5">Budget</p>
+            <div className="flex flex-wrap gap-2">
+              {SS_BUDGETS.map(b => (
+                <button key={b.id} onClick={() => setBudget(budget === b.id ? null : b.id)}
+                  className={`text-[12px] font-medium px-3.5 py-1.5 rounded-full border transition-all ${
+                    budget === b.id
+                      ? 'bg-black text-white border-black'
+                      : 'border-black/15 text-[#555] hover:border-black/30 hover:bg-black/4'
+                  }`}>
+                  {b.label}
+                </button>
+              ))}
             </div>
+          </div>
 
-            {/* ── Results ── */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-[12px] text-muted">
-                  <span className="font-semibold text-black">{results.length}</span> products{query && ` matching "${query}"`}
-                  {selected.length > 0 && <span className="ml-2 text-accent font-semibold">· {selected.length} selected</span>}
-                </p>
-                {selected.length > 0 && (
-                  <button onClick={() => setSelected([])} className="text-[11px] text-muted hover:text-black">Clear selection</button>
-                )}
+          <div className="mb-5">
+            <p className="text-[12px] font-semibold text-[#444] mb-2.5">Company Size</p>
+            <div className="flex flex-wrap gap-2">
+              {SS_SIZES.map(s => (
+                <button key={s} onClick={() => setCompanySize(companySize === s ? null : s)}
+                  className={`text-[12px] font-medium px-3.5 py-1.5 rounded-full border transition-all ${
+                    companySize === s
+                      ? 'bg-black text-white border-black'
+                      : 'border-black/15 text-[#555] hover:border-black/30 hover:bg-black/4'
+                  }`}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-[12px] font-semibold text-[#444] mb-2.5">
+              Industry <span className="text-muted font-normal text-[11px]">(optional)</span>
+            </p>
+            <input value={industry} onChange={e => setIndustry(e.target.value)}
+              placeholder="e.g. Healthcare, Finance, Retail, Manufacturing…"
+              className="w-full px-4 py-2.5 text-[13px] border border-black/12 rounded-xl outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/10 bg-[#fafafa] focus:bg-white transition-all"
+            />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="border-t border-black/8 px-6 py-4 flex items-center justify-between shrink-0">
+          <button onClick={() => setStep(2)}
+            className="text-[13px] text-muted hover:text-black transition-colors">
+            Skip filters →
+          </button>
+          <button onClick={() => setStep(2)}
+            className="flex items-center gap-2 text-[13px] font-semibold text-white px-6 py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+            style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
+            <Search size={14} strokeWidth={2} /> Search
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── STEP 2: Results ───────────────────────────────────────────────────────
+  if (step === 2) return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
+      onClick={onClose}>
+      <div className={modalCls}
+        style={{ maxWidth: '1020px', maxHeight: 'min(92vh, 840px)', height: '100%' }}
+        onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-black/8 shrink-0">
+          <button onClick={() => { setStep(1); setSelected([]); }}
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-[18px] leading-none text-muted hover:text-black hover:bg-surface transition-colors shrink-0">
+            ←
+          </button>
+          <div className="flex-1 min-w-0">
+            <p className="text-[14px] font-semibold text-black truncate">
+              {query ? `Your results for "${query}"` : 'All Products'}
+            </p>
+            <p className="text-[11px] text-muted">{results.length} matches found</p>
+          </div>
+          <button
+            className="hidden sm:flex items-center gap-1.5 text-[11px] font-semibold text-accent border border-accent/30 hover:bg-accent hover:text-white px-3.5 py-1.5 rounded-xl shrink-0 transition-all">
+            Build RFP with matches →
+          </button>
+          {selected.length >= 2 && (
+            <button onClick={() => setStep(3)}
+              className="flex items-center gap-1.5 text-[11px] font-semibold text-white px-3.5 py-1.5 rounded-xl shrink-0"
+              style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
+              <SlidersHorizontal size={11} /> Compare ({selected.length})
+            </button>
+          )}
+          {closeBtn}
+        </div>
+
+        {/* Body */}
+        <div className="flex flex-1 min-h-0 overflow-hidden">
+          {/* Results grid */}
+          <div className="flex-1 overflow-y-auto px-4 py-4">
+            {results.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-[15px] font-semibold text-black mb-2">No products match your criteria</p>
+                <p className="text-[12px] text-muted mb-4">Try adjusting your filters or broadening your search.</p>
+                <button onClick={() => setStep(1)}
+                  className="text-[12px] font-semibold text-accent hover:underline">
+                  ← Adjust filters
+                </button>
               </div>
-
+            ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {results.map(p => {
-                  const isSelected = selected.includes(p.id);
                   const sc = p.score;
-                  const color = scoreColor(sc);
+                  const col = scoreColor(sc);
+                  const isSel = selected.includes(p.id);
                   return (
                     <div key={p.id}
-                      className={`relative rounded-xl p-4 border cursor-pointer transition-all ${
-                        isSelected
-                          ? 'border-accent/50 bg-accent/4 shadow-sm shadow-accent/10'
+                      className={`relative rounded-xl border p-4 transition-all ${
+                        isSel
+                          ? 'border-accent/40 bg-accent/3 shadow-sm shadow-accent/8'
                           : 'border-black/8 bg-white hover:border-black/20 hover:shadow-md'
-                      }`}
-                      onClick={() => toggleSelect(p.id)}>
-
-                      {/* Selection circle */}
-                      <div className={`absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                        isSelected ? 'border-accent bg-accent' : 'border-black/20 bg-white'
                       }`}>
-                        {isSelected && <Check size={10} className="text-white" strokeWidth={3} />}
+                      {/* Match badge */}
+                      <div className="absolute top-3.5 right-3.5 px-2 py-0.5 rounded-full text-[10px] font-bold"
+                        style={{ backgroundColor: col + '18', color: col }}>
+                        {sc}% match
                       </div>
-
                       {/* Product info */}
-                      <div className="flex items-start gap-3 mb-2.5 pr-6">
-                        <div className="w-9 h-9 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-[11px] font-bold text-zinc-600 shrink-0">
+                      <div className="flex items-start gap-3 mb-2.5 pr-20">
+                        <div className="w-10 h-10 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-[11px] font-bold text-zinc-600 shrink-0">
                           {p.logo}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -227,139 +323,286 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
                           <p className="text-[10px] text-muted">{p.vendor} · {p.category}</p>
                         </div>
                       </div>
-
                       <p className="text-[11px] text-[#555] leading-snug mb-3 line-clamp-2">{p.tagline}</p>
-
-                      {/* Match bar + price */}
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <div className="flex-1 h-1.5 bg-black/8 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${sc}%`, backgroundColor: color }} />
-                          </div>
-                          <span className="text-[10px] font-bold shrink-0" style={{ color }}>
-                            {sc}%
-                          </span>
-                          <span className="text-[9px] font-semibold shrink-0 px-1.5 py-0.5 rounded-full"
-                            style={{ color, backgroundColor: color + '15' }}>
-                            {scoreLabel(sc)}
-                          </span>
+                      {/* Rating + Price */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-1">
+                          {[1,2,3,4,5].map(i => (
+                            <Star key={i} size={9}
+                              fill={i <= Math.round(p.rating) ? '#F59E0B' : 'none'}
+                              className={i <= Math.round(p.rating) ? 'text-amber-400' : 'text-zinc-300'} />
+                          ))}
+                          <span className="text-[9px] text-muted ml-0.5">{p.rating}</span>
                         </div>
-                        <div className="text-right shrink-0">
-                          <p className="text-[12px] font-bold text-black">
-                            {p.gcPrice === 0 ? 'Free' : `$${p.gcPrice}/mo`}
-                          </p>
-                        </div>
+                        <span className="text-[12px] font-bold text-black">
+                          {p.gcPrice === 0 ? 'Free' : `$${p.gcPrice}/mo`}
+                        </span>
                       </div>
-
-                      {/* Rating row */}
-                      <div className="flex items-center gap-1 mt-2">
-                        {[1,2,3,4,5].map(i => (
-                          <Star key={i} size={9}
-                            fill={i <= Math.round(p.rating) ? '#F59E0B' : 'none'}
-                            className={i <= Math.round(p.rating) ? 'text-amber-400' : 'text-zinc-300'} />
-                        ))}
-                        <span className="text-[9px] text-muted ml-0.5">{p.rating} ({p.reviews.toLocaleString()})</span>
+                      {/* Actions */}
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => toggleSelect(p.id)}
+                          className={`flex-1 flex items-center justify-center gap-1.5 text-[11px] font-semibold py-1.5 rounded-lg border transition-all ${
+                            isSel
+                              ? 'border-accent/50 text-accent bg-accent/8'
+                              : 'border-black/12 text-[#555] hover:border-black/25 hover:bg-black/4'
+                          }`}>
+                          {isSel ? <><Check size={10} /> Added</> : <><SlidersHorizontal size={10} /> Compare</>}
+                        </button>
+                        <Link href={`/software/product/${p.slug}`}
+                          className="flex-1 flex items-center justify-center gap-1.5 text-[11px] font-semibold py-1.5 rounded-lg border border-accent/30 text-accent hover:bg-accent hover:text-white hover:border-accent transition-all"
+                          onClick={onClose}>
+                          View Details <ArrowRight size={10} />
+                        </Link>
                       </div>
                     </div>
                   );
                 })}
               </div>
+            )}
+          </div>
 
-              {results.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-[14px] font-semibold text-black mb-1">No products found</p>
-                  <p className="text-[12px] text-muted mb-4">Try a different search term or browse a category</p>
-                  <button onClick={() => setQuery('')} className="text-[12px] font-semibold text-accent hover:underline">
-                    Clear search
-                  </button>
-                </div>
-              )}
+          {/* Right sidebar */}
+          <div className="hidden md:flex w-[220px] shrink-0 border-l border-black/8 overflow-y-auto flex-col gap-3 px-4 py-4">
+            <div className="rounded-xl border border-black/8 p-4 bg-[#fafafa]">
+              <p className="text-[12px] font-bold text-black mb-3">Refine your match</p>
+              <ul className="space-y-2 mb-4">
+                {['See precise fit %', 'Get accurate pricing estimates', 'Auto-draft your RFP document'].map(item => (
+                  <li key={item} className="flex items-start gap-2 text-[11px] text-[#444] leading-snug">
+                    <Check size={10} className="text-green-500 mt-0.5 shrink-0" strokeWidth={3} /> {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/software/report/requirements"
+                className="flex items-center justify-center text-[11px] font-semibold text-white w-full py-2 rounded-lg"
+                style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}
+                onClick={onClose}>
+                Start RFP Builder →
+              </Link>
             </div>
 
-            {/* ── Footer bar ── */}
+            <div className="rounded-xl border border-black/8 p-4 bg-[#fafafa]">
+              <p className="text-[12px] font-bold text-black mb-1">Continue evaluation</p>
+              <p className="text-[10px] text-muted mb-3 leading-[1.5]">
+                Expert advice tailored to your industry and budget.
+              </p>
+              <button
+                className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-accent border border-accent/30 w-full py-2 rounded-lg hover:bg-accent hover:text-white hover:border-accent transition-all">
+                <Phone size={11} /> Talk to an Advisor
+              </button>
+            </div>
+
             {selected.length > 0 && (
-              <div className="border-t border-black/8 px-6 py-3 flex items-center justify-between shrink-0 bg-[#fafafa]">
-                <p className="text-[12px] text-muted">
-                  <span className="font-semibold text-black">{selected.length}</span> selected · up to 3 for comparison
+              <div className="rounded-xl border border-accent/25 p-4 bg-accent/4">
+                <p className="text-[11px] font-bold text-accent mb-2">
+                  {selected.length} selected for compare
                 </p>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => setSelected([])}
-                    className="text-[12px] text-muted hover:text-black px-3 py-1.5 rounded-lg hover:bg-surface transition-colors">
-                    Clear
-                  </button>
-                  {selected.length >= 2 && (
-                    <button onClick={() => setComparing(true)}
-                      className="flex items-center gap-1.5 text-[12px] font-semibold text-white px-4 py-2 rounded-xl"
-                      style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
-                      <SlidersHorizontal size={12} /> Compare {selected.length} products
-                    </button>
-                  )}
-                </div>
+                <button onClick={() => setStep(3)} disabled={selected.length < 2}
+                  className="w-full text-[11px] font-semibold text-white py-2 rounded-lg disabled:opacity-50"
+                  style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}>
+                  Compare Now →
+                </button>
+                <button onClick={() => setSelected([])}
+                  className="w-full text-[10px] text-muted hover:text-black mt-1.5 text-center">
+                  Clear
+                </button>
               </div>
             )}
-          </>
-        ) : (
-          /* ── Compare view ── */
-          <div className="flex-1 overflow-y-auto px-6 py-5">
-            <p className="text-[12px] text-muted mb-5">
-              Side-by-side comparison of {compareList.length} selected products
-            </p>
-            <div className={`grid gap-4 ${compareList.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
-              {compareList.map(p => {
-                const sc = p.score;
-                const color = scoreColor(sc);
-                return (
-                  <div key={p.id} className="border border-black/8 rounded-xl overflow-hidden">
-                    {/* Card header */}
-                    <div className="px-4 py-4 bg-surface border-b border-black/8">
-                      <div className="w-10 h-10 rounded-lg bg-white border border-black/8 flex items-center justify-center text-[11px] font-bold text-zinc-600 mb-2">
-                        {p.logo}
-                      </div>
-                      <p className="text-[13px] font-semibold text-black leading-tight">{p.name}</p>
-                      <p className="text-[10px] text-muted mt-0.5">{p.vendor}</p>
-                      {/* Match badge */}
-                      <div className="flex items-center gap-1.5 mt-2">
-                        <div className="flex-1 h-1 bg-black/8 rounded-full overflow-hidden">
-                          <div className="h-full rounded-full" style={{ width: `${sc}%`, backgroundColor: color }} />
-                        </div>
-                        <span className="text-[10px] font-bold" style={{ color }}>{sc}% match</span>
-                      </div>
-                    </div>
-
-                    {/* Attributes */}
-                    <div className="px-4 py-4 space-y-3">
-                      {([
-                        { l: 'Category',  v: p.category },
-                        { l: 'Price',     v: p.gcPrice === 0 ? 'Free' : `$${p.gcPrice}/mo` },
-                        { l: 'Rating',    v: `${p.rating}/5 · ${p.reviews.toLocaleString()} reviews` },
-                        { l: 'Discount',  v: p.discountPct > 0 ? `${p.discountPct}% off` : 'Standard pricing' },
-                      ] as { l: string; v: string }[]).map(({ l, v }) => (
-                        <div key={l}>
-                          <p className="text-[9px] font-bold text-muted uppercase tracking-[0.08em] mb-0.5">{l}</p>
-                          <p className="text-[12px] font-medium text-black">{v}</p>
-                        </div>
-                      ))}
-
-                      <div className="pt-2">
-                        <p className="text-[9px] font-bold text-muted uppercase tracking-[0.08em] mb-1.5">Tags</p>
-                        <div className="flex flex-wrap gap-1">
-                          {p.tags.slice(0, 4).map(t => (
-                            <span key={t} className="text-[9px] font-medium px-1.5 py-0.5 bg-surface rounded-full text-[#555]">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Link href={`/software/product/${p.slug}`}
-                        className="flex items-center justify-center gap-1.5 w-full text-[12px] font-semibold py-2 rounded-xl border border-accent/30 text-accent hover:bg-accent hover:text-white hover:border-accent transition-all mt-1">
-                        View Details <ArrowRight size={11} />
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
-        )}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── STEP 3: Compare table ─────────────────────────────────────────────────
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
+      onClick={onClose}>
+      <div className={modalCls}
+        style={{ maxWidth: '1100px', maxHeight: 'min(92vh, 840px)', height: '100%' }}
+        onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-black/8 shrink-0">
+          <button onClick={() => setStep(2)}
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-[18px] leading-none text-muted hover:text-black hover:bg-surface transition-colors shrink-0">
+            ←
+          </button>
+          <p className="text-[15px] font-semibold text-black flex-1">
+            Comparing {compareList.length} product{compareList.length !== 1 ? 's' : ''}
+          </p>
+          {closeBtn}
+        </div>
+
+        {/* Compare table */}
+        <div className="flex-1 overflow-auto">
+          <table className="border-collapse"
+            style={{ minWidth: `${160 + compareList.length * 240}px`, width: '100%' }}>
+            <thead>
+              <tr>
+                <th className="sticky left-0 bg-white z-10 border-b border-r border-black/8 p-4 w-[160px] min-w-[160px]" />
+                {compareList.map(p => (
+                  <th key={p.id}
+                    className="border-b border-r last:border-r-0 border-black/8 p-5 text-left min-w-[220px] align-top">
+                    <div className="w-10 h-10 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-[11px] font-bold text-zinc-600 mb-2.5">
+                      {p.logo}
+                    </div>
+                    <p className="text-[13px] font-semibold text-black leading-tight">{p.name}</p>
+                    <p className="text-[10px] text-muted mt-0.5 mb-2">{p.vendor}</p>
+                    <Link href={`/software/product/${p.slug}`}
+                      className="text-[11px] font-semibold text-accent hover:underline"
+                      onClick={onClose}>
+                      Visit Profile →
+                    </Link>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {/* Pricing */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Pricing starting from</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <p className="text-[14px] font-bold text-black">{p.gcPrice === 0 ? 'Free' : `$${p.gcPrice}/mo`}</p>
+                    {p.discountPct > 0 && (
+                      <p className="text-[10px] text-green-600 font-semibold mt-0.5">{p.discountPct}% GCC discount</p>
+                    )}
+                  </td>
+                ))}
+              </tr>
+              {/* Rating */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Rating</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <div className="flex items-center gap-1 mb-0.5">
+                      {[1,2,3,4,5].map(i => (
+                        <Star key={i} size={11}
+                          fill={i <= Math.round(p.rating) ? '#F59E0B' : 'none'}
+                          className={i <= Math.round(p.rating) ? 'text-amber-400' : 'text-zinc-300'} />
+                      ))}
+                      <span className="text-[12px] font-bold text-black ml-0.5">{p.rating}</span>
+                    </div>
+                    <p className="text-[10px] text-muted">{p.reviews.toLocaleString()} reviews</p>
+                  </td>
+                ))}
+              </tr>
+              {/* Overview */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Overview</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <p className="text-[11px] text-[#444] leading-[1.65]">{p.tagline}</p>
+                  </td>
+                ))}
+              </tr>
+              {/* Best for */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Best for</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <div className="flex flex-wrap gap-1">
+                      {p.targetSize.map(s => (
+                        <span key={s} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-black/6 text-[#444]">{s}</span>
+                      ))}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+              {/* Competitive Advantage */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Competitive Advantage</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <p className="text-[11px] text-[#444] leading-[1.65]">{p.usp || p.tagline}</p>
+                  </td>
+                ))}
+              </tr>
+              {/* Features */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Features</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <div className="flex flex-wrap gap-1">
+                      {p.tags.slice(0, 6).map(t => (
+                        <span key={t} className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-surface text-[#555] border border-black/8">{t}</span>
+                      ))}
+                      {p.tags.length > 6 && (
+                        <span className="text-[9px] text-muted self-center">+{p.tags.length - 6} more</span>
+                      )}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+              {/* Deployment */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Deployment</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-black/6 text-[#333]">{p.deployment}</span>
+                  </td>
+                ))}
+              </tr>
+              {/* Integrations */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Integrations</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <div className="flex flex-wrap gap-1">
+                      {p.integrations.slice(0, 5).map(intg => (
+                        <span key={intg} className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">{intg}</span>
+                      ))}
+                      {p.integrations.length > 5 && (
+                        <span className="text-[9px] text-muted self-center">+{p.integrations.length - 5} more</span>
+                      )}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+              {/* Supports */}
+              <tr className="border-b border-black/6 hover:bg-[#fafafa] transition-colors">
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8">
+                  <p className="text-[11px] font-bold text-[#333]">Supports</p>
+                </td>
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <p className="text-[11px] text-[#444]">{SS_SUPPORTS[p.deployment] || 'Web · iOS · Android'}</p>
+                  </td>
+                ))}
+              </tr>
+              {/* Contact Us */}
+              <tr>
+                <td className="sticky left-0 bg-white z-10 px-4 py-4 border-r border-black/8" />
+                {compareList.map(p => (
+                  <td key={p.id} className="px-5 py-4 border-r last:border-r-0 border-black/8 align-top">
+                    <Link href={`/software/product/${p.slug}`}
+                      className="flex items-center justify-center gap-1.5 text-[12px] font-semibold text-white w-full py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+                      style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))' }}
+                      onClick={onClose}>
+                      Contact Us <ArrowRight size={11} />
+                    </Link>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -547,9 +790,9 @@ function ZainChatbot({ defaultOpen }: { defaultOpen: boolean }) {
         {/* Zain avatar — opens chat */}
         <button onClick={() => setOpen(o => !o)}
           title="Chat with Zain"
-          className="w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all ring-2 ring-white/80 overflow-hidden"
-          style={{ boxShadow: open ? '0 0 0 3px var(--color-accent)' : '' }}>
-          <img src="/zain-avatar.svg" alt="Zain" className="w-full h-full object-cover" />
+          className="transition-all hover:scale-105 active:scale-95"
+          style={{ filter: open ? 'drop-shadow(0 0 6px var(--color-accent))' : 'drop-shadow(0 4px 14px rgba(0,0,0,0.28))' }}>
+          <img src="/zain-avatar.svg" alt="Zain" className="w-12 h-12 block" />
         </button>
         {/* Green call button — bottom */}
         <button onClick={() => setCalling(true)}
