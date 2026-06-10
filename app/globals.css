@@ -288,6 +288,22 @@ body {
 [data-theme="2"] .bg-\[\#f9fafb\],
 [data-theme="2"] .bg-gray-50       { background-color: #FAF7F4 !important; }
 
+/* ── group-hover:text-white — prevent text-accent !important from hiding white text on hover ── */
+[data-theme="2"] .group:hover .group-hover\:text-white { color: #ffffff !important; }
+[data-theme="2"] .hover\:text-white:hover { color: #ffffff !important; }
+
+/* ── Logo marquee animation ── */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* Fade masks — use --th-card-bg so they match the logo strip bg in both themes */
+.th-logo-fade-l { background: linear-gradient(to right,  #ffffff, transparent) !important; }
+.th-logo-fade-r { background: linear-gradient(to left,   #ffffff, transparent) !important; }
+[data-theme="2"] .th-logo-fade-l { background: linear-gradient(to right,  #ffffff, transparent) !important; }
+[data-theme="2"] .th-logo-fade-r { background: linear-gradient(to left,   #ffffff, transparent) !important; }
+
+/* ── bg-[#f8faff] (Global Reach section, light blue) → warm stone in Theme 2 ── */
+[data-theme="2"] .bg-\[\#f8faff\] { background-color: var(--color-surface) !important; }
+
 /* ── CSM (Success Manager) card ── */
 .csm-card {
   background: linear-gradient(160deg, #0051D5 0%, #003CA6 100%);

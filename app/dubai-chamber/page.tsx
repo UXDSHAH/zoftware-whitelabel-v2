@@ -481,10 +481,8 @@ export default function DubaiChamberPage() {
           <div className="mb-6 overflow-hidden border border-black/6 rounded-sm bg-white py-3.5">
             <div className="relative">
               {/* Fade masks */}
-              <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-                style={{ background: 'linear-gradient(to right, white, transparent)' }} />
-              <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-                style={{ background: 'linear-gradient(to left, white, transparent)' }} />
+              <div className="th-logo-fade-l absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none" />
+              <div className="th-logo-fade-r absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none" />
 
               {/* Scrolling track — 8 local logos × 4 repetitions for seamless loop */}
               <div className="flex items-center w-max" style={{ animation: 'marquee 32s linear infinite' }}>
@@ -509,8 +507,6 @@ export default function DubaiChamberPage() {
               </div>
             </div>
           </div>
-          <style>{`@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
-
           {/* 4 gateway tool cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-6">
             {gatewayTools.map((tool, i) => (
@@ -843,7 +839,7 @@ export default function DubaiChamberPage() {
       </section>
 
       {/* ── INTERNATIONAL PRESENCE ──────────────────────────────── */}
-      <section className="bg-[#f8faff] border-y border-black/6">
+      <section className="bg-surface border-y border-black/6">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>
