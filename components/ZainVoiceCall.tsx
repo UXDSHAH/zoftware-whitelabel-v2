@@ -208,9 +208,12 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
         vapi.on('speech-end', () => setIsSpeaking(false));
         vapi.on('error', error => {
           console.error('Vapi voice call failed', error);
+          restoreMutedAudio();
           setErrorMessage(extractErrorMessage(error));
           setCallStatus('idle');
           setIsSpeaking(false);
+          setIsMuted(false);
+          setIsVolumeMuted(false);
         });
       } catch (error) {
         console.error('Failed to load Vapi SDK', error);
@@ -287,12 +290,12 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
     restoreMutedAudio();
     setCallStatus('ended');
     setIsSpeaking(false);
-    void vapiRef.current?.stop();
+    void vapiRef.current?.stop().catch(() => undefined);
   };
 
   const closeCall = () => {
     restoreMutedAudio();
-    void vapiRef.current?.stop();
+    void vapiRef.current?.stop().catch(() => undefined);
     onClose();
   };
 
@@ -343,6 +346,9 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="zain-voice-title"
       className="fixed inset-0 z-[60] flex items-center justify-center p-4"
       style={{ background: 'rgba(0,0,0,0.76)', backdropFilter: 'blur(14px)' }}
     >
@@ -369,7 +375,7 @@ export default function ZainVoiceCall({ onClose }: { onClose: () => void }) {
               <ZainBotIcon size={28} />
             </div>
             <div>
-              <p className="text-[13px] font-semibold text-white">Zain from Zoftware</p>
+              <p id="zain-voice-title" className="text-[13px] font-semibold text-white">Zain from Zoftware</p>
               <p className="text-[11px] text-white/45">Senior Software Advisor</p>
             </div>
           </div>
