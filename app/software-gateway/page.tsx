@@ -714,7 +714,7 @@ export default function SoftwareGatewayPage() {
                   AI Tools
                 </span>
               </div>
-              <h3 className="text-[13px] font-semibold text-black mb-1 leading-snug">AI Productivity &amp; Collaboration</h3>
+              <h3 className="text-[13px] font-semibold text-black mb-1 leading-snug">AI Productivity &amp; Collaboration Hub</h3>
               <p className="text-[10px] text-muted mb-3 leading-snug">Top AI tools trusted by 10,000+ businesses</p>
               {/* Brand-color logo badges */}
               <div className="flex items-center gap-2 mb-3 flex-wrap">

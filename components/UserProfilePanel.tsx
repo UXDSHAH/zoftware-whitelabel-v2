@@ -341,11 +341,16 @@ export default function UserProfilePanel({ onClose }: { onClose: () => void }) {
                     style={{ background: '#fff', color: 'var(--color-accent)' }}>
                     <Mail size={11} /> Email
                   </a>
-                  <a href={`https://wa.me/${mockContact.whatsapp}`} target="_blank" rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-sm transition-colors"
-                    style={{ background: '#25D366', color: '#fff' }}>
-                    <MessageSquare size={11} /> WhatsApp
-                  </a>
+                  <button
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-sm transition-colors text-white"
+                    style={{ background: 'var(--color-accent)' }}
+                    onClick={() => {
+                      const chatEl = document.querySelector('[title="Minimise chat"]')?.closest('button');
+                      if (chatEl) chatEl.click();
+                      window.dispatchEvent(new CustomEvent('zain-open'));
+                    }}>
+                    <MessageSquare size={11} /> Chat
+                  </button>
                 </div>
               </div>
             </div>

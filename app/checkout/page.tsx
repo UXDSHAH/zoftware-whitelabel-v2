@@ -175,6 +175,29 @@ function CheckoutContent() {
           ))}
         </div>
 
+        {/* Deepa Rawat — Customer Success */}
+        <div className="pt-3 border-t border-black/8">
+          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2">Need help?</p>
+          <div className="flex items-center gap-2.5 bg-surface border border-black/8 rounded-lg p-3 mb-2">
+            <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white text-[11px] font-bold shrink-0">DR</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[12px] font-semibold text-black">Deepa Rawat</p>
+              <p className="text-[10px] text-muted">Customer Success · Responds in &lt;24h</p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <a href="mailto:deepa@zoftwarehub.com"
+              className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[11px] font-semibold border border-black/10 rounded-lg text-muted hover:text-black transition-colors">
+              <Mail size={10}/> Email
+            </a>
+            <button
+              className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[11px] font-semibold border border-black/10 rounded-lg text-muted hover:text-black transition-colors"
+              onClick={() => window.dispatchEvent(new CustomEvent('zain-open'))}>
+              <MessageSquare size={10}/> Chat
+            </button>
+          </div>
+        </div>
+
         {isBundle && bundle && (
           <div className="pt-3 border-t border-black/8">
             <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2">Bundle includes</p>

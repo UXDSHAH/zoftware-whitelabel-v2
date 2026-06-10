@@ -5,14 +5,22 @@ import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Search, ArrowRight, Package, BarChart2, FileText, Sparkles,
-  Star, Zap, CheckCircle, X, SlidersHorizontal, Flame
+  Star, Zap, CheckCircle, X, SlidersHorizontal, Flame, ShoppingCart, Heart, Tag
 } from 'lucide-react';
 import TechRequirementBuilder from '@/components/TechRequirementBuilder';
 import TechStrategyBuilder from '@/components/TechStrategyBuilder';
 import SmartSearchPopup from '@/components/SmartSearchPopup';
+import GetQuoteModal from '@/components/GetQuoteModal';
 import { bundles } from '@/data/bundles';
 import { gatewayProducts } from '@/data/gateway-products';
 import { AED_RATE } from '@/data/billing-options';
+import { addToCart, isInCart } from '@/lib/cart';
+
+const BUNDLE_DISCOUNTS: Record<string, string> = {
+  starter:   'up to 12%',
+  growth:    'up to 15%',
+  expansion: 'up to 18%',
+};
 
 // ── Curated category filter chips ────────────────────────────────────────────
 const ALL_CATS = [
@@ -72,6 +80,8 @@ function SoftwareContent() {
   const [toast,       setToast]       = useState(false);
   const [visibleCount,setVisible]     = useState(18);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+  const [quoteProduct, setQuoteProduct] = useState<string | null>(null);
+  const [cartVersion,  setCartVersion]  = useState(0);
 
   // Reset confirm when tool changes
   useEffect(() => { setShowCloseConfirm(false); }, [activeTool]);
@@ -209,6 +219,11 @@ function SoftwareContent() {
                   {filtered.slice(0, visibleCount).map(p => {
                     const checkoutUrl = `/checkout?product=${encodeURIComponent(p.name)}&price=${p.gcPrice}&billing=monthly&currency=${currency}&offerCode=${p.slug}-gcc`;
                     const detailUrl   = `/software/product/${p.slug}`;
+                    const isAI = p.categorySlug === 'ai-productivity';
+                    const annualPct = isAI ? 3 : 6;
+                    const annualBase = Math.round(p.gcPrice * 0.8);
+                    const annualFinal = Math.round(annualBase * (1 - annualPct / 100));
+                    const inCart = isInCart(p.id);
                     return (
                       /* Entire card is clickable → detail page via stretched pseudo-link */
                       <div key={p.id} className="relative border border-zinc-200 rounded-2xl hover:border-zinc-300 hover:shadow-md transition-all bg-white group cursor-pointer flex flex-col md:flex-row md:items-center justify-between p-4 gap-4">
@@ -221,7 +236,7 @@ function SoftwareContent() {
                           <div className="w-12 h-12 rounded-xl bg-zinc-100 border border-zinc-200 flex items-center justify-center shrink-0 text-[12px] font-bold text-zinc-700">
                             {p.logo}
                           </div>
-                          
+
                           {/* Text Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -258,23 +273,44 @@ function SoftwareContent() {
                                   <span className="text-[16px] font-bold text-zinc-900">{fmt(p.gcPrice)}</span>
                                   <span className="text-[11px] text-zinc-400">/mo</span>
                                 </div>
-                                <span className="text-[10px] text-accent font-medium block">
-                                  {fmt(Math.round(p.gcPrice * 0.8))}/mo annual
-                                </span>
+                                <div className="flex items-center gap-1.5 md:justify-end flex-wrap">
+                                  <span className="text-[12px] text-accent font-semibold">{fmt(annualFinal)}/mo</span>
+                                  <span className="text-[10px] text-zinc-400 line-through">{fmt(annualBase)}</span>
+                                  <span className="text-[8px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 px-1 py-0.5 rounded-full">-{annualPct}%</span>
+                                </div>
+                                <span className="text-[9px] text-zinc-400">annual plan</span>
                               </div>
                             )}
                           </div>
 
                           {/* CTAs */}
-                          <div className="flex items-center gap-2">
-                            <Link href={checkoutUrl}
-                              className="px-4 py-2 bg-accent text-white text-[12px] font-semibold rounded-xl hover:bg-accent-hover transition-colors whitespace-nowrap">
-                              Buy Now
-                            </Link>
-                            <Link href={detailUrl}
-                              className="px-3 py-2 border border-zinc-200 text-zinc-500 text-[12px] font-medium rounded-xl hover:bg-zinc-50 transition-colors">
-                              Details
-                            </Link>
+                          <div className="flex flex-col gap-1.5 items-end">
+                            <div className="flex items-center gap-2">
+                              {/* Cart button */}
+                              <button
+                                onClick={e => {
+                                  e.preventDefault(); e.stopPropagation();
+                                  addToCart({ id: p.id, slug: p.slug, name: p.name, vendor: p.vendor, logo: p.logo, category: p.category, gcPrice: p.gcPrice, currency, addedAt: new Date().toISOString() });
+                                  setCartVersion(v => v + 1);
+                                  window.dispatchEvent(new Event('zg-cart-updated'));
+                                  // auto-open cart panel
+                                  document.dispatchEvent(new CustomEvent('zg-open-cart'));
+                                }}
+                                title={inCart ? 'In cart' : 'Add to cart'}
+                                className="w-9 h-9 rounded-xl flex items-center justify-center border transition-all"
+                                style={{ borderColor: inCart ? 'var(--color-accent)' : '#e4e4e7', background: inCart ? 'var(--color-accent)' : 'white' }}>
+                                <ShoppingCart size={13} style={{ color: inCart ? '#fff' : '#71717a' }} />
+                              </button>
+                              <Link href={checkoutUrl}
+                                className="px-4 py-2 bg-accent text-white text-[12px] font-semibold rounded-xl hover:bg-accent-hover transition-colors whitespace-nowrap">
+                                Buy Now
+                              </Link>
+                            </div>
+                            <button
+                              onClick={e => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(p.name); }}
+                              className="flex items-center gap-1 text-[11px] font-semibold text-accent hover:underline">
+                              <Tag size={10} /> Get Custom Quote
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -311,10 +347,15 @@ function SoftwareContent() {
                   <div className="px-4 py-3.5 flex items-center justify-between gap-2 pointer-events-none"
                     style={{ background: `linear-gradient(135deg, ${bundle.color}12, ${bundle.color}04)` }}>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
+                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                         <p className="text-[15px] font-bold text-zinc-900 truncate group-hover:text-accent transition-colors">{bundle.name}</p>
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white shrink-0"
                           style={{ backgroundColor: bundle.color }}>−{bundle.savePct}%</span>
+                        {BUNDLE_DISCOUNTS[bundle.slug] && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 shrink-0">
+                            Save {BUNDLE_DISCOUNTS[bundle.slug]}
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11px] text-zinc-500 truncate">{bundle.tagline}</p>
                     </div>
@@ -377,6 +418,9 @@ function SoftwareContent() {
           </div>
         </div>
       </div>
+
+      {/* ── Get Quote Modal ── */}
+      {quoteProduct && <GetQuoteModal productName={quoteProduct} onClose={() => setQuoteProduct(null)} />}
 
       {/* ── Toast nudge ── */}
       <div className={`fixed bottom-24 left-4 sm:left-6 z-50 max-w-[300px] transition-all duration-300 ${toast ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Phone, X, Send, ArrowRight, ExternalLink, ChevronRight, PhoneOff, Mic, Ticket } from 'lucide-react';
+import { Phone, X, Send, ArrowRight, ExternalLink, ChevronRight, PhoneOff, Mic, Ticket, Minus } from 'lucide-react';
 import { gatewayProducts } from '@/data/gateway-products';
 import { createTicket } from '@/lib/zain-tickets';
 
@@ -161,6 +161,12 @@ export default function ZainChatbot({ defaultOpen = false }: { defaultOpen?: boo
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener('zain-open', onOpen);
+    return () => window.removeEventListener('zain-open', onOpen);
+  }, []);
+
   const send = async (text: string) => {
     if (!text.trim() || loading) return;
     const userMsg: Message = { role: 'user', text };
@@ -258,9 +264,9 @@ export default function ZainChatbot({ defaultOpen = false }: { defaultOpen?: boo
             <p className="text-[14px] font-semibold text-white leading-none">Zain</p>
             <p className="text-[11px] text-white/50 mt-0.5">Software Gateway · AI Assistant · Online</p>
           </div>
-          <button onClick={() => setOpen(false)}
+          <button onClick={() => setOpen(false)} title="Minimise chat"
             className="w-8 h-8 rounded-xl flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors shrink-0">
-            <X size={16} />
+            <Minus size={16} />
           </button>
         </div>
 

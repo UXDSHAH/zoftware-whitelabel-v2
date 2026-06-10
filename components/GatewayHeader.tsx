@@ -3,10 +3,12 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeft, Package, Search, Zap, ChevronDown, ExternalLink, User } from 'lucide-react';
+import { ArrowLeft, Package, Search, Zap, ChevronDown, ExternalLink, User, ShoppingCart } from 'lucide-react';
 import UserProfilePanel from './UserProfilePanel';
 import ThemeToggle from './ThemeToggle';
+import CartPanel from './CartPanel';
 import { getOpenCount } from '@/lib/zain-tickets';
+import { getCartCount } from '@/lib/cart';
 
 const breadcrumbMap: Record<string, string> = {
   '/software': 'Browse Software',
@@ -19,13 +21,24 @@ export default function GatewayHeader() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openTickets, setOpenTickets] = useState(0);
+  const [cartCount,   setCartCount]   = useState(0);
+  const [cartOpen,    setCartOpen]    = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setOpenTickets(getOpenCount() + 1); // +1 for existing mock ticket
-    const handler = () => setOpenTickets(getOpenCount() + 1);
-    window.addEventListener('zg-tickets-updated', handler);
-    return () => window.removeEventListener('zg-tickets-updated', handler);
+    setOpenTickets(getOpenCount() + 1);
+    setCartCount(getCartCount());
+    const onTickets  = () => setOpenTickets(getOpenCount() + 1);
+    const onCart     = () => setCartCount(getCartCount());
+    const onOpenCart = () => setCartOpen(true);
+    window.addEventListener('zg-tickets-updated', onTickets);
+    window.addEventListener('zg-cart-updated', onCart);
+    document.addEventListener('zg-open-cart', onOpenCart);
+    return () => {
+      window.removeEventListener('zg-tickets-updated', onTickets);
+      window.removeEventListener('zg-cart-updated', onCart);
+      document.removeEventListener('zg-open-cart', onOpenCart);
+    };
   }, []);
 
   useEffect(() => {
@@ -85,6 +98,17 @@ export default function GatewayHeader() {
               <ArrowLeft size={12} /> Dubai Chamber
             </Link>
 
+            {/* Cart icon */}
+            <button onClick={() => setCartOpen(true)}
+              className="relative flex items-center justify-center w-9 h-9 rounded-xl hover:bg-black/5 transition-colors">
+              <ShoppingCart size={16} style={{ color: 'var(--gw-nav-text, #111)' }} strokeWidth={1.8} />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-accent border-2 border-white flex items-center justify-center text-[8px] font-bold text-white leading-none">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
             <ThemeToggle />
 
             {/* ── Profile dropdown ── */}
@@ -137,6 +161,7 @@ export default function GatewayHeader() {
       </header>
 
       {profileOpen && <UserProfilePanel onClose={() => setProfileOpen(false)} />}
+      {cartOpen    && <CartPanel        onClose={() => setCartOpen(false)} />}
     </>
   );
 }
