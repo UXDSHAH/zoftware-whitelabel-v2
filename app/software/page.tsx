@@ -430,7 +430,7 @@ function SoftwareContent() {
         const cfg = TOOL_CONFIG[activeTool];
         return (
           <>
-            <div className="fixed inset-0 z-[60] bg-black/20 backdrop-blur-[1px]" onClick={handleCloseRequest} />
+            <div className="fixed inset-0 z-[60] bg-black/20 backdrop-blur-[1px]" onClick={handleConfirmedClose} />
             <div className="fixed top-0 right-0 h-screen z-[61] flex flex-col bg-white border-l border-black/10 shadow-2xl"
               style={{ width: 'min(420px, 95vw)' }}>
               <div className="flex items-center gap-3 px-5 py-4 border-b border-black/8 shrink-0"
@@ -439,7 +439,7 @@ function SoftwareContent() {
                   {cfg.icon}
                 </div>
                 <p className="text-[14px] font-semibold text-white flex-1 leading-none">{cfg.label}</p>
-                <button onClick={handleCloseRequest}
+                <button onClick={handleConfirmedClose}
                   className="w-8 h-8 rounded-xl flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors shrink-0">
                   <X size={16} />
                 </button>
@@ -449,30 +449,6 @@ function SoftwareContent() {
                 {activeTool === 'strategy'     && <TechStrategyBuilder onClose={handleConfirmedClose} />}
               </div>
             </div>
-
-            {/* Close confirmation */}
-            {showCloseConfirm && (
-              <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                <div className="bg-white rounded-2xl p-6 max-w-sm mx-4 shadow-2xl">
-                  <p className="text-[16px] font-semibold text-zinc-900 mb-1.5">
-                    Close {cfg.label}?
-                  </p>
-                  <p className="text-[13px] text-zinc-500 mb-5 leading-relaxed">
-                    Your current progress will be lost if you close now.
-                  </p>
-                  <div className="flex gap-2.5">
-                    <button onClick={() => setShowCloseConfirm(false)}
-                      className="flex-1 py-2.5 rounded-xl border border-zinc-200 text-[13px] font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors">
-                      Continue working
-                    </button>
-                    <button onClick={handleConfirmedClose}
-                      className="flex-1 py-2.5 rounded-xl bg-zinc-900 text-white text-[13px] font-semibold hover:bg-black transition-colors">
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </>
         );
       })()}
