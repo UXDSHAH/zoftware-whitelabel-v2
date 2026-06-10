@@ -33,12 +33,12 @@ const mockCompany = {
 };
 
 const mockContact = {
-  name: 'Sana Al-Rashidi',
+  name: 'Deepa Rawat',
   title: 'Customer Success Manager',
-  email: 'sana@zoftware.com',
+  email: 'deepa@zoftwarehub.com',
   phone: '+971 4 000 0001',
   whatsapp: '+971550000001',
-  avatar: 'SR',
+  avatar: 'DR',
   availability: 'Sun–Thu, 9am–6pm GST',
   online: true,
 };
@@ -135,12 +135,12 @@ const mockTickets = [
   {
     id: 'TKT-8841', subject: 'Salesforce CRM — SSO configuration assistance',
     status: 'Open', priority: 'Medium', created: '28 May 2025',
-    lastUpdate: '2 hours ago', agent: 'Sana Al-Rashidi',
+    lastUpdate: '2 hours ago', agent: 'Deepa Rawat',
   },
   {
     id: 'TKT-7923', subject: 'Invoice request for Zoho Books — Q2 2025',
     status: 'Resolved', priority: 'Low', created: '05 Apr 2025',
-    lastUpdate: '10 Apr 2025', agent: 'Sana Al-Rashidi',
+    lastUpdate: '10 Apr 2025', agent: 'Deepa Rawat',
   },
 ];
 
