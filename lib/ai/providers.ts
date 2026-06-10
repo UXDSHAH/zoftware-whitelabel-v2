@@ -29,7 +29,7 @@ function getVertexCredentials() {
     : {};
 }
 
-export function getMyProvider() {
+export function getZainProvider() {
   const vertex = createVertex({
     project: process.env.GOOGLE_VERTEX_PROJECT,
     location: process.env.GOOGLE_VERTEX_LOCATION ?? 'global',
@@ -44,5 +44,5 @@ export function getMyProvider() {
 }
 
 export function getZainLanguageModel(modelId = DEFAULT_CHAT_MODEL) {
-  return getMyProvider().languageModel(modelId);
+  return getZainProvider().languageModel(modelId);
 }

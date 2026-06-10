@@ -416,12 +416,11 @@ export function buildCheckoutLinkValue({
       };
     }
 
-    const priceUsd = billing === 'annual' ? bundle.annualMonthlyPrice : bundle.monthlyPrice;
-    const price = toCurrencyAmount(priceUsd, currency);
+    const priceUsd = roundMoney(billing === 'annual' ? bundle.annualMonthlyPrice : bundle.monthlyPrice);
     const params = new URLSearchParams({
       bundle: bundle.slug,
       bundleName: bundle.name,
-      price: String(price),
+      price: String(priceUsd),
       billing,
       currency,
     });
@@ -431,7 +430,8 @@ export function buildCheckoutLinkValue({
       itemType,
       name: bundle.name,
       slug: bundle.slug,
-      price,
+      price: priceUsd,
+      requestedPrice: formatPrice(priceUsd, currency),
       currency,
       url: `/checkout?${params.toString()}`,
     };
@@ -445,14 +445,14 @@ export function buildCheckoutLinkValue({
     };
   }
 
-  const billingOffer = findBillingOptions(product).find(option => !plan || normalize(option.plan) === normalize(plan)) ?? findBillingOptions(product)[0];
-  const selectedPlan = plan ?? billingOffer?.plan ?? 'Standard';
-  const priceUsd = billingOffer?.price ?? product.gcPrice;
-  const price = toCurrencyAmount(priceUsd, currency);
+  const productBillingOptions = findBillingOptions(product);
+  const billingOffer = productBillingOptions.find(option => !plan || normalize(option.plan) === normalize(plan)) ?? productBillingOptions[0];
+  const selectedPlan = billingOffer?.plan ?? 'Standard';
+  const priceUsd = roundMoney(billingOffer?.price ?? product.gcPrice);
   const params = new URLSearchParams({
     product: product.name,
     plan: selectedPlan,
-    price: String(price),
+    price: String(priceUsd),
     billing: billingOffer?.billingCycle ?? billing,
     currency,
     offerCode: billingOffer?.offerCode ?? product.offerCode ?? `${product.slug}-gcc`,
@@ -464,7 +464,8 @@ export function buildCheckoutLinkValue({
     name: product.name,
     slug: product.slug,
     plan: selectedPlan,
-    price,
+    price: priceUsd,
+    requestedPrice: formatPrice(priceUsd, currency),
     currency,
     url: `/checkout?${params.toString()}`,
   };

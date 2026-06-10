@@ -87,6 +87,23 @@ function friendlyErrorMessage(error?: Error) {
   return error.message || 'Please try again.';
 }
 
+function safeLinkProps(href: string) {
+  if (href.startsWith('/') && !href.startsWith('//')) {
+    return { href, isExternal: false };
+  }
+
+  try {
+    const url = new URL(href);
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      return { href: url.href, isExternal: true };
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
 export default function ZainChat() {
   const [open, setOpen] = useState(false);
   const [minimised, setMinimised] = useState(false);
@@ -137,8 +154,17 @@ export default function ZainChat() {
       .map((part, i) => {
         const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         if (link) {
+          const linkProps = safeLinkProps(link[2]);
+          if (!linkProps) return <span key={i}>{link[1]}</span>;
+
           return (
-            <a key={i} href={link[2]} className="font-semibold underline underline-offset-2">
+            <a
+              key={i}
+              href={linkProps.href}
+              target={linkProps.isExternal ? '_blank' : undefined}
+              rel={linkProps.isExternal ? 'noopener noreferrer' : undefined}
+              className="font-semibold underline underline-offset-2"
+            >
               {link[1]}
             </a>
           );
