@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import {
-  Search, FileText, BarChart2, TrendingDown, ArrowRight, Zap,
+  Search, FileText, BarChart2, TrendingDown, ArrowRight, ArrowLeft, Zap,
   Phone, X, Send, Sparkles, ChevronRight,
   ExternalLink, PhoneOff, Check, Star, SlidersHorizontal,
   ChevronDown, User
@@ -627,14 +627,21 @@ export default function SoftwareGatewayPage() {
       {/* ── Nav ── */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-black/8">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-          <Link href="/dubai-chamber" className="flex items-center gap-2 shrink-0">
-            <div className="w-7 h-7 bg-black rounded-sm flex items-center justify-center">
-              <div className="grid grid-cols-2 gap-[2px]">
-                {[0,1,2,3].map(i => <div key={i} className="w-[5px] h-[5px] bg-white rounded-[1px]" />)}
+          <div className="flex items-center gap-3 shrink-0">
+            <Link href="/dubai-chamber"
+              className="flex items-center gap-1.5 text-[12px] font-medium text-muted hover:text-black transition-colors">
+              <ArrowLeft size={13} /> Dubai Chamber
+            </Link>
+            <div className="w-px h-4 bg-black/12" />
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 bg-black rounded-sm flex items-center justify-center">
+                <div className="grid grid-cols-2 gap-[2px]">
+                  {[0,1,2,3].map(i => <div key={i} className="w-[5px] h-[5px] bg-white rounded-[1px]" />)}
+                </div>
               </div>
+              <span className="text-[14px] font-bold text-black tracking-tight">LOGO</span>
             </div>
-            <span className="text-[14px] font-bold text-black tracking-tight">LOGO</span>
-          </Link>
+          </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link href="/software"

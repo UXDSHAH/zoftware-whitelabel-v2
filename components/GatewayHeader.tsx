@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ArrowLeft, Package, Search, Zap, ChevronDown, ExternalLink, User, ShoppingCart } from 'lucide-react';
 import UserProfilePanel from './UserProfilePanel';
 import ThemeToggle from './ThemeToggle';
@@ -16,8 +16,19 @@ const breadcrumbMap: Record<string, string> = {
   '/checkout': 'Checkout',
 };
 
+// Map each route pattern to its parent path for the back button
+function getBackTarget(pathname: string): string | null {
+  if (pathname.startsWith('/software/report/'))  return '/software';
+  if (pathname.startsWith('/software/product/')) return '/software';
+  if (pathname.startsWith('/software/category/')) return '/software';
+  if (pathname.startsWith('/bundles/'))          return '/software?view=bundles';
+  if (pathname === '/checkout')                  return '/software';
+  return null; // no back button on root-level pages like /software itself
+}
+
 export default function GatewayHeader() {
   const pathname = usePathname();
+  const router   = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openTickets, setOpenTickets] = useState(0);
@@ -63,7 +74,7 @@ export default function GatewayHeader() {
       <header className="gw-header sticky top-0 z-40 backdrop-blur-xl border-b">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
 
-          <Link href="/dubai-chamber" className="flex items-center gap-2 shrink-0">
+          <Link href="/software-gateway" className="flex items-center gap-2 shrink-0">
             <div className="w-7 h-7 bg-black rounded-sm flex items-center justify-center">
               <div className="grid grid-cols-2 gap-[2px]">
                 {[0,1,2,3].map(i => <div key={i} className="w-[5px] h-[5px] bg-white rounded-[1px]" />)}
@@ -81,8 +92,24 @@ export default function GatewayHeader() {
             <span className="gw-nav-text text-[12px] font-semibold hidden sm:block">Software Gateway</span>
           </div>
 
-          <div className="gw-nav-divider w-px h-4 shrink-0 hidden sm:block" />
-          <span className="gw-nav-muted text-[12px] hidden sm:block truncate">{crumb}</span>
+          {getBackTarget(pathname) ? (
+            <>
+              <div className="gw-nav-divider w-px h-4 shrink-0" />
+              <button
+                onClick={() => router.back()}
+                className="flex items-center gap-1 text-[12px] font-medium shrink-0 transition-colors"
+                style={{ color: 'var(--gw-nav-muted, #888)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--gw-nav-text, #111)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--gw-nav-muted, #888)')}>
+                <ArrowLeft size={12} /> Back
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="gw-nav-divider w-px h-4 shrink-0 hidden sm:block" />
+              <span className="gw-nav-muted text-[12px] hidden sm:block truncate">{crumb}</span>
+            </>
+          )}
 
           <div className="ml-auto flex items-center gap-1.5">
             <Link href="/software"

@@ -2,6 +2,7 @@
 
 import { use, useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, Download, FileText, BarChart2, Check, ArrowRight,
   Building2, Calendar, Users, Shield, Zap, Package, Star,
@@ -231,6 +232,7 @@ const DUMMY_STR_PROFILE = [
 
 export default function ReportPage({ params }: { params: Promise<{ type: string }> }) {
   const { type } = use(params);
+  const router = useRouter();
   const isRequirements = type === 'requirements';
   const QUESTIONS = isRequirements ? REQ_QUESTIONS : STR_QUESTIONS;
 
@@ -343,10 +345,10 @@ export default function ReportPage({ params }: { params: Promise<{ type: string 
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-black/8">
           <div className="max-w-[900px] mx-auto px-4 sm:px-6 h-13 flex items-center justify-between gap-4 py-3">
             <div className="flex items-center gap-3">
-              <Link href="/software"
+              <button onClick={() => router.back()}
                 className="flex items-center gap-1.5 text-[12px] text-muted hover:text-black transition-colors">
-                <ArrowLeft size={13} /> Back to Software
-              </Link>
+                <ArrowLeft size={13} /> Back
+              </button>
               <span className="text-[#e5e5e7]">|</span>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: accentGrad }}>
