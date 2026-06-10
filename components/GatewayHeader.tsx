@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { ArrowLeft, Package, Search, Zap, ChevronDown, ExternalLink, User, ShoppingCart } from 'lucide-react';
 import UserProfilePanel from './UserProfilePanel';
 import ThemeToggle from './ThemeToggle';
@@ -29,7 +29,6 @@ function getBackTarget(pathname: string): string | null {
 
 export default function GatewayHeader() {
   const pathname = usePathname();
-  const router   = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openTickets, setOpenTickets] = useState(0);
@@ -96,14 +95,14 @@ export default function GatewayHeader() {
           {getBackTarget(pathname) ? (
             <>
               <div className="gw-nav-divider w-px h-4 shrink-0" />
-              <button
-                onClick={() => router.back()}
+              <Link
+                href={getBackTarget(pathname)!}
                 className="flex items-center gap-1 text-[12px] font-medium shrink-0 transition-colors"
                 style={{ color: 'var(--gw-nav-muted, #888)' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--gw-nav-text, #111)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'var(--gw-nav-muted, #888)')}>
                 <ArrowLeft size={12} /> Back
-              </button>
+              </Link>
             </>
           ) : (
             <>
@@ -120,10 +119,6 @@ export default function GatewayHeader() {
             <Link href="/software?view=bundles"
               className="gw-nav-link hidden sm:flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1.5 rounded-sm">
               <Package size={12} /> Bundles
-            </Link>
-            <Link href="/dubai-chamber"
-              className="gw-nav-accent hidden sm:flex items-center gap-1.5 text-[12px] font-semibold transition-colors px-3 py-1.5 border rounded-sm min-h-[36px]">
-              <ArrowLeft size={12} /> Dubai Chamber
             </Link>
 
             {/* Cart icon */}
