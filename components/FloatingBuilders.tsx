@@ -226,6 +226,9 @@ export default function FloatingBuilders() {
   const [stratFs,  setStratFs]  = useState(false);
   const [zainFs,   setZainFs]   = useState(false);
 
+  // Temporarily hidden
+  return null;
+
   return (
     <>
       <style>{`
