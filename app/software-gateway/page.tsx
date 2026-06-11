@@ -64,15 +64,28 @@ const logos = [
 ];
 
 // ── Compatibility score ───────────────────────────────────────────────────────
+const STOP_WORDS = new Set(['a','an','the','for','and','or','in','of','to','with','my','our','i','is','are','we','on','at','by','as','from','that','this','it','be','do','have','need','want']);
+
 function getScore(p: typeof gatewayProducts[0], q: string): number {
   if (!q.trim()) return Math.round(60 + p.rating * 6);
-  const ql = q.toLowerCase();
-  let s = 52;
-  if (p.name.toLowerCase().includes(ql))     s += 28;
-  if (p.category.toLowerCase().includes(ql)) s += 20;
-  if (p.vendor.toLowerCase().includes(ql))   s += 14;
-  if (p.tagline.toLowerCase().includes(ql))  s += 10;
-  p.tags.forEach(t => { if (t.toLowerCase().includes(ql)) s += 5; });
+  // Tokenize so "CRM for a 50-person team" → ["crm","50-person","team"]
+  const tokens = q.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !STOP_WORDS.has(w));
+  if (tokens.length === 0) return Math.round(60 + p.rating * 6);
+  const name     = p.name.toLowerCase();
+  const category = p.category.toLowerCase();
+  const vendor   = p.vendor.toLowerCase();
+  const tagline  = p.tagline.toLowerCase();
+  const tags     = p.tags.join(' ').toLowerCase();
+  const overview = (p.overview || '').toLowerCase();
+  let s = 50;
+  for (const t of tokens) {
+    if (name.includes(t))     s += 28;
+    if (category.includes(t)) s += 20;
+    if (vendor.includes(t))   s += 14;
+    if (tagline.includes(t))  s += 12;
+    if (tags.includes(t))     s += 8;
+    if (overview.includes(t)) s += 4;
+  }
   return Math.min(97, s);
 }
 
@@ -115,9 +128,8 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
 
   const results = useMemo(() => {
     const q = [query, industry].filter(Boolean).join(' ').toLowerCase().trim();
-    let prods = gatewayProducts
-      .map(p => ({ ...p, score: getScore(p, q) }))
-      .filter(p => !q || p.score > 58);
+    let prods = gatewayProducts.map(p => ({ ...p, score: getScore(p, q) }));
+    // Apply budget / size filters
     if (budget && budget !== 'b4') {
       const r = SS_BUDGETS.find(b => b.id === budget);
       if (r) prods = prods.filter(p => p.gcPrice >= r.min && p.gcPrice <= r.max);
@@ -126,7 +138,14 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
       const allowed = SS_SIZE_MAP[companySize] || [];
       prods = prods.filter(p => p.targetSize.some(s => allowed.includes(s)));
     }
-    return prods.sort((a, b) => b.score - a.score).slice(0, 12);
+    prods = prods.sort((a, b) => b.score - a.score);
+    // When there's a query: prefer relevant results (score > 50), but always
+    // guarantee at least 6 results so the page is never empty
+    if (q) {
+      const relevant = prods.filter(p => p.score > 50);
+      prods = relevant.length >= 3 ? relevant : prods.slice(0, 6);
+    }
+    return prods.slice(0, 12);
   }, [query, industry, budget, companySize]);
 
   const compareList = useMemo(

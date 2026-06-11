@@ -94,7 +94,7 @@ function CheckoutContent() {
   const grandMonthly = softwareTotal + managedMonthly;
 
   // ── Step 2 state — Payment & Details ───────────────────────────────────
-  const [card, setCard]       = useState({ number: '', expiry: '', cvv: '', name: '' });
+  const [card, setCard]       = useState({ number: '4111 1111 1111 1111', expiry: '12/26', cvv: '123', name: 'Ravi Sharma' });
   const [orderDetails, setOrderDetails] = useState({
     licenseCompany:  '',
     companyLocation: '',
