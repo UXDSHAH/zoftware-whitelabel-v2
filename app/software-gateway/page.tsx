@@ -742,75 +742,26 @@ export default function SoftwareGatewayPage() {
 
         <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 pt-8 pb-6">
 
-          {/* Section header — heading left, AI productivity card right */}
-          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-6">
-            <div className="flex-1">
-              <div className="inline-flex items-center gap-2 bg-accent text-white px-3 py-1.5 rounded-sm text-[10px] font-bold tracking-[0.1em] uppercase mb-4 shadow-sm shadow-accent/20">
-                <Zap size={11} strokeWidth={2.5} /> Exclusive Software Gateway
-              </div>
-              <h2 className="text-[28px] sm:text-[36px] font-semibold text-black tracking-tight leading-[1.1] mb-2.5">
-                Procure the right software.<br />
-                <span className="text-accent">In minutes, not months.</span>
-              </h2>
-              <p className="text-[13px] font-semibold text-accent mb-2 flex items-center gap-1.5">
-                <Sparkles size={13} strokeWidth={2} />
-                AI-powered digital collaboration hub for business growth
-              </p>
-              <p className="text-[13px] text-[#555] max-w-[460px] leading-[1.7]">
-                Access 50+ verified products with GCC-exclusive pricing, bundle deals, and AI-powered recommendations built in.
-              </p>
+          {/* Section header */}
+          <div className="mb-6">
+            <div className="inline-flex items-center gap-2 bg-accent text-white px-3 py-1.5 rounded-sm text-[10px] font-bold tracking-[0.1em] uppercase mb-4 shadow-sm shadow-accent/20">
+              <Zap size={11} strokeWidth={2.5} /> Exclusive Software Gateway
             </div>
-
-            {/* AI Productivity card replacing "Browse All Software" button */}
-            <div className="relative border border-black/8 rounded-sm p-5 bg-white overflow-hidden shrink-0 lg:w-[340px]">
-              <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-15 pointer-events-none"
-                style={{ background: 'radial-gradient(circle, #6366F1 0%, transparent 70%)' }} />
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-9 h-9 rounded-sm flex items-center justify-center" style={{ backgroundColor: '#6366F114' }}>
-                  <Sparkles size={16} style={{ color: '#6366F1' }} />
-                </div>
-                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full"
-                  style={{ color: '#6366F1', backgroundColor: '#6366F112', border: '1px solid #6366F128' }}>
-                  AI Tools
-                </span>
-              </div>
-              <h3 className="text-[13px] font-semibold text-black mb-1 leading-snug">AI Productivity &amp; Collaboration Hub</h3>
-              <p className="text-[10px] text-muted mb-3 leading-snug">Top AI tools trusted by 10,000+ businesses</p>
-              {/* Brand logo badges — horizontal scroll, no wrap */}
-              <div className="flex items-center gap-2 mb-3 overflow-x-auto" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
-                {[
-                  { name: 'Claude',  abbr: 'Cl', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://claude.ai&size=128' },
-                  { name: 'ChatGPT', abbr: 'G',  url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://chatgpt.com&size=128' },
-                  { name: 'Copilot', abbr: 'Co', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://copilot.microsoft.com&size=128' },
-                  { name: 'Notion',  abbr: 'N',  url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://notion.so&size=128' },
-                  { name: 'Gemini',  abbr: 'Ge', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gemini.google.com&size=128' },
-                ].map(t => (
-                  <div key={t.name} className="flex flex-col items-center gap-0.5 shrink-0">
-                    <div className="w-9 h-9 rounded-xl overflow-hidden border border-black/8 bg-zinc-50 flex items-center justify-center">
-                      <img
-                        src={t.url}
-                        alt={t.name}
-                        className="w-full h-full object-contain"
-                        onError={e => {
-                          const el = e.currentTarget as HTMLImageElement;
-                          el.style.display = 'none';
-                          el.parentElement!.style.background = '#6366F1';
-                          el.parentElement!.innerHTML += `<span style="color:#fff;font-size:10px;font-weight:700">${t.abbr}</span>`;
-                        }}
-                      />
-                    </div>
-                    <span className="text-[8px] text-muted">{t.name}</span>
-                  </div>
-                ))}
-              </div>
-              <Link href="/software?cat=ai-productivity" className="inline-flex items-center gap-1 text-[11px] font-semibold hover:gap-2 transition-all" style={{ color: '#6366F1' }}>
-                Explore AI tools <ArrowRight size={10} />
-              </Link>
-            </div>
+            <h2 className="text-[28px] sm:text-[36px] font-semibold text-black tracking-tight leading-[1.1] mb-2.5">
+              Procure the right software.<br />
+              <span className="text-accent">In minutes, not months.</span>
+            </h2>
+            <p className="text-[13px] font-semibold text-accent mb-2 flex items-center gap-1.5">
+              <Sparkles size={13} strokeWidth={2} />
+              AI-powered digital collaboration hub for business growth
+            </p>
+            <p className="text-[13px] text-[#555] max-w-[460px] leading-[1.7]">
+              Access 50+ verified products with GCC-exclusive pricing, bundle deals, and AI-powered recommendations built in.
+            </p>
           </div>
 
-          {/* 4 tool cards — strategy/requirements open right panel, smart search opens popup */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+          {/* 4 tool cards + AI hub card — all equal width in same grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-5">
             {tools.map((tool, i) => {
               const accentColor = tool.color === 'var(--color-accent)' ? '#007AFF' : tool.color;
               const shared = `relative border border-black/8 rounded-sm p-5 hover:border-black/20 hover:shadow-md transition-all overflow-hidden bg-white group text-left w-full`;
@@ -855,6 +806,50 @@ export default function SoftwareGatewayPage() {
                 </Link>
               );
             })}
+
+            {/* AI Productivity card — 5th item in grid */}
+            <div className="relative border border-black/8 rounded-sm p-5 bg-white overflow-hidden">
+              <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-15 pointer-events-none"
+                style={{ background: 'radial-gradient(circle, #6366F1 0%, transparent 70%)' }} />
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-9 h-9 rounded-sm flex items-center justify-center" style={{ backgroundColor: '#6366F114' }}>
+                  <Sparkles size={16} style={{ color: '#6366F1' }} />
+                </div>
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ color: '#6366F1', backgroundColor: '#6366F112', border: '1px solid #6366F128' }}>
+                  AI Tools
+                </span>
+              </div>
+              <h3 className="text-[14px] font-semibold text-black mb-1 leading-snug">AI Productivity &amp; Collaboration Hub</h3>
+              <p className="text-[12px] text-[#555] leading-[1.6] mb-3">Top AI tools trusted by 10,000+ businesses</p>
+              <div className="flex items-center gap-2 mb-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+                {[
+                  { name: 'Claude',  abbr: 'Cl', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://claude.ai&size=128' },
+                  { name: 'ChatGPT', abbr: 'G',  url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://chatgpt.com&size=128' },
+                  { name: 'Copilot', abbr: 'Co', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://copilot.microsoft.com&size=128' },
+                  { name: 'Notion',  abbr: 'N',  url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://notion.so&size=128' },
+                  { name: 'Gemini',  abbr: 'Ge', url: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gemini.google.com&size=128' },
+                ].map(t => (
+                  <div key={t.name} className="flex flex-col items-center gap-0.5 shrink-0">
+                    <div className="w-8 h-8 rounded-xl overflow-hidden border border-black/8 bg-zinc-50 flex items-center justify-center">
+                      <img src={t.url} alt={t.name} className="w-full h-full object-contain"
+                        onError={e => {
+                          const el = e.currentTarget as HTMLImageElement;
+                          el.style.display = 'none';
+                          el.parentElement!.style.background = '#6366F1';
+                          el.parentElement!.innerHTML += `<span style="color:#fff;font-size:9px;font-weight:700">${t.abbr}</span>`;
+                        }} />
+                    </div>
+                    <span className="text-[8px] text-muted">{t.name}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/software?cat=ai-productivity"
+                className="inline-flex items-center gap-1.5 text-[12px] font-semibold group-hover:gap-2 transition-all"
+                style={{ color: '#6366F1' }}>
+                Explore AI tools <ArrowRight size={11} />
+              </Link>
+            </div>
           </div>
 
           {/* Stats strip */}
