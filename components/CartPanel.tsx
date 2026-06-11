@@ -30,7 +30,7 @@ export default function CartPanel({ onClose }: CartPanelProps) {
 
       {/* Panel */}
       <div className="fixed top-0 right-0 h-screen z-[55] flex flex-col bg-white border-l border-black/10 shadow-2xl"
-        style={{ width: 'min(400px, 95vw)' }}>
+        style={{ width: 'min(580px, 95vw)' }}>
 
         {/* Header */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-black/8 shrink-0"

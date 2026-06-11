@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, Check, SlidersHorizontal, ArrowRight, Star, Phone } from 'lucide-react';
+import { Search, Check, SlidersHorizontal, ArrowRight, Star, Phone, X } from 'lucide-react';
 import { gatewayProducts } from '@/data/gateway-products';
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -26,15 +26,52 @@ const SS_SUPPORTS: Record<string, string> = {
   'Hybrid':     'Web · Windows · iOS · Android',
 };
 
+const SYNONYMS: Record<string, string[]> = {
+  hrms:  ['hr','human resources','payroll','workforce','people','talent'],
+  hris:  ['hr','human resources','payroll','workforce'],
+  crm:   ['customer','sales','pipeline','contact','lead'],
+  erp:   ['enterprise','resource','operations','finance','accounting'],
+  scm:   ['supply chain','inventory','logistics','warehouse'],
+  cms:   ['content','marketing','website'],
+  lms:   ['learning','training','elearning','course'],
+  bi:    ['analytics','reporting','dashboard','intelligence'],
+  itsm:  ['it service','helpdesk','ticketing','support','service desk'],
+  iam:   ['identity','access','authentication','sso'],
+  wfm:   ['workforce','scheduling','attendance','time tracking'],
+  ai:    ['artificial intelligence','machine learning','automation'],
+};
+const STOP_WORDS = new Set(['and','or','the','for','a','an','in','of','to','with','that','is','are','on','at','by','from']);
+
+function expandTokens(tokens: string[]): string[] {
+  const out = new Set(tokens);
+  for (const t of tokens) {
+    if (SYNONYMS[t]) SYNONYMS[t].forEach(s => s.split(' ').forEach(w => out.add(w)));
+  }
+  return [...out];
+}
+
 function getScore(p: typeof gatewayProducts[0], q: string): number {
   if (!q.trim()) return Math.round(60 + p.rating * 6);
-  const ql = q.toLowerCase();
-  let s = 52;
-  if (p.name.toLowerCase().includes(ql))     s += 28;
-  if (p.category.toLowerCase().includes(ql)) s += 20;
-  if (p.vendor.toLowerCase().includes(ql))   s += 14;
-  if (p.tagline.toLowerCase().includes(ql))  s += 10;
-  p.tags.forEach(t => { if (t.toLowerCase().includes(ql)) s += 5; });
+  const rawTokens = q.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !STOP_WORDS.has(w));
+  if (rawTokens.length === 0) return Math.round(60 + p.rating * 6);
+  const tokens = expandTokens(rawTokens);
+  const name     = p.name.toLowerCase();
+  const category = p.category.toLowerCase();
+  const vendor   = p.vendor.toLowerCase();
+  const tagline  = p.tagline.toLowerCase();
+  const tags     = p.tags.join(' ').toLowerCase();
+  const overview = ((p as Record<string, unknown>).overview as string ?? '').toLowerCase();
+  const haystack = [name, category, vendor, tagline, tags, overview].join(' ');
+  let s = 50;
+  for (const t of tokens) {
+    if (name.includes(t))     s += 28;
+    if (category.includes(t)) s += 20;
+    if (vendor.includes(t))   s += 14;
+    if (tagline.includes(t))  s += 12;
+    if (tags.includes(t))     s += 8;
+    if (overview.includes(t)) s += 4;
+    if (haystack.split(/\s+/).some(w => w.startsWith(t))) s += 3;
+  }
   return Math.min(97, s);
 }
 
@@ -61,18 +98,22 @@ export default function SmartSearchPopup({ onClose }: { onClose: () => void }) {
 
   const results = useMemo(() => {
     const q = [query, industry].filter(Boolean).join(' ').toLowerCase().trim();
-    let prods = gatewayProducts
+    const scored = gatewayProducts
       .map(p => ({ ...p, score: getScore(p, q) }))
-      .filter(p => !q || p.score > 58);
+      .sort((a, b) => b.score - a.score);
+    let filtered = [...scored];
     if (budget && budget !== 'b4') {
       const r = SS_BUDGETS.find(b => b.id === budget);
-      if (r) prods = prods.filter(p => p.gcPrice >= r.min && p.gcPrice <= r.max);
+      if (r) filtered = filtered.filter(p => p.gcPrice >= r.min && p.gcPrice <= r.max);
     }
     if (companySize) {
       const allowed = SS_SIZE_MAP[companySize] || [];
-      prods = prods.filter(p => p.targetSize.some(s => allowed.includes(s)));
+      filtered = filtered.filter(p => p.targetSize.some(s => allowed.includes(s)));
     }
-    return prods.sort((a, b) => b.score - a.score).slice(0, 12);
+    if (filtered.length === 0) filtered = scored;
+    const relevant = filtered.filter(p => p.score > 50);
+    const final = relevant.length >= 3 ? relevant : filtered.slice(0, 6);
+    return final.slice(0, 12);
   }, [query, industry, budget, companySize]);
 
   const compareList = useMemo(
@@ -188,6 +229,10 @@ export default function SmartSearchPopup({ onClose }: { onClose: () => void }) {
             <SlidersHorizontal size={11} /> Compare ({selected.length})
           </button>
         )}
+        <button onClick={onClose}
+          className="w-8 h-8 rounded-xl flex items-center justify-center text-zinc-400 hover:text-zinc-800 hover:bg-zinc-200 transition-colors shrink-0">
+          <X size={15} />
+        </button>
       </div>
 
       {/* Body */}
@@ -316,6 +361,10 @@ export default function SmartSearchPopup({ onClose }: { onClose: () => void }) {
         <p className="text-[13px] font-semibold text-black flex-1">
           Comparing {compareList.length} product{compareList.length !== 1 ? 's' : ''}
         </p>
+        <button onClick={onClose}
+          className="w-8 h-8 rounded-xl flex items-center justify-center text-zinc-400 hover:text-zinc-800 hover:bg-zinc-200 transition-colors shrink-0">
+          <X size={15} />
+        </button>
       </div>
 
       <div className="flex-1 overflow-auto">

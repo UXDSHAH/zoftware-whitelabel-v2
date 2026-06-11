@@ -338,7 +338,7 @@ function CheckoutContent() {
                   {basePrice > 0 && (
                     <div className="border-t border-black/8 pt-4">
                       <p className="text-[12px] font-semibold text-black mb-3">
-                        {isBundle ? 'Number of Bundles' : 'Number of Licenses'}
+                        {'Number of Users'}
                       </p>
                       <div className="flex items-center gap-3">
                         <button onClick={() => changeLicenses(-1)} disabled={licenses <= 1}
@@ -347,7 +347,7 @@ function CheckoutContent() {
                         </button>
                         <div className="flex-1 text-center">
                           <span className="text-[22px] font-bold text-black">{licenses}</span>
-                          <p className="text-[11px] text-muted">{isBundle ? 'bundle(s)' : 'users'}</p>
+                          <p className="text-[11px] text-muted">user(s)</p>
                         </div>
                         <button onClick={() => changeLicenses(1)} disabled={licenses >= 500}
                           className="w-9 h-9 border border-black/10 rounded-lg flex items-center justify-center hover:bg-surface disabled:opacity-30 transition-colors">
@@ -483,7 +483,7 @@ function CheckoutContent() {
                     </div>
                     <div className="bg-surface border border-black/8 rounded-lg px-4 py-3 flex items-center justify-between">
                       <div className="text-[12px] text-muted">Licenses allocated to this order</div>
-                      <div className="text-[15px] font-bold text-black">{licenses} {isBundle ? 'bundle(s)' : 'user license(s)'}</div>
+                      <div className="text-[15px] font-bold text-black">{licenses} user(s)</div>
                     </div>
                   </div>
                 </div>
