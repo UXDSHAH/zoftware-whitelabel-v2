@@ -852,8 +852,6 @@ export default function SoftwareGatewayPage() {
                 </Link>
               );
             })}
-
-            })}
           </div>
 
           {/* Stats strip */}
