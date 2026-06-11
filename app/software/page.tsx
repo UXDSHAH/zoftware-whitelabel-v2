@@ -445,7 +445,7 @@ function SoftwareContent() {
         return (
           <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center">
             <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={handleConfirmedClose} />
-            <div className="relative bg-white flex flex-col w-full h-full sm:max-w-[min(96vw,1100px)] sm:h-[92vh] sm:rounded-2xl shadow-2xl overflow-hidden">
+            <div className="relative bg-white flex flex-col w-full h-full sm:max-w-[min(96vw,1100px)] sm:h-[92vh] sm:rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-zinc-100 bg-zinc-50 shrink-0">
                 <div className="flex items-center gap-2.5">
                   <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: cfg.accent }}>

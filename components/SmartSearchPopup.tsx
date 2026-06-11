@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, Check, SlidersHorizontal, ArrowRight, Star, Phone } from 'lucide-react';
+import { Search, Check, SlidersHorizontal, ArrowRight, Star, Phone, X } from 'lucide-react';
 import { gatewayProducts } from '@/data/gateway-products';
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -91,9 +91,15 @@ export default function SmartSearchPopup({ onClose }: { onClose: () => void }) {
   if (step === 1) return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto px-6 py-6">
-        <h2 className="text-[22px] font-semibold text-black leading-tight mb-1.5">
-          What are you looking for?
-        </h2>
+        <div className="flex items-start justify-between mb-1.5">
+          <h2 className="text-[22px] font-semibold text-black leading-tight">
+            What are you looking for?
+          </h2>
+          <button onClick={onClose}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-colors shrink-0 ml-3 -mt-0.5">
+            <X size={16} />
+          </button>
+        </div>
         <p className="text-[13px] text-muted mb-6 leading-[1.6]">
           Describe your needs and we'll match you with the right software from 50+ verified products.
         </p>
@@ -188,6 +194,10 @@ export default function SmartSearchPopup({ onClose }: { onClose: () => void }) {
             <SlidersHorizontal size={11} /> Compare ({selected.length})
           </button>
         )}
+        <button onClick={onClose}
+          className="w-8 h-8 rounded-xl flex items-center justify-center text-zinc-400 hover:text-zinc-800 hover:bg-zinc-200 transition-colors shrink-0">
+          <X size={15} />
+        </button>
       </div>
 
       {/* Body */}
@@ -316,6 +326,10 @@ export default function SmartSearchPopup({ onClose }: { onClose: () => void }) {
         <p className="text-[13px] font-semibold text-black flex-1">
           Comparing {compareList.length} product{compareList.length !== 1 ? 's' : ''}
         </p>
+        <button onClick={onClose}
+          className="w-8 h-8 rounded-xl flex items-center justify-center text-zinc-400 hover:text-zinc-800 hover:bg-zinc-200 transition-colors shrink-0">
+          <X size={15} />
+        </button>
       </div>
 
       <div className="flex-1 overflow-auto">
