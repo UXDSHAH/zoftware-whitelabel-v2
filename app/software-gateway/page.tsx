@@ -66,17 +66,46 @@ const logos = [
 // ── Compatibility score ───────────────────────────────────────────────────────
 const STOP_WORDS = new Set(['a','an','the','for','and','or','in','of','to','with','my','our','i','is','are','we','on','at','by','as','from','that','this','it','be','do','have','need','want']);
 
+// Acronym / synonym expansion so "HRMS" also searches "hr payroll workforce",
+// "CRM" also searches "sales customer", etc.
+const SYNONYMS: Record<string, string[]> = {
+  hrms:  ['hr','human resources','payroll','workforce','people','talent'],
+  hris:  ['hr','human resources','payroll','workforce'],
+  crm:   ['customer','sales','pipeline','contact','lead'],
+  erp:   ['enterprise','resource','operations','finance','accounting'],
+  scm:   ['supply chain','inventory','logistics','warehouse'],
+  cms:   ['content','marketing','website'],
+  lms:   ['learning','training','elearning','course'],
+  bi:    ['analytics','reporting','dashboard','intelligence'],
+  itsm:  ['it service','helpdesk','ticketing','support','service desk'],
+  iam:   ['identity','access','authentication','sso'],
+  ecom:  ['ecommerce','online store','shopping','retail'],
+  pos:   ['point of sale','retail','payments'],
+  wfm:   ['workforce','scheduling','attendance','time tracking'],
+  ai:    ['artificial intelligence','machine learning','automation'],
+};
+
+function expandTokens(tokens: string[]): string[] {
+  const expanded = [...tokens];
+  for (const t of tokens) {
+    const syns = SYNONYMS[t];
+    if (syns) expanded.push(...syns);
+  }
+  return [...new Set(expanded)];
+}
+
 function getScore(p: typeof gatewayProducts[0], q: string): number {
   if (!q.trim()) return Math.round(60 + p.rating * 6);
-  // Tokenize so "CRM for a 50-person team" → ["crm","50-person","team"]
-  const tokens = q.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !STOP_WORDS.has(w));
-  if (tokens.length === 0) return Math.round(60 + p.rating * 6);
+  const rawTokens = q.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !STOP_WORDS.has(w));
+  if (rawTokens.length === 0) return Math.round(60 + p.rating * 6);
+  const tokens = expandTokens(rawTokens);
   const name     = p.name.toLowerCase();
   const category = p.category.toLowerCase();
   const vendor   = p.vendor.toLowerCase();
   const tagline  = p.tagline.toLowerCase();
   const tags     = p.tags.join(' ').toLowerCase();
   const overview = (p.overview || '').toLowerCase();
+  const haystack = `${name} ${category} ${vendor} ${tagline} ${tags} ${overview}`;
   let s = 50;
   for (const t of tokens) {
     if (name.includes(t))     s += 28;
@@ -85,6 +114,8 @@ function getScore(p: typeof gatewayProducts[0], q: string): number {
     if (tagline.includes(t))  s += 12;
     if (tags.includes(t))     s += 8;
     if (overview.includes(t)) s += 4;
+    // Partial word-start match (e.g. "pay" matches "payroll")
+    if (haystack.split(/\s+/).some(w => w.startsWith(t))) s += 3;
   }
   return Math.min(97, s);
 }
@@ -128,24 +159,27 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
 
   const results = useMemo(() => {
     const q = [query, industry].filter(Boolean).join(' ').toLowerCase().trim();
-    let prods = gatewayProducts.map(p => ({ ...p, score: getScore(p, q) }));
-    // Apply budget / size filters
+    const scored = gatewayProducts.map(p => ({ ...p, score: getScore(p, q) }))
+      .sort((a, b) => b.score - a.score);
+
+    // Apply budget / size filters to a copy
+    let filtered = [...scored];
     if (budget && budget !== 'b4') {
       const r = SS_BUDGETS.find(b => b.id === budget);
-      if (r) prods = prods.filter(p => p.gcPrice >= r.min && p.gcPrice <= r.max);
+      if (r) filtered = filtered.filter(p => p.gcPrice >= r.min && p.gcPrice <= r.max);
     }
     if (companySize) {
       const allowed = SS_SIZE_MAP[companySize] || [];
-      prods = prods.filter(p => p.targetSize.some(s => allowed.includes(s)));
+      filtered = filtered.filter(p => p.targetSize.some(s => allowed.includes(s)));
     }
-    prods = prods.sort((a, b) => b.score - a.score);
-    // When there's a query: prefer relevant results (score > 50), but always
-    // guarantee at least 6 results so the page is never empty
-    if (q) {
-      const relevant = prods.filter(p => p.score > 50);
-      prods = relevant.length >= 3 ? relevant : prods.slice(0, 6);
-    }
-    return prods.slice(0, 12);
+
+    // If filters wiped everything out, fall back to scored without filters
+    if (filtered.length === 0) filtered = scored;
+
+    // Prefer results with a meaningful score boost; always show at least 6
+    const relevant = filtered.filter(p => p.score > 50);
+    const final = relevant.length >= 3 ? relevant : filtered.slice(0, 6);
+    return final.slice(0, 12);
   }, [query, industry, budget, companySize]);
 
   const compareList = useMemo(
