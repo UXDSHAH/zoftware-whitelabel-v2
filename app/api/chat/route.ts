@@ -20,7 +20,22 @@ const isLangSmithTracingEnabled =
 const isChatTelemetryEnabled =
   process.env.ZAIN_CHAT_TELEMETRY === 'true' ||
   isLangSmithTracingEnabled;
-const shouldRecordChatTraceContent = process.env.ZAIN_CHAT_TRACE_CONTENT === 'true';
+const chatTraceMode = process.env.ZAIN_CHAT_TRACE_MODE;
+const chatTraceContentSetting = process.env.ZAIN_CHAT_TRACE_CONTENT;
+const isDevTraceEnvironment =
+  process.env.NODE_ENV === 'development' ||
+  process.env.VERCEL_ENV === 'preview' ||
+  process.env.VERCEL_ENV === 'development' ||
+  process.env.ZAIN_ENV === 'development';
+const shouldRecordChatTraceContent =
+  chatTraceMode === 'full' ||
+  chatTraceContentSetting === 'true' ||
+  (
+    isDevTraceEnvironment &&
+    chatTraceMode !== 'summary' &&
+    chatTraceContentSetting !== 'false'
+  );
+const chatTraceContentMode = shouldRecordChatTraceContent ? 'full' : 'summary';
 const chatRequestSchema = z.object({
   messages: z.array(
     z.custom<UIMessage>(
@@ -174,6 +189,7 @@ export async function POST(req: Request) {
         provider: 'vertex',
         model: modelId,
         messageCount: messages.length,
+        traceContentMode: chatTraceContentMode,
       },
     },
     providerOptions: {
@@ -188,6 +204,7 @@ export async function POST(req: Request) {
           provider: 'vertex',
           model: modelId,
           messageCount: messages.length,
+          traceContentMode: chatTraceContentMode,
         },
         processInputs: inputs =>
           shouldRecordChatTraceContent
@@ -196,6 +213,7 @@ export async function POST(req: Request) {
                 route: '/api/chat',
                 model: modelId,
                 messageCount: messages.length,
+                traceContentMode: chatTraceContentMode,
                 messages: summarizeUiMessages(messages),
                 availableTools: Object.keys(catalogTools),
               },
@@ -204,7 +222,7 @@ export async function POST(req: Request) {
             ? (outputs as unknown as Record<string, unknown>)
             : {
                 ...summarizeRunOutput(outputs),
-                traceContent: 'Set ZAIN_CHAT_TRACE_CONTENT=true to capture full prompts and responses.',
+                traceContent: 'Summary mode. Set ZAIN_CHAT_TRACE_MODE=full or ZAIN_CHAT_TRACE_CONTENT=true to capture full prompts, responses, tool inputs, and tool outputs.',
               },
         processChildLLMRunInputs: inputs =>
           shouldRecordChatTraceContent
