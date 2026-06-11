@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Search, FileText, BarChart2, TrendingDown, ArrowRight, ArrowLeft, Zap,
-  Phone, X, Send, Sparkles, ChevronRight,
-  ExternalLink, PhoneOff, Check, Star, SlidersHorizontal,
+  Phone, X, Sparkles,
+  ExternalLink, Check, Star, SlidersHorizontal,
   ChevronDown, User
 } from 'lucide-react';
 import { gatewayProducts } from '@/data/gateway-products';
@@ -196,7 +196,7 @@ function SmartSearchModal({ onClose }: { onClose: () => void }) {
             What are you looking for?
           </h2>
           <p className="text-[13px] text-muted mb-6 leading-[1.6]">
-            Describe your needs and we'll match you with the right software from 50+ verified products.
+            Describe your needs and we&apos;ll match you with the right software from 50+ verified products.
           </p>
 
           <div className="relative mb-7">

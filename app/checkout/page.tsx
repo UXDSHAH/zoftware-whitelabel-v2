@@ -62,7 +62,6 @@ function CheckoutContent() {
   const planName      = searchParams.get('plan') || '';
   const priceRaw      = searchParams.get('price') || '0';
   const billingParam  = searchParams.get('billing') || 'monthly';
-  const offerCode     = searchParams.get('offerCode') || '';
   const productParam  = searchParams.get('product') || '';
   const currencyParam = (searchParams.get('currency') || 'USD') as 'USD' | 'AED';
   const bundleSlug    = searchParams.get('bundle') || '';
@@ -75,7 +74,7 @@ function CheckoutContent() {
 
   // ── Step 1 state — Plan & Pricing ──────────────────────────────────────
   const [billingCycle, setBillingCycle] = useState<'monthly'|'annual'>(billingParam as 'monthly'|'annual');
-  const [currency, setCurrency]         = useState<'USD'|'AED'>(currencyParam);
+  const currency                         = currencyParam;
   const [licenses, setLicenses]         = useState(1);
   const [profSel, setProfSel]           = useState<string[]>([]);
   const [managedSel, setManagedSel]     = useState<string[]>([]);
@@ -133,7 +132,7 @@ function CheckoutContent() {
   };
 
   // ── Order summary (right rail) ─────────────────────────────────────────
-  const OrderSummary = () => (
+  const orderSummary = (
     <div className="border border-black/10 rounded-lg overflow-hidden bg-white sticky top-24">
       <div className="px-5 py-4 border-b border-black/8 bg-surface">
         <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em]">Order Summary</p>
@@ -566,7 +565,7 @@ function CheckoutContent() {
 
           {/* Right rail */}
           <div className="w-full lg:w-72 shrink-0">
-            <OrderSummary/>
+            {orderSummary}
           </div>
         </div>
       </div>
