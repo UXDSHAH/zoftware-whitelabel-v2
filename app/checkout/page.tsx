@@ -1,17 +1,19 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import type { ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, ArrowRight, Check, Lock, CreditCard, Building2,
   Mail, Phone, ChevronDown, Shield, Package, Zap, Clock, CheckCircle,
-  Wrench, Server, MessageSquare, Plus, Minus, X, MapPin, User2
+  Wrench, Server, MessageSquare, Plus, Minus, X, MapPin, User2,
+  ShoppingCart, Tag, AlertCircle
 } from 'lucide-react';
 import { getProductBySlug } from '@/data/products';
 import { getBundleBySlug } from '@/data/bundles';
 import { AED_RATE } from '@/data/billing-options';
+import { getCart, getPromo, clearCart, clearPromo, PROMO_CODES, type CartItem } from '@/lib/cart';
 
 function mockUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -58,6 +60,7 @@ function Field({ label, value, onChange, placeholder, type = 'text', icon, error
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
+  const fromCart      = searchParams.get('fromCart') === 'true';
   const slug          = searchParams.get('slug') || '';
   const planName      = searchParams.get('plan') || '';
   const priceRaw      = searchParams.get('price') || '0';
@@ -67,10 +70,40 @@ function CheckoutContent() {
   const bundleSlug    = searchParams.get('bundle') || '';
   const bundleNameParam = searchParams.get('bundleName') || '';
 
+  // Cart mode state
+  const [cartItems, setCartItems]       = useState<CartItem[]>([]);
+  const [cartPromo, setCartPromo]       = useState('');
+  const [cartPromoInput, setCartPromoInput] = useState('');
+  const [cartPromoError, setCartPromoError] = useState('');
+
+  useEffect(() => {
+    if (fromCart) {
+      setCartItems(getCart());
+      setCartPromo(getPromo());
+      setStep('payment');
+    }
+  }, [fromCart]);
+
+  const cartPromoData   = cartPromo ? PROMO_CODES[cartPromo] : null;
+  const cartSubtotal    = cartItems.reduce((s, i) => s + i.gcPrice * (i.qty || 1), 0);
+  const cartDiscount    = cartPromoData ? Math.round(cartSubtotal * cartPromoData.discount) : 0;
+  const cartTotal       = cartSubtotal - cartDiscount;
+
+  const applyCartPromo = () => {
+    const code = cartPromoInput.trim().toUpperCase();
+    if (PROMO_CODES[code]) {
+      setCartPromo(code);
+      setCartPromoInput('');
+      setCartPromoError('');
+    } else {
+      setCartPromoError('Invalid promo code');
+    }
+  };
+
   const isBundle = !!bundleSlug;
   const bundle   = isBundle ? getBundleBySlug(bundleSlug) : null;
   const product  = slug ? getProductBySlug(slug) : null;
-  const basePrice = parseFloat(priceRaw);
+  const basePrice = fromCart ? cartTotal : parseFloat(priceRaw);
 
   // ── Step 1 state — Plan & Pricing ──────────────────────────────────────
   const [billingCycle, setBillingCycle] = useState<'monthly'|'annual'>(billingParam as 'monthly'|'annual');
@@ -128,11 +161,126 @@ function CheckoutContent() {
   };
 
   const handlePurchase = () => {
-    if (validatePayment()) { setTxnId(mockUUID()); setStep('success'); }
+    if (validatePayment()) {
+      if (fromCart) { clearCart(); clearPromo(); }
+      setTxnId(mockUUID());
+      setStep('success');
+    }
   };
 
   // ── Order summary (right rail) ─────────────────────────────────────────
-  const orderSummary = (
+  const helpSection = (
+    <div className="pt-3 border-t border-black/8">
+      <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2">Need help?</p>
+      <div className="flex items-center gap-2.5 bg-surface border border-black/8 rounded-lg p-3 mb-2">
+        <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white text-[11px] font-bold shrink-0">DR</div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[12px] font-semibold text-black">Deepa Rawat</p>
+          <p className="text-[10px] text-muted">Customer Success · Responds in &lt;24h</p>
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <a href="mailto:deepa@zoftwarehub.com"
+          className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[11px] font-semibold border border-black/10 rounded-lg text-muted hover:text-black transition-colors">
+          <Mail size={10}/> Email
+        </a>
+        <button
+          className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[11px] font-semibold border border-black/10 rounded-lg text-muted hover:text-black transition-colors"
+          onClick={() => window.dispatchEvent(new CustomEvent('zain-open'))}>
+          <MessageSquare size={10}/> Chat
+        </button>
+      </div>
+    </div>
+  );
+
+  const trustBadges = (
+    <div className="pt-3 border-t border-black/8 space-y-2">
+      {[
+        { icon: <Clock size={11}/>,   text: 'Activation: 2–7 business days' },
+        { icon: <Shield size={11}/>,  text: 'Secured by Geidea · GCC' },
+        { icon: <Zap size={11}/>,     text: 'Cancel anytime' },
+      ].map(({ icon, text }) => (
+        <div key={text} className="flex items-center gap-2 text-[11px] text-muted">{icon}{text}</div>
+      ))}
+    </div>
+  );
+
+  const cartOrderSummary = (
+    <div className="border border-black/10 rounded-lg overflow-hidden bg-white sticky top-24">
+      <div className="px-5 py-4 border-b border-black/8 bg-surface flex items-center gap-2">
+        <ShoppingCart size={12} className="text-muted"/>
+        <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em]">Order Summary ({cartItems.length} product{cartItems.length !== 1 ? 's' : ''})</p>
+      </div>
+      <div className="p-5 space-y-4">
+        {/* Cart items list */}
+        <div className="space-y-2.5 pb-3 border-b border-black/8">
+          {cartItems.map(item => (
+            <div key={item.id} className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-zinc-100 border border-black/10 flex items-center justify-center shrink-0 text-[9px] font-bold text-black">
+                {item.logo}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[12px] font-semibold text-black truncate">{item.name}</p>
+                <p className="text-[10px] text-muted">{item.qty} user{item.qty !== 1 ? 's' : ''} · ${item.gcPrice}/user/mo</p>
+              </div>
+              <span className="text-[12px] font-semibold text-black shrink-0">${(item.gcPrice * item.qty).toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Promo code input */}
+        {!cartPromo ? (
+          <div className="space-y-1">
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <Tag size={11} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400"/>
+                <input value={cartPromoInput} onChange={e => { setCartPromoInput(e.target.value); setCartPromoError(''); }}
+                  onKeyDown={e => e.key === 'Enter' && applyCartPromo()}
+                  placeholder="Promo code"
+                  className="w-full pl-7 pr-2 py-2 text-[12px] border border-black/10 rounded-lg outline-none focus:border-accent/40 transition-all"/>
+              </div>
+              <button onClick={applyCartPromo}
+                className="px-3 py-2 bg-zinc-900 text-white text-[11px] font-semibold rounded-lg hover:bg-zinc-700 transition-colors">Apply</button>
+            </div>
+            {cartPromoError && <div className="flex items-center gap-1 text-[10px] text-red-500"><AlertCircle size={10}/>{cartPromoError}</div>}
+          </div>
+        ) : (
+          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-1.5">
+              <Check size={12} className="text-green-600"/>
+              <div>
+                <p className="text-[11px] font-semibold text-green-700">{cartPromo}</p>
+                <p className="text-[10px] text-green-600">{cartPromoData?.label}</p>
+              </div>
+            </div>
+            <button onClick={() => setCartPromo('')} className="text-[10px] text-red-400 hover:text-red-600">Remove</button>
+          </div>
+        )}
+
+        {/* Price breakdown */}
+        <div className="space-y-1.5 text-[13px]">
+          <div className="flex justify-between"><span className="text-muted">Subtotal</span><span className="font-semibold">${cartSubtotal.toLocaleString()}/mo</span></div>
+          {cartDiscount > 0 && (
+            <div className="flex justify-between text-[12px] text-green-600">
+              <span>Promo ({Math.round((cartPromoData?.discount || 0) * 100)}% off)</span>
+              <span>−${cartDiscount.toLocaleString()}/mo</span>
+            </div>
+          )}
+          <div className="flex justify-between text-[11px]"><span className="text-muted">VAT (0% — GCC)</span><span>$0</span></div>
+        </div>
+
+        <div className="pt-3 border-t border-black/8 flex justify-between items-center">
+          <span className="text-[13px] font-semibold text-black">Monthly total</span>
+          <span className="text-[18px] font-bold text-black">${cartTotal.toLocaleString()}/mo</span>
+        </div>
+
+        {trustBadges}
+        {helpSection}
+      </div>
+    </div>
+  );
+
+  const singleOrderSummary = (
     <div className="border border-black/10 rounded-lg overflow-hidden bg-white sticky top-24">
       <div className="px-5 py-4 border-b border-black/8 bg-surface">
         <p className="text-[11px] font-semibold text-muted uppercase tracking-[0.07em]">Order Summary</p>
@@ -164,38 +312,8 @@ function CheckoutContent() {
         </div>
         {profTotal > 0 && <p className="text-[11px] text-muted">+ {fmt(profTotal)} one-time setup</p>}
 
-        <div className="pt-3 border-t border-black/8 space-y-2">
-          {[
-            { icon: <Clock size={11}/>,   text: 'Activation: 2–7 business days' },
-            { icon: <Shield size={11}/>,  text: 'Secured by Geidea · GCC' },
-            { icon: <Zap size={11}/>,     text: 'Cancel anytime' },
-          ].map(({ icon, text }) => (
-            <div key={text} className="flex items-center gap-2 text-[11px] text-muted">{icon}{text}</div>
-          ))}
-        </div>
-
-        {/* Deepa Rawat — Customer Success */}
-        <div className="pt-3 border-t border-black/8">
-          <p className="text-[10px] font-semibold text-muted uppercase tracking-[0.07em] mb-2">Need help?</p>
-          <div className="flex items-center gap-2.5 bg-surface border border-black/8 rounded-lg p-3 mb-2">
-            <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white text-[11px] font-bold shrink-0">DR</div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[12px] font-semibold text-black">Deepa Rawat</p>
-              <p className="text-[10px] text-muted">Customer Success · Responds in &lt;24h</p>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <a href="mailto:deepa@zoftwarehub.com"
-              className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[11px] font-semibold border border-black/10 rounded-lg text-muted hover:text-black transition-colors">
-              <Mail size={10}/> Email
-            </a>
-            <button
-              className="flex-1 flex items-center justify-center gap-1 py-1.5 text-[11px] font-semibold border border-black/10 rounded-lg text-muted hover:text-black transition-colors"
-              onClick={() => window.dispatchEvent(new CustomEvent('zain-open'))}>
-              <MessageSquare size={10}/> Chat
-            </button>
-          </div>
-        </div>
+        {trustBadges}
+        {helpSection}
 
         {isBundle && bundle && (
           <div className="pt-3 border-t border-black/8">
@@ -211,6 +329,8 @@ function CheckoutContent() {
     </div>
   );
 
+  const orderSummary = fromCart ? cartOrderSummary : singleOrderSummary;
+
   // ── Success ────────────────────────────────────────────────────────────
   if (step === 'success') return (
     <div className="min-h-[calc(100vh-56px)] bg-surface flex items-center justify-center px-4 py-12">
@@ -218,16 +338,21 @@ function CheckoutContent() {
         <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
           <Check size={28} className="text-emerald-600" strokeWidth={2.5}/>
         </div>
-        <h1 className="text-[22px] font-semibold text-black mb-2">{basePrice === 0 ? 'Account Activated!' : 'Order Confirmed!'}</h1>
+        <h1 className="text-[22px] font-semibold text-black mb-2">Order Confirmed!</h1>
         <p className="text-[13px] text-muted mb-6">Confirmation sent to <span className="font-medium text-black">ravi.sharma@gulf-enterprises.ae</span></p>
 
         <div className="bg-surface rounded-lg p-4 mb-5 text-left space-y-2">
-          {[
+          {(fromCart ? [
+            { label: 'Order ref',     value: merchantRef.split('-')[0].toUpperCase() },
+            { label: 'Products',      value: `${cartItems.length} software product${cartItems.length !== 1 ? 's' : ''}` },
+            { label: 'Monthly total', value: `$${cartTotal.toLocaleString()}/mo` },
+            { label: 'Activation',    value: '2–7 business days' },
+          ] : [
             { label: 'Order ref', value: merchantRef.split('-')[0].toUpperCase() },
             { label: 'Monthly total', value: fmt(grandMonthly) + '/mo' },
             { label: 'Licenses', value: isBundle ? `${licenses} bundle${licenses !== 1 ? 's' : ''}` : `${licenses} user${licenses !== 1 ? 's' : ''}` },
             { label: 'Activation', value: '2–7 business days' },
-          ].map(({ label, value }) => (
+          ]).map(({ label, value }) => (
             <div key={label} className="flex justify-between text-[12px]">
               <span className="text-muted">{label}</span><span className="font-medium text-black">{value}</span>
             </div>
@@ -264,9 +389,9 @@ function CheckoutContent() {
     <div className="min-h-[calc(100vh-56px)] bg-surface px-4 py-8 sm:py-12">
       <div className="max-w-[1000px] mx-auto">
 
-        <Link href={isBundle ? `/bundles/${bundleSlug}` : '/software'}
+        <Link href={fromCart ? '/software' : isBundle ? `/bundles/${bundleSlug}` : '/software'}
           className="flex items-center gap-1.5 text-[12px] text-muted hover:text-black transition-colors mb-6 w-fit min-h-[44px]">
-          <ArrowLeft size={12}/> Back
+          <ArrowLeft size={12}/> {fromCart ? 'Back to Software' : 'Back'}
         </Link>
 
         {/* Welcome strip */}
